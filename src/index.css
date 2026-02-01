@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Outfit:wght@400;600;800&display=swap');
 
 :root {
-  --bg-color: #080808;
+  --bg-color: #000000;
   --text-color: #ffffff;
-  --accent-color: #bfff47; /* Lime accent like the reference or similar */
-  --secondary-text: rgba(255, 255, 255, 0.6);
+  --accent-color: #d8b4fe;
+  /* Lighter Purple for better contrast on black */
+  --secondary-text: rgba(255, 255, 255, 0.5);
   --font-main: 'Inter', sans-serif;
   --font-heading: 'Outfit', sans-serif;
 }
@@ -17,7 +18,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
+html,
+body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--font-main);
@@ -33,7 +35,10 @@ body.lenis-scrolling:active {
   cursor: grabbing;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: -0.02em;
@@ -55,13 +60,16 @@ button {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-color);
 }
+
 ::-webkit-scrollbar-thumb {
   background: #333;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
 }
@@ -81,9 +89,17 @@ section {
 }
 
 /* Utilities */
-.text-accent { color: var(--accent-color); }
-.text-secondary { color: var(--secondary-text); }
-.text-reveal { overflow: hidden; }
+.text-accent {
+  color: var(--accent-color);
+}
+
+.text-secondary {
+  color: var(--secondary-text);
+}
+
+.text-reveal {
+  overflow: hidden;
+}
 
 /* Lenis CSS */
 html.lenis {

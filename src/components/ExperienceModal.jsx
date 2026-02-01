@@ -2,78 +2,78 @@ import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 const ExperienceModal = ({ onStart }) => {
-    const [isVisible, setIsVisible] = useState(true);
-    const modalRef = useRef(null);
-    const contentRef = useRef(null);
-    const logoRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const modalRef = useRef(null);
+  const contentRef = useRef(null);
+  const logoRef = useRef(null);
 
-    useEffect(() => {
-        // Initial entrance animation
-        const tl = gsap.timeline();
-        tl.fromTo(logoRef.current,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 1.5, ease: 'power4.out' }
-        ).fromTo('.modal-option',
-            { opacity: 0, y: 10 },
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' },
-            '-=1'
-        ).fromTo('.start-btn',
-            { opacity: 0, scale: 0.9 },
-            { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' },
-            '-=0.5'
-        );
-    }, []);
+  useEffect(() => {
+    // Initial entrance animation
+    const tl = gsap.timeline();
+    tl.fromTo(logoRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 1.5, ease: 'power4.out' }
+    ).fromTo('.modal-option',
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' },
+      '-=1'
+    ).fromTo('.start-btn',
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' },
+      '-=0.5'
+    );
+  }, []);
 
-    const handleStart = () => {
-        const tl = gsap.timeline({
-            onComplete: () => {
-                setIsVisible(false);
-                onStart();
-            }
-        });
+  const handleStart = () => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsVisible(false);
+        onStart();
+      }
+    });
 
-        tl.to(contentRef.current, {
-            opacity: 0,
-            y: -20,
-            duration: 1,
-            ease: 'power4.inOut'
-        }).to(modalRef.current, {
-            backgroundColor: 'rgba(8, 8, 8, 0)',
-            backdropFilter: 'blur(0px)',
-            duration: 1,
-            ease: 'power4.inOut'
-        }, '-=0.5').set(modalRef.current, { display: 'none' });
-    };
+    tl.to(contentRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 1,
+      ease: 'power4.inOut'
+    }).to(modalRef.current, {
+      backgroundColor: 'rgba(8, 8, 8, 0)',
+      backdropFilter: 'blur(0px)',
+      duration: 1,
+      ease: 'power4.inOut'
+    }, '-=0.5').set(modalRef.current, { display: 'none' });
+  };
 
-    if (!isVisible) return null;
+  if (!isVisible) return null;
 
-    return (
-        <div ref={modalRef} className="experience-modal">
-            <div ref={contentRef} className="modal-content">
-                <div ref={logoRef} className="modal-logo">
-                    <h1>Sébastien Lempens</h1>
-                    <p className="text-accent">Portfolio Replica</p>
-                </div>
+  return (
+    <div ref={modalRef} className="experience-modal">
+      <div ref={contentRef} className="modal-content">
+        <div ref={logoRef} className="modal-logo">
+          <h1>Sébastien Lempens</h1>
+          <p className="text-accent">Portfolio Replica</p>
+        </div>
 
-                <div className="modal-options">
-                    <div className="modal-option">
-                        <span className="dot"></span>
-                        <p>For the best experience</p>
-                    </div>
-                    <div className="modal-option">
-                        <span className="dot"></span>
-                        <p>Turn your sound on / Switch to desktop</p>
-                    </div>
-                </div>
+        <div className="modal-options">
+          <div className="modal-option">
+            <span className="dot"></span>
+            <p>For the best experience</p>
+          </div>
+          <div className="modal-option">
+            <span className="dot"></span>
+            <p>Turn your sound on / Switch to desktop</p>
+          </div>
+        </div>
 
-                <button className="start-btn" onClick={handleStart}>
-                    <span className="btn-line"></span>
-                    <span className="btn-text">START EXPERIENCE</span>
-                    <span className="btn-line"></span>
-                </button>
-            </div>
+        <button className="start-btn" onClick={handleStart}>
+          <span className="btn-line"></span>
+          <span className="btn-text">START EXPERIENCE</span>
+          <span className="btn-line"></span>
+        </button>
+      </div>
 
-            <style>{`
+      <style>{`
         .experience-modal {
           position: fixed;
           top: 0;
@@ -86,7 +86,7 @@ const ExperienceModal = ({ onStart }) => {
           justify-content: center;
           align-items: center;
           color: white;
-          backdrop-filter: blur(20px);
+          backdrop-filter: blur(8px);
         }
         
         .modal-content {
@@ -160,8 +160,8 @@ const ExperienceModal = ({ onStart }) => {
           color: var(--accent-color);
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 };
 
 export default ExperienceModal;
