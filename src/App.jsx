@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import SmoothScroll from './components/SmoothScroll';
+import Navbar from './components/Navbar';
 import ExperienceModal from './components/ExperienceModal';
 import ShaderHero from './components/ShaderHero';
 import TextReveal from './components/TextReveal';
@@ -9,6 +10,7 @@ function App() {
 
   return (
     <SmoothScroll>
+      <Navbar />
       <ExperienceModal onStart={() => setHasStarted(true)} />
 
       {/* Background is now outside main-content to show behind modal */}
@@ -69,22 +71,133 @@ function App() {
         </section>
 
         {/* FOOTER */}
-        <footer className="footer section">
-          <div className="container">
-            <TextReveal className="hero-title text-accent">Let's Talk</TextReveal>
-            <div className="footer-links">
-              <a href="#" className="link-hover">LinkedIn</a>
-              <a href="#" className="link-hover">GitHub</a>
-              <a href="#" className="link-hover">Twitter</a>
+        <footer className="footer-cinematic">
+          <div className="footer-bg-bubbles">
+            <div className="footer-bubble"></div>
+            <div className="footer-bubble"></div>
+          </div>
+
+          <div className="container footer-content-left">
+            <div className="footer-text-wrapper">
+              <TextReveal className="hero-title text-accent">Let's Talk</TextReveal>
+              <div className="text-floats">
+                <div className="float-bubble"></div>
+                <div className="float-bubble"></div>
+                <div className="float-bubble"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <div className="container">
+              <div className="footer-info">
+                <p>© 2026</p>
+                <a href="mailto:hello@antigravity.io" className="mail-link">hello@antigravity.io</a>
+              </div>
             </div>
           </div>
         </footer>
       </main>
 
       <style>{`
-        section {
+        section, .footer-cinematic {
           position: relative; /* Ensure children like ScrollTrigger work well */
           z-index: 2;
+        }
+
+        .footer-cinematic {
+          padding: 20vh 0 10vh;
+          background: linear-gradient(180deg, #000000 0%, #0a0a20 100%);
+          overflow: hidden;
+          position: relative;
+        }
+
+        .footer-content-left {
+          position: relative;
+          z-index: 5;
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
+
+        .footer-text-wrapper {
+          position: relative;
+          padding-left: 2vw;
+        }
+
+        .text-floats {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
+
+        .float-bubble {
+          position: absolute;
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          animation: bob 4s ease-in-out infinite alternate;
+        }
+
+        .float-bubble:nth-child(1) { width: 60px; height: 60px; top: -20px; right: -40px; animation-delay: 0s; }
+        .float-bubble:nth-child(2) { width: 40px; height: 40px; bottom: 10px; left: -30px; animation-delay: 0.5s; }
+        .float-bubble:nth-child(3) { width: 25px; height: 25px; top: 30%; right: -60px; animation-delay: 1s; }
+
+        @keyframes bob {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(-10px, -20px); }
+        }
+
+        .footer-bg-bubbles {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
+
+        .footer-bubble {
+          position: absolute;
+          border-radius: 50%;
+          background: linear-gradient(135deg, rgba(76, 29, 149, 0.15), rgba(30, 27, 75, 0.3));
+          filter: blur(60px);
+        }
+
+        .footer-bubble:nth-child(1) { width: 600px; height: 600px; top: -200px; right: -200px; }
+        .footer-bubble:nth-child(2) { width: 500px; height: 500px; bottom: -100px; left: -100px; opacity: 0.5; }
+
+        .footer-bottom {
+          width: 100%;
+          margin-top: 5vh;
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          position: relative;
+          z-index: 3;
+        }
+
+        .footer-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.75rem;
+          letter-spacing: 0.1em;
+          color: var(--secondary-text);
+        }
+
+        .mail-link {
+          color: white;
+          font-weight: 600;
+          transition: color 0.3s ease;
+        }
+
+        .mail-link:hover {
+          color: var(--accent-color);
         }
 
         .main-content {

@@ -51,8 +51,7 @@ const ExperienceModal = ({ onStart }) => {
     <div ref={modalRef} className="experience-modal">
       <div ref={contentRef} className="modal-content">
         <div ref={logoRef} className="modal-logo">
-          <h1>Sébastien Lempens</h1>
-          <p className="text-accent">Portfolio Replica</p>
+          <p className="text-accent">Portfolio</p>
         </div>
 
         <div className="modal-options">
