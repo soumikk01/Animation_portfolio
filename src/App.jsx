@@ -17,41 +17,113 @@ function App() {
       <ShaderHero />
 
       <main className={`main-content ${hasStarted ? 'started' : ''}`}>
-        {/* HERO SECTION */}
-        <section className="hero">
+        {/* HERO SECTION - REPLICATING "LOCKED AWAY" DESIGN */}
+        <section id="home" className="hero hero-vibe">
+          <div className="container hero-container">
+            <div className="typography-design">
+              {/* Top Sparkle */}
+              <div className="sparkle top-left">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" className="small">
+                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+                </svg>
+              </div>
+
+              {/* Line 1: Locked */}
+              <div className="text-line line-1">
+                <h1 className="main-word">Locked</h1>
+                <div className="annotation ligature">
+                  <div className="annotation-line"></div>
+                  <span className="annotation-text">"ligature"</span>
+                </div>
+              </div>
+
+              {/* Line 2: Away */}
+              <div className="text-line line-2">
+                <div className="annotation alternate-left">
+                  <span className="annotation-text">"alternate"</span>
+                  <div className="annotation-curve curve-left">
+                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
+                      <path d="M100 10 C 50 10, 10 50, 10 90" />
+                    </svg>
+                  </div>
+                </div>
+
+                <h1 className="main-word">Away</h1>
+
+                <div className="annotation alternate-right">
+                  <div className="annotation-curve curve-right">
+                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
+                      <path d="M0 10 C 50 10, 90 50, 90 90" />
+                    </svg>
+                  </div>
+                  <span className="annotation-text">"alternate"</span>
+                </div>
+
+                {/* Bottom Sparkle */}
+                <div className="sparkle bottom-right">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="small">
+                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Subtext */}
+              <div className="hero-description">
+                <p>a new design serif font</p>
+                <p>with stylistic alternates</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TECH STACK SECTION */}
+        <section id="tech-stack" className="tech-stack">
           <div className="container">
-            <div className="hero-content">
-              <h1 className="hero-title">
-                <TextReveal>Creative</TextReveal>
-                <TextReveal className="text-accent">Engineer</TextReveal>
-              </h1>
-              <div className="hero-footer">
-                <p className="text-secondary">Based in France / Available for freelance</p>
-                <div className="scroll-hint">
-                  <span>SCROLL TO EXPLORE</span>
+            <h2 className="section-title">01 / Tech Stack</h2>
+            <div className="tech-grid">
+              <div className="tech-category">
+                <h3 className="category-title">Frontend</h3>
+                <div className="tech-items">
+                  <div className="tech-item">React</div>
+                  <div className="tech-item">Next.js</div>
+                  <div className="tech-item">TypeScript</div>
+                  <div className="tech-item">Tailwind CSS</div>
+                  <div className="tech-item">GSAP</div>
+                  <div className="tech-item">Three.js</div>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3 className="category-title">Backend</h3>
+                <div className="tech-items">
+                  <div className="tech-item">Node.js</div>
+                  <div className="tech-item">Express</div>
+                  <div className="tech-item">MongoDB</div>
+                  <div className="tech-item">PostgreSQL</div>
+                  <div className="tech-item">Firebase</div>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3 className="category-title">Tools & Others</h3>
+                <div className="tech-items">
+                  <div className="tech-item">Git</div>
+                  <div className="tech-item">Docker</div>
+                  <div className="tech-item">Figma</div>
+                  <div className="tech-item">Blender</div>
+                  <div className="tech-item">WebGL</div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ABOUT SECTION */}
-        <section className="about">
-          <div className="container">
-            <h2 className="section-title">01 / Profile</h2>
-            <div className="about-grid">
-              <div className="about-text">
-                <TextReveal className="large-text">
-                  I craft immersive digital experiences at the intersection of design and code.
-                  Specializing in WebGL, GSAP, and advanced React development.
-                </TextReveal>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* PROJECTS SECTION */}
-        <section className="projects">
+        <section id="projects" className="projects">
           <div className="container">
             <h2 className="section-title">02 / Selected Works</h2>
             <div className="project-list">
@@ -209,6 +281,173 @@ function App() {
           opacity: 1;
         }
         
+        .hero-vibe {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: radial-gradient(circle at center, rgba(40, 30, 20, 0.2) 0%, transparent 70%); /* Warm tint like the image */
+          position: relative;
+          color: #f8f8f8;
+          overflow: hidden;
+        }
+
+        .hero-container {
+          max-width: 1200px;
+          display: flex;
+          justify-content: center;
+          position: relative;
+          z-index: 5;
+        }
+
+        .typography-design {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          filter: drop-shadow(0 0 50px rgba(0,0,0,0.5));
+        }
+
+        .main-word {
+          font-family: 'Caprasimo', serif;
+          font-size: clamp(2.5rem, 6vw, 5.5rem);
+          font-weight: 400; /* Caprasimo is naturally heavy */
+          line-height: 0.88;
+          letter-spacing: -0.04em;
+          margin: 0;
+          z-index: 2;
+          color: #fff9f0;
+          text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+          will-change: transform;
+        }
+
+        .text-line {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: fit-content;
+        }
+
+        .line-1 {
+          margin-bottom: -0.2vw;
+          z-index: 3;
+        }
+
+        /* Annotations */
+        .annotation {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: #fff9f0;
+          opacity: 0.6;
+          font-family: 'Outfit', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 300;
+          pointer-events: none;
+          white-space: nowrap;
+          letter-spacing: 0.05em;
+        }
+
+        .ligature {
+          top: -15%;
+          right: -5%;
+          flex-direction: row;
+          align-items: center;
+        }
+
+        .annotation-line {
+          width: 30px;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.4);
+        }
+
+        .alternate-left {
+          left: -15%;
+          top: 35%;
+          flex-direction: row-reverse;
+          align-items: center;
+        }
+
+        .alternate-right {
+          right: -15%;
+          top: 35%;
+          flex-direction: row;
+          align-items: center;
+        }
+
+        .annotation-curve {
+          width: 30px;
+          height: 30px;
+          opacity: 0.4;
+        }
+        
+        .curve-left { transform: rotate(-15deg) translateY(8px); }
+        .curve-right { transform: rotate(15deg) translateY(8px); }
+
+        .hero-description {
+          margin-top: 3rem;
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          font-size: 0.85rem;
+          color: rgba(255, 255, 255, 0.6);
+          letter-spacing: 0.04em;
+          line-height: 1.4;
+          text-transform: lowercase;
+        }
+
+        /* Sparkles */
+        .sparkle {
+          position: absolute;
+          color: #ffffff;
+          display: flex;
+          gap: 4px;
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+
+        .sparkle svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        .sparkle svg.small {
+          width: 10px;
+          height: 10px;
+          align-self: flex-start;
+          margin-top: 3px;
+        }
+
+        .top-left {
+          top: -20%;
+          left: -8%;
+          flex-direction: row;
+        }
+
+        .bottom-right {
+          bottom: 12%;
+          right: -8%;
+          flex-direction: row-reverse;
+        }
+
+        @media (max-width: 768px) {
+          .main-word {
+            font-size: 5rem;
+          }
+          .annotation {
+            display: none; /* Hide on small screens to avoid clutter */
+          }
+          .hero-description {
+            font-size: 0.9rem;
+            margin-top: 2rem;
+          }
+          .sparkle svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+        
         .hero {
           height: 100vh;
           display: flex;
@@ -246,6 +485,68 @@ function App() {
           border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
+        .tech-stack {
+          padding: 8rem 0;
+        }
+        
+        .tech-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-top: 3rem;
+        }
+        
+        .tech-category {
+          background: rgba(255, 255, 255, 0.02);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 20px;
+          padding: 2rem;
+          transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .tech-category:hover {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.15);
+          transform: translateY(-5px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .category-title {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: var(--accent-color);
+          margin-bottom: 1.5rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+        
+        .tech-items {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.8rem;
+        }
+        
+        .tech-item {
+          padding: 0.6rem 1.2rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 50px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.9);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        
+        .tech-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: var(--accent-color);
+          color: #ffffff;
+          transform: translateY(-2px);
+        }
+        
+        
         .large-text {
           font-size: clamp(1.5rem, 4vw, 2.5rem);
           line-height: 1.2;
@@ -273,7 +574,7 @@ function App() {
         }
         
         .project-name {
-          font-size: clamp(2rem, 6vw, 4rem);
+          font-size: clamp(1rem, 2.5vw, 1.6rem);
           flex: 1;
         }
         
@@ -299,6 +600,81 @@ function App() {
   transform: scaleX(1);
   transform-origin: left;
 }
+
+        /* Responsive Optimizations */
+        @media (max-width: 1024px) {
+          .hero-title {
+            font-size: clamp(3.5rem, 10vw, 6rem);
+          }
+          .container {
+            padding: 0 6vw;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-top: 2rem;
+          }
+          
+          .scroll-hint {
+            display: none;
+          }
+
+          .tech-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted minmax */
+            gap: 1.5rem;
+          }
+
+          .project-item {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1.5rem 0;
+          }
+
+          .project-name {
+            font-size: 1.8rem;
+          }
+
+          .footer-cinematic {
+            padding: 10vh 0 5vh;
+          }
+
+          .footer-content-left {
+            margin-bottom: 4rem;
+          }
+
+          .hero-title {
+            font-size: 3.5rem;
+          }
+
+          .large-text {
+            font-size: 1.5rem;
+          }
+
+          .footer-info {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 2.8rem;
+          }
+
+          .tech-category {
+            padding: 1.5rem;
+          }
+
+          .tech-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+          }
+        }
       `}</style>
     </SmoothScroll>
   );

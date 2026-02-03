@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect, Suspense } from 'react';
+import { useRef, useMemo, useEffect, useState, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, PerspectiveCamera, MeshTransmissionMaterial, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -10,22 +10,33 @@ gsap.registerPlugin(ScrollTrigger);
 const CinematicObject = () => {
     const groupRef = useRef();
     const bubblesRef = useRef([]);
+    const [isMobile, setIsMobile] = useState(false);
 
-    // Higher fidelity data for 12 bubbles
-    const bubbleData = useMemo(() => [
-        { id: 0, targetPos: [0, 0, 0], scale: 1.2, speed: 1 },
-        { id: 1, targetPos: [-4, 3, -3], scale: 0.6, speed: 1.2 },
-        { id: 2, targetPos: [4, -3, -2], scale: 0.5, speed: 0.8 },
-        { id: 3, targetPos: [-3, -4, -4], scale: 0.7, speed: 1.5 },
-        { id: 4, targetPos: [5, 4, -5], scale: 0.4, speed: 1.1 },
-        { id: 5, targetPos: [-5, 1, -2], scale: 0.5, speed: 0.9 },
-        { id: 6, targetPos: [3, 5, -4], scale: 0.6, speed: 1.3 },
-        { id: 7, targetPos: [1, -5, -2], scale: 0.4, speed: 0.7 },
-        { id: 8, targetPos: [-6, -2, -3], scale: 0.3, speed: 1.4 },
-        { id: 9, targetPos: [6, 0, -4], scale: 0.5, speed: 1.0 },
-        { id: 10, targetPos: [-2, 6, -3], scale: 0.4, speed: 1.2 },
-        { id: 11, targetPos: [2, -6, -5], scale: 0.3, speed: 0.9 },
-    ], []);
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Higher fidelity data for 12 bubbles (reduced on mobile for performance)
+    const bubbleData = useMemo(() => {
+        const allData = [
+            { id: 0, targetPos: [0, 0, 0], scale: 1.2, speed: 1 },
+            { id: 1, targetPos: [-4, 3, -3], scale: 0.6, speed: 1.2 },
+            { id: 2, targetPos: [4, -3, -2], scale: 0.5, speed: 0.8 },
+            { id: 3, targetPos: [-3, -4, -4], scale: 0.7, speed: 1.5 },
+            { id: 4, targetPos: [5, 4, -5], scale: 0.4, speed: 1.1 },
+            { id: 5, targetPos: [-5, 1, -2], scale: 0.5, speed: 0.9 },
+            { id: 6, targetPos: [3, 5, -4], scale: 0.6, speed: 1.3 },
+            { id: 7, targetPos: [1, -5, -2], scale: 0.4, speed: 0.7 },
+            { id: 8, targetPos: [-6, -2, -3], scale: 0.3, speed: 1.4 },
+            { id: 9, targetPos: [6, 0, -4], scale: 0.5, speed: 1.0 },
+            { id: 10, targetPos: [-2, 6, -3], scale: 0.4, speed: 1.2 },
+            { id: 11, targetPos: [2, -6, -5], scale: 0.3, speed: 0.9 },
+        ];
+        return isMobile ? allData.slice(0, 6) : allData;
+    }, [isMobile]);
 
     useEffect(() => {
         // Scroll animation timeline
@@ -118,17 +129,18 @@ const CinematicObject = () => {
                         <icosahedronGeometry args={[2, 20]} />
                         <MeshTransmissionMaterial
                             backside
-                            backsideThickness={1.5}
-                            thickness={1.2}
-                            samples={4}
+                            backsideThickness={isMobile ? 0.5 : 1.5}
+                            thickness={isMobile ? 0.5 : 1.2}
+                            samples={isMobile ? 1 : 4}
+                            resolution={isMobile ? 256 : 512}
                             transmission={1}
-                            clearcoat={1}
+                            clearcoat={isMobile ? 0.5 : 1}
                             clearcoatRoughness={0}
-                            envMapIntensity={2.5}
+                            envMapIntensity={isMobile ? 1.5 : 2.5}
                             color="#ffffff"
                             roughness={0.03}
-                            anisotropy={0.5} // Professional optical effect
-                            chromaticAberration={0.06} // High-end glass look
+                            anisotropy={isMobile ? 0.1 : 0.5}
+                            chromaticAberration={0.06}
                             distortion={0.3}
                             distortionScale={0.3}
                             temporalDistortion={0.5}
@@ -296,8 +308,8 @@ const BackgroundFluid = () => {
 const ShaderHero = () => {
     return (
         <div className="canvas-container">
-            <Canvas dpr={[1, 2]} gl={{ antialias: true, alpha: true, stencil: false }} powerPreference="high-performance">
-                <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={45} />
+            <Canvas dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]} gl={{ antialias: false, alpha: true, stencil: false }} powerPreference="high-performance">
+                <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={window.innerWidth < 768 ? 60 : 45} />
 
                 <color attach="background" args={['#000000']} />
 

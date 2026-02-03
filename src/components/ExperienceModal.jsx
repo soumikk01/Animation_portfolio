@@ -158,6 +158,35 @@ const ExperienceModal = ({ onStart }) => {
         .start-btn:hover .btn-text {
           color: var(--accent-color);
         }
+        @media (max-width: 768px) {
+          .modal-content {
+            padding: 1.5rem;
+            width: 90%;
+          }
+          
+          .modal-logo h1 {
+            font-size: 2rem;
+          }
+
+          .modal-options {
+            margin-bottom: 3rem;
+          }
+
+          .modal-option {
+            font-size: 0.85rem;
+            text-align: left;
+            justify-content: flex-start;
+          }
+
+          .start-btn {
+            padding: 1.2rem;
+            gap: 15px;
+          }
+
+          .btn-text {
+            font-size: 0.8rem;
+          }
+        }
       `}</style>
     </div>
   );
