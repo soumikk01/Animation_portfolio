@@ -6,6 +6,8 @@ import ShaderHero from './components/ShaderHero';
 import About from './components/About';
 import TextReveal from './components/TextReveal';
 import SocialButtons from './components/SocialButtons';
+import FadeIn from './components/FadeIn';
+import StaggerFadeIn from './components/StaggerFadeIn';
 
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -76,10 +78,10 @@ function App() {
               </div>
 
               {/* Subtext */}
-              <div className="hero-description">
+              <FadeIn delay={0.8} className="hero-description">
                 <p>a new design serif font</p>
                 <p>with stylistic alternates</p>
-              </div>
+              </FadeIn>
             </div>
           </div>
         </section>
@@ -90,48 +92,58 @@ function App() {
         {/* TECH STACK SECTION */}
         <section id="tech-stack" className="tech-stack">
           <div className="container">
-            <h2 className="section-title">01 / Tech Stack</h2>
-            <div className="tech-grid">
-              <div className="tech-category">
-                <h3 className="category-title">Frontend</h3>
-                <div className="tech-items">
-                  <div className="tech-item">React</div>
-                  <div className="tech-item">Next.js</div>
-                  <div className="tech-item">TypeScript</div>
-                  <div className="tech-item">Tailwind CSS</div>
-                  <div className="tech-item">GSAP</div>
-                  <div className="tech-item">Three.js</div>
+            <FadeIn>
+              <h2 className="section-title">01 / Tech Stack</h2>
+            </FadeIn>
+            <StaggerFadeIn className="tech-grid" staggerDelay={0.15}>
+              <FadeIn delay={0.2}>
+                <div className="tech-category">
+                  <h3 className="category-title">Frontend</h3>
+                  <div className="tech-items">
+                    <div className="tech-item">React</div>
+                    <div className="tech-item">Next.js</div>
+                    <div className="tech-item">TypeScript</div>
+                    <div className="tech-item">Tailwind CSS</div>
+                    <div className="tech-item">GSAP</div>
+                    <div className="tech-item">Three.js</div>
+                  </div>
                 </div>
-              </div>
-              <div className="tech-category">
-                <h3 className="category-title">Backend</h3>
-                <div className="tech-items">
-                  <div className="tech-item">Node.js</div>
-                  <div className="tech-item">Express</div>
-                  <div className="tech-item">MongoDB</div>
-                  <div className="tech-item">PostgreSQL</div>
-                  <div className="tech-item">Firebase</div>
+              </FadeIn>
+              <FadeIn delay={0.3}>
+                <div className="tech-category">
+                  <h3 className="category-title">Backend</h3>
+                  <div className="tech-items">
+                    <div className="tech-item">Node.js</div>
+                    <div className="tech-item">Express</div>
+                    <div className="tech-item">MongoDB</div>
+                    <div className="tech-item">PostgreSQL</div>
+                    <div className="tech-item">Firebase</div>
+                  </div>
                 </div>
-              </div>
-              <div className="tech-category">
-                <h3 className="category-title">Tools & Others</h3>
-                <div className="tech-items">
-                  <div className="tech-item">Git</div>
-                  <div className="tech-item">Docker</div>
-                  <div className="tech-item">Figma</div>
-                  <div className="tech-item">Blender</div>
-                  <div className="tech-item">WebGL</div>
+              </FadeIn>
+              <FadeIn delay={0.4}>
+                <div className="tech-category">
+                  <h3 className="category-title">Tools & Others</h3>
+                  <div className="tech-items">
+                    <div className="tech-item">Git</div>
+                    <div className="tech-item">Docker</div>
+                    <div className="tech-item">Figma</div>
+                    <div className="tech-item">Blender</div>
+                    <div className="tech-item">WebGL</div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </FadeIn>
+            </StaggerFadeIn>
           </div>
         </section>
 
         {/* PROJECTS SECTION */}
         <section id="projects" className="projects">
           <div className="container">
-            <h2 className="section-title">02 / Selected Works</h2>
-            <div className="project-list">
+            <FadeIn>
+              <h2 className="section-title">02 / Selected Works</h2>
+            </FadeIn>
+            <StaggerFadeIn className="project-list" staggerDelay={0.2}>
               {[
                 { name: 'Motion Identity', cat: 'Interaction Design' },
                 { name: 'Vortex System', cat: 'WebGL / Shader' },
@@ -143,10 +155,12 @@ function App() {
                   <span className="project-category">{proj.cat}</span>
                 </div>
               ))}
-            </div>
+            </StaggerFadeIn>
 
             {/* Social Media Buttons with Bubble Animation */}
-            <SocialButtons />
+            <FadeIn delay={0.3}>
+              <SocialButtons />
+            </FadeIn>
           </div>
         </section>
 
@@ -158,22 +172,26 @@ function App() {
           </div>
 
           <div className="container footer-content-left">
-            <div className="footer-text-wrapper">
-              <TextReveal className="hero-title text-accent">Let's Talk</TextReveal>
-              <div className="text-floats">
-                <div className="float-bubble"></div>
-                <div className="float-bubble"></div>
-                <div className="float-bubble"></div>
+            <FadeIn delay={0.2}>
+              <div className="footer-text-wrapper">
+                <TextReveal className="hero-title text-accent">Let's Talk</TextReveal>
+                <div className="text-floats">
+                  <div className="float-bubble"></div>
+                  <div className="float-bubble"></div>
+                  <div className="float-bubble"></div>
+                </div>
               </div>
-            </div>
+            </FadeIn>
           </div>
 
           <div className="footer-bottom">
             <div className="container">
-              <div className="footer-info">
-                <p>© 2026</p>
-                <a href="mailto:hello@antigravity.io" className="mail-link">hello@antigravity.io</a>
-              </div>
+              <FadeIn delay={0.4}>
+                <div className="footer-info">
+                  <p>© 2026</p>
+                  <a href="mailto:hello@antigravity.io" className="mail-link">hello@antigravity.io</a>
+                </div>
+              </FadeIn>
             </div>
           </div>
         </footer>
@@ -684,7 +702,7 @@ function App() {
           }
         }
       `}</style>
-    </SmoothScroll>
+    </SmoothScroll >
   );
 }
 

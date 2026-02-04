@@ -1,0 +1,32 @@
+.typing-animation {
+    display: inline;
+    font-family: inherit;
+    line-height: 1.6;
+}
+
+.typing-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    color: var(--accent-color);
+    font-weight: 400;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Smooth appearance */
+.typing-animation {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}

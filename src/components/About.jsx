@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import TypingAnimation from './TypingAnimation';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,10 +52,18 @@ const About = () => {
                     <div ref={textRef} className="about-text-wrapper">
                         <h2 className="section-title">00 / About</h2>
                         <h3 className="about-headline">
-                            Crafting immersive <span className="highlight">digital experiences</span> at the intersection of <span className="highlight">art & technology</span>
+                            <TypingAnimation
+                                text="B.Tech in Computer Science & Engineering (AI & Machine Learning)"
+                                speed={40}
+                                delay={500}
+                            />
                         </h3>
                         <p className="about-description">
-                            I specialize in building scalable, efficient, and production-ready full-stack applications with a focus on modern aesthetics and seamless user interaction.
+                            <TypingAnimation
+                                text="I am currently pursuing a B.Tech in Computer Science and Engineering (Artificial Intelligence & Machine Learning). I am actively learning backend development and AI concepts, with a strong interest in building real-world software systems. I specialize in Java backend development combined with modern frontend technologies such as JavaScript, React, and Three.js, and I focus on building scalable, efficient, and production-ready full-stack applications."
+                                speed={25}
+                                delay={3500}
+                            />
                         </p>
                     </div>
 
