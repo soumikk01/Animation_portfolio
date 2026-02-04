@@ -5,6 +5,7 @@ import ExperienceModal from './components/ExperienceModal';
 import ShaderHero from './components/ShaderHero';
 import About from './components/About';
 import TextReveal from './components/TextReveal';
+import SocialButtons from './components/SocialButtons';
 
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -143,6 +144,9 @@ function App() {
                 </div>
               ))}
             </div>
+
+            {/* Social Media Buttons with Bubble Animation */}
+            <SocialButtons />
           </div>
         </section>
 
