@@ -25,62 +25,58 @@ function App() {
         <section id="home" className="hero hero-vibe">
           <div className="container hero-container">
             <div className="typography-design">
-              {/* Top Sparkle */}
-              <div className="sparkle top-left">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                </svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="small">
-                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                </svg>
-              </div>
-
-              {/* Line 1: Locked */}
+              {/* Line 1: Full-Stack */}
               <div className="text-line line-1">
-                <h1 className="main-word">Locked</h1>
+                {/* Top-center annotation */}
+                <div className="annotation top-center-ann">
+                  <span className="annotation-text">"logic"</span>
+                  <div className="annotation-line"></div>
+                </div>
+
+                <h1 className="main-word">Full-Stack</h1>
+
+                {/* Top-left annotation */}
+                <div className="annotation top-left-ann">
+                  <span className="annotation-text">"Java backend"</span>
+                  <div className="annotation-line diag-line"></div>
+                </div>
+
+                {/* Top-right annotation */}
                 <div className="annotation ligature">
                   <div className="annotation-line"></div>
-                  <span className="annotation-text">"ligature"</span>
+                  <span className="annotation-text">"RESTful APIs"</span>
                 </div>
+
+
               </div>
 
-              {/* Line 2: Away */}
+              {/* Line 2: Developer */}
               <div className="text-line line-2">
+                {/* Left annotation */}
                 <div className="annotation alternate-left">
-                  <span className="annotation-text">"alternate"</span>
-                  <div className="annotation-curve curve-left">
-                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
-                      <path d="M100 10 C 50 10, 10 50, 10 90" />
-                    </svg>
-                  </div>
+                  <div className="annotation-line"></div>
+                  <span className="annotation-text">"JavaScript frontends"</span>
                 </div>
 
-                <h1 className="main-word">Away</h1>
+                <h1 className="main-word">Developer</h1>
 
+                {/* Bottom-center annotation */}
+                <div className="annotation bottom-center-ann">
+                  <div className="annotation-line"></div>
+                  <span className="annotation-text">"CI/CD"</span>
+                </div>
+
+                {/* Right annotation */}
                 <div className="annotation alternate-right">
-                  <div className="annotation-curve curve-right">
-                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
-                      <path d="M0 10 C 50 10, 90 50, 90 90" />
-                    </svg>
-                  </div>
-                  <span className="annotation-text">"alternate"</span>
-                </div>
-
-                {/* Bottom Sparkle */}
-                <div className="sparkle bottom-right">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                  </svg>
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="small">
-                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-                  </svg>
+                  <div className="annotation-line"></div>
+                  <span className="annotation-text">"databases"</span>
                 </div>
               </div>
 
               {/* Subtext */}
               <FadeIn delay={0.8} className="hero-description">
-                <p>a new design serif font</p>
-                <p>with stylistic alternates</p>
+                <p>Building modern web experiences</p>
+                <p>with cutting-edge technologies</p>
               </FadeIn>
             </div>
           </div>
@@ -378,40 +374,77 @@ function App() {
         }
 
         .ligature {
-          top: -15%;
-          right: -5%;
+          top: -22%;
+          right: -12%;
           flex-direction: row;
           align-items: center;
         }
 
         .annotation-line {
-          width: 30px;
-          height: 1px;
-          background: rgba(255, 255, 255, 0.4);
+          width: 45px;
+          height: 1.5px;
+          background: rgba(255, 255, 255, 0.6);
         }
 
         .alternate-left {
-          left: -15%;
-          top: 35%;
+          left: -35%;
+          top: 48%;
           flex-direction: row-reverse;
           align-items: center;
         }
 
         .alternate-right {
-          right: -15%;
-          top: 35%;
+          right: -24%;
+          top: 48%;
           flex-direction: row;
+          align-items: center;
+        }
+        
+        /* New annotation positions for Full-Stack */
+        .top-left-ann {
+          top: -30%;
+          left: -21%;
+          flex-direction: row;
+          align-items: center;
+        }
+        
+        .diag-line {
+          transform: rotate(45deg);
+          transform-origin: left center;
+          width: 25px;
+        }
+        
+
+        
+        /* New annotation positions for Developer */
+        .top-center-ann {
+          top: -35%;
+          left: 50%;
+          transform: translateX(-50%);
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .bottom-center-ann {
+          bottom: -40%;
+          left: 50%;
+          transform: translateX(-50%);
+          flex-direction: column;
           align-items: center;
         }
 
         .annotation-curve {
-          width: 30px;
-          height: 30px;
-          opacity: 0.4;
+          width: 50px;
+          height: 50px;
+          opacity: 0.7;
         }
         
-        .curve-left { transform: rotate(-15deg) translateY(8px); }
-        .curve-right { transform: rotate(15deg) translateY(8px); }
+        .curve-left { 
+          transform: rotate(-8deg) translateY(6px); 
+        }
+        .curve-right { 
+          transform: rotate(8deg) translateY(6px); 
+        }
 
         .hero-description {
           margin-top: 3rem;
