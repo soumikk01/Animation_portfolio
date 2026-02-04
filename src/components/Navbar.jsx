@@ -4,52 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Sound utility functions using Web Audio API
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioContext;
-
-const initAudio = () => {
-    if (!audioContext) {
-        audioContext = new AudioContext();
-    }
-    return audioContext;
-};
-
-const playSound = (frequency, duration, type = 'sine', volume = 0.1) => {
-    const ctx = initAudio();
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-
-    oscillator.type = type;
-    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
-
-    gainNode.gain.setValueAtTime(volume, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + duration);
-};
-
-// Different sound effects
-const sounds = {
-    hover: () => playSound(800, 0.1, 'sine', 0.05),
-    click: () => {
-        playSound(600, 0.05, 'sine', 0.08);
-        setTimeout(() => playSound(900, 0.05, 'sine', 0.06), 50);
-    },
-    menuOpen: () => {
-        playSound(400, 0.1, 'sine', 0.08);
-        setTimeout(() => playSound(600, 0.1, 'sine', 0.06), 80);
-        setTimeout(() => playSound(800, 0.1, 'sine', 0.04), 150);
-    },
-    menuClose: () => {
-        playSound(800, 0.1, 'sine', 0.06);
-        setTimeout(() => playSound(600, 0.1, 'sine', 0.05), 60);
-    }
-};
+import { sounds, setMuted, getMuted } from '../utils/audio';
 
 const Navbar = () => {
     const navRef = useRef();
@@ -60,6 +15,7 @@ const Navbar = () => {
     const menuOpenedAtRef = useRef(0);
     const [logoText, setLogoText] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMuted, setIsMuted] = useState(getMuted());
     const fullText = "PORTFOLIO";
 
     useEffect(() => {
@@ -235,6 +191,15 @@ const Navbar = () => {
         }
     };
 
+    const toggleSound = () => {
+        const nextMuted = !isMuted;
+        setIsMuted(nextMuted);
+        setMuted(nextMuted);
+        if (!nextMuted) {
+            sounds.hover();
+        }
+    };
+
     return (
         <nav ref={navRef} className="navbar">
             {/* Left Section - Logo (Separate Container) */}
@@ -296,6 +261,24 @@ const Navbar = () => {
                             </div>
                             <div className="btn-glow" />
                         </a>
+
+                        <button
+                            className={`sound-toggle ${isMuted ? 'muted' : ''}`}
+                            onClick={toggleSound}
+                            onMouseEnter={() => !isMuted && sounds.hover()}
+                            aria-label={isMuted ? "Unmute" : "Mute"}
+                        >
+                            <div className="sound-waves">
+                                <span className="sound-wave"></span>
+                                <span className="sound-wave"></span>
+                                <span className="sound-wave"></span>
+                                <span className="sound-wave"></span>
+                            </div>
+                            <div className="btn-bubbles">
+                                <span className="btn-bubble"></span>
+                                <span className="btn-bubble"></span>
+                            </div>
+                        </button>
                     </div>
                 </div>
 
@@ -789,6 +772,78 @@ const Navbar = () => {
                     right: -5px; 
                     transition-delay: 0.1s;
                     animation: float1 3s ease-in-out infinite;
+                }
+
+                .nav-action {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                }
+
+                .sound-toggle {
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    position: relative;
+                    transition: all 0.3s ease;
+                }
+
+                .sound-toggle:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-color: rgba(255, 255, 255, 0.3);
+                    transform: translateY(-2px);
+                }
+
+                .sound-waves {
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 3px;
+                    height: 14px;
+                }
+
+                .sound-wave {
+                    width: 2px;
+                    height: 100%;
+                    background: #ffffff;
+                    border-radius: 2px;
+                    transition: height 0.3s ease;
+                }
+
+                /* Animated Waves */
+                .sound-toggle:not(.muted) .sound-wave {
+                    animation: waveAnim 0.8s ease-in-out infinite;
+                }
+
+                .sound-toggle:not(.muted) .sound-wave:nth-child(1) { animation-delay: 0.0s; height: 60%; }
+                .sound-toggle:not(.muted) .sound-wave:nth-child(2) { animation-delay: 0.1s; height: 100%; }
+                .sound-toggle:not(.muted) .sound-wave:nth-child(3) { animation-delay: 0.2s; height: 75%; }
+                .sound-toggle:not(.muted) .sound-wave:nth-child(4) { animation-delay: 0.3s; height: 40%; }
+
+                @keyframes waveAnim {
+                    0%, 100% { height: 30%; opacity: 0.4; }
+                    50% { height: 100%; opacity: 1; }
+                }
+
+                /* Muted State */
+                .sound-toggle.muted .sound-wave {
+                    height: 2px !important;
+                    opacity: 0.3;
+                }
+
+                .sound-toggle.muted::after {
+                    content: '';
+                    position: absolute;
+                    width: 70%;
+                    height: 2px;
+                    background: rgba(255, 255, 255, 0.5);
+                    transform: rotate(-45deg);
+                    border-radius: 2px;
                 }
 
                 .menu-btn-bubble:nth-child(2) { 

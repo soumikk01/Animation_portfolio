@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { sounds, getMuted } from '../utils/audio';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const ParticleField = () => {
@@ -148,6 +150,9 @@ const CinematicObject = () => {
     }, [isMobile]);
 
     useEffect(() => {
+        let lastSoundTime = 0;
+        const soundCooldown = 150; // ms
+
         // Scroll animation timeline
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -155,6 +160,14 @@ const CinematicObject = () => {
                 start: 'top top',
                 end: 'bottom bottom',
                 scrub: 3, // Increased for a more liquid, high-fidelity smoothing feel
+                onUpdate: (self) => {
+                    // Play bubble sound when scrolling, with a cooldown and check if muted
+                    const now = Date.now();
+                    if (!getMuted() && Math.abs(self.getVelocity()) > 100 && now - lastSoundTime > soundCooldown) {
+                        sounds.bubble();
+                        lastSoundTime = now;
+                    }
+                }
             }
         });
 
