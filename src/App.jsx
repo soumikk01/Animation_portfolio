@@ -50,6 +50,15 @@ function App() {
 
               </div>
 
+              {/* Animated Bubbles */}
+              <div className="hero-bubbles">
+                <div className="bubble bubble-1"></div>
+                <div className="bubble bubble-2"></div>
+                <div className="bubble bubble-3"></div>
+                <div className="bubble bubble-4"></div>
+                <div className="bubble bubble-5"></div>
+              </div>
+
               {/* Line 2: Developer */}
               <div className="text-line line-2">
                 {/* Left annotation */}
@@ -455,6 +464,151 @@ function App() {
           letter-spacing: 0.04em;
           line-height: 1.4;
           text-transform: lowercase;
+        }
+
+        /* Animated Bubbles */
+        .hero-bubbles {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .bubble {
+          position: absolute;
+          border-radius: 50%;
+          background: linear-gradient(135deg, rgba(186, 85, 211, 0.15), rgba(138, 43, 226, 0.1));
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 8px 32px 0 rgba(31, 38, 135, 0.2),
+            inset 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .bubble-1 {
+          width: 120px;
+          height: 120px;
+          top: -10%;
+          left: 15%;
+          animation: slideFloat1 8s ease-in-out infinite;
+        }
+
+        .bubble-2 {
+          width: 80px;
+          height: 80px;
+          top: 20%;
+          right: 10%;
+          animation: slideFloat2 10s ease-in-out infinite;
+        }
+
+        .bubble-3 {
+          width: 150px;
+          height: 150px;
+          bottom: 5%;
+          left: -5%;
+          animation: slideFloat3 12s ease-in-out infinite;
+        }
+
+        .bubble-4 {
+          width: 60px;
+          height: 60px;
+          top: 50%;
+          right: -3%;
+          animation: slideFloat4 9s ease-in-out infinite;
+        }
+
+        .bubble-5 {
+          width: 100px;
+          height: 100px;
+          bottom: 15%;
+          right: 20%;
+          animation: slideFloat5 11s ease-in-out infinite;
+        }
+
+        @keyframes slideFloat1 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.3;
+          }
+          25% {
+            transform: translate(20px, -30px) scale(1.1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translate(40px, -10px) scale(0.9);
+            opacity: 0.4;
+          }
+          75% {
+            transform: translate(15px, 20px) scale(1.05);
+            opacity: 0.35;
+          }
+        }
+
+        @keyframes slideFloat2 {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 0.4;
+          }
+          33% {
+            transform: translate(-25px, 30px) rotate(120deg);
+            opacity: 0.6;
+          }
+          66% {
+            transform: translate(-10px, -15px) rotate(240deg);
+            opacity: 0.45;
+          }
+        }
+
+        @keyframes slideFloat3 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.25;
+          }
+          30% {
+            transform: translate(30px, -20px) scale(1.15);
+            opacity: 0.4;
+          }
+          60% {
+            transform: translate(-15px, -40px) scale(0.95);
+            opacity: 0.35;
+          }
+        }
+
+        @keyframes slideFloat4 {
+          0%, 100% {
+            transform: translate(0, 0);
+            opacity: 0.5;
+          }
+          40% {
+            transform: translate(-30px, -25px);
+            opacity: 0.7;
+          }
+          80% {
+            transform: translate(10px, 15px);
+            opacity: 0.55;
+          }
+        }
+
+        @keyframes slideFloat5 {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 0.35;
+          }
+          25% {
+            transform: translate(-20px, -35px) rotate(90deg) scale(1.1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translate(15px, -20px) rotate(180deg) scale(0.9);
+            opacity: 0.45;
+          }
+          75% {
+            transform: translate(-10px, 25px) rotate(270deg) scale(1.05);
+            opacity: 0.4;
+          }
         }
 
         /* Sparkles */
