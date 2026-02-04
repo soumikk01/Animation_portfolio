@@ -3,6 +3,7 @@ import SmoothScroll from './components/SmoothScroll';
 import Navbar from './components/Navbar';
 import ExperienceModal from './components/ExperienceModal';
 import ShaderHero from './components/ShaderHero';
+import About from './components/About';
 import TextReveal from './components/TextReveal';
 
 function App() {
@@ -81,6 +82,9 @@ function App() {
             </div>
           </div>
         </section>
+
+        {/* ABOUT SECTION */}
+        <About />
 
         {/* TECH STACK SECTION */}
         <section id="tech-stack" className="tech-stack">
@@ -179,7 +183,7 @@ function App() {
 
         .footer-cinematic {
           padding: 20vh 0 10vh;
-          background: linear-gradient(180deg, #000000 0%, #0a0a20 100%);
+          background: linear-gradient(180deg, #000000 0%, #1e0a29 100%);
           overflow: hidden;
           position: relative;
         }
@@ -237,7 +241,7 @@ function App() {
         .footer-bubble {
           position: absolute;
           border-radius: 50%;
-          background: linear-gradient(135deg, rgba(76, 29, 149, 0.15), rgba(30, 27, 75, 0.3));
+          background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(46, 16, 101, 0.3));
           filter: blur(60px);
         }
 
@@ -286,7 +290,7 @@ function App() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: radial-gradient(circle at center, rgba(40, 30, 20, 0.2) 0%, transparent 70%); /* Warm tint like the image */
+          background: radial-gradient(circle at center, rgba(168, 85, 247, 0.15) 0%, transparent 70%); /* Purple tint */
           position: relative;
           color: #f8f8f8;
           overflow: hidden;

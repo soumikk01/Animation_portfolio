@@ -7,6 +7,115 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const ParticleField = () => {
+    const pointsRef = useRef();
+    const count = 1200;
+
+    const [positions, colors] = useMemo(() => {
+        const pos = new Float32Array(count * 3);
+        const cols = new Float32Array(count * 3);
+        const color1 = new THREE.Color('#ffffff');
+        const color2 = new THREE.Color('#a855f7');
+
+        for (let i = 0; i < count; i++) {
+            pos[i * 3] = (Math.random() - 0.5) * 40;
+            pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
+            pos[i * 3 + 2] = (Math.random() - 0.5) * 10 - 2; // Range [-7, 3] which is > -10
+
+            const mixedColor = Math.random() > 0.5 ? color1 : color2;
+            cols[i * 3] = mixedColor.r;
+            cols[i * 3 + 1] = mixedColor.g;
+            cols[i * 3 + 2] = mixedColor.b;
+        }
+        return [pos, cols];
+    }, []);
+
+    useFrame((state) => {
+        const time = state.clock.getElapsedTime();
+        const pulse = (Math.sin(time * 0.5) + 1) * 0.5;
+        const scroll = state.mouse.y * 2;
+
+        if (pointsRef.current) {
+            pointsRef.current.rotation.y = time * 0.02;
+            pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.05;
+
+            // Parallax shift
+            pointsRef.current.position.y = THREE.MathUtils.lerp(pointsRef.current.position.y, scroll * 0.5, 0.05);
+
+            // Sync particle brightness with pulse
+            pointsRef.current.material.opacity = 0.1 + pulse * 0.4;
+        }
+    });
+
+    return (
+        <points ref={pointsRef}>
+            <bufferGeometry>
+                <bufferAttribute
+                    attach="attributes-position"
+                    count={count}
+                    array={positions}
+                    itemSize={3}
+                />
+                <bufferAttribute
+                    attach="attributes-color"
+                    count={count}
+                    array={colors}
+                    itemSize={3}
+                />
+            </bufferGeometry>
+            <pointsMaterial
+                size={0.12}
+                vertexColors
+                transparent
+                opacity={0.3}
+                sizeAttenuation
+                blending={THREE.AdditiveBlending}
+                depthWrite={false}
+            />
+        </points>
+    );
+};
+
+const ShootingStars = () => {
+    const groupRef = useRef();
+    const count = 6;
+    const stars = useMemo(() => {
+        return [...Array(count)].map(() => ({
+            pos: [(Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40, -5],
+            speed: 0.2 + Math.random() * 0.5,
+            length: 2 + Math.random() * 5,
+            delay: Math.random() * 10
+        }));
+    }, []);
+
+    useFrame((state) => {
+        const time = state.clock.getElapsedTime();
+        groupRef.current.children.forEach((star, i) => {
+            const data = stars[i];
+            if (time > data.delay) {
+                star.position.x -= data.speed;
+                star.position.y -= data.speed * 0.3;
+
+                if (star.position.x < -30) {
+                    star.position.set(30, (Math.random() - 0.5) * 40, -5);
+                    data.delay = time + Math.random() * 15;
+                }
+            }
+        });
+    });
+
+    return (
+        <group ref={groupRef}>
+            {stars.map((data, i) => (
+                <mesh key={i} position={data.pos} rotation={[0, 0, Math.PI / 6]}>
+                    <planeGeometry args={[data.length, 0.05]} />
+                    <meshBasicMaterial color="#ffffff" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
+                </mesh>
+            ))}
+        </group>
+    );
+};
+
 const CinematicObject = () => {
     const groupRef = useRef();
     const bubblesRef = useRef([]);
@@ -102,21 +211,32 @@ const CinematicObject = () => {
         };
     }, [bubbleData]);
 
-    useFrame((state, delta) => {
+    useFrame((state) => {
         const time = state.clock.getElapsedTime();
+        const pulse = (Math.sin(time * 0.5) + 1) * 0.5; // Synced 0-1 pulse
+        const mouseX = state.mouse.x * 2;
+        const mouseY = state.mouse.y * 2;
+
         if (groupRef.current) {
-            // Smooth group rotation lerp
-            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, time * 0.05, 0.1);
-            groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, Math.sin(time * 0.5) * 0.1, 0.1);
+            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, time * 0.05 + mouseX * 0.1, 0.1);
+            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, mouseY * 0.05, 0.1);
+            groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, Math.sin(time * 0.5) * 0.1 + mouseY * 0.05, 0.1);
         }
 
         bubblesRef.current.forEach((bubble, i) => {
             if (bubble) {
-                // Organic rotation wobble with lerp for jitter-free motion
                 const targetRotX = Math.sin(time * (0.2 + i * 0.05)) * 0.2;
                 const targetRotZ = Math.cos(time * (0.1 + i * 0.03)) * 0.1;
                 bubble.rotation.x = THREE.MathUtils.lerp(bubble.rotation.x, targetRotX, 0.1);
                 bubble.rotation.z = THREE.MathUtils.lerp(bubble.rotation.z, targetRotZ, 0.1);
+
+                // Sync bubble color/transmission with pulse
+                const material = bubble.material;
+                if (material) {
+                    // Blend between white and vibrant purple
+                    material.color.lerp(new THREE.Color(pulse > 0.5 ? '#a855f7' : '#ffffff'), 0.02);
+                    material.envMapIntensity = THREE.MathUtils.lerp(material.envMapIntensity, 1.5 + pulse * 2, 0.05);
+                }
             }
         });
     });
@@ -159,11 +279,13 @@ const BackgroundFluid = () => {
     const shaderArgs = useMemo(() => ({
         uniforms: {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#000000') },
-            uColor2: { value: new THREE.Color('#1e1b4b') }, // Deeper Indigo/Purple
-            uColor3: { value: new THREE.Color('#ffffff') }, // Energy Highlights
-            uAccent: { value: new THREE.Color('#4c1d95') }, // Sophisticated Violet
-            uDeepBlue: { value: new THREE.Color('#020617') } // Deep Space Blue
+            uSyncPulse: { value: 0 },
+            uMouse: { value: new THREE.Vector2(0, 0) },
+            uColor1: { value: new THREE.Color('#05010a') }, // Very Dark Purple instead of Black
+            uColor2: { value: new THREE.Color('#7c3aed') }, // Vibrant Purple
+            uColor3: { value: new THREE.Color('#ffffff') }, // White Highlights
+            uAccent: { value: new THREE.Color('#a855f7') }, // Lighter Purple Accent
+            uDeepPurple: { value: new THREE.Color('#1e0a45') } // Slightly brighter Deep Purple
         },
         vertexShader: `
       varying vec2 vUv;
@@ -174,10 +296,13 @@ const BackgroundFluid = () => {
     `,
         fragmentShader: `
       uniform float uTime;
+      uniform float uSyncPulse;
+      uniform vec2 uMouse;
       uniform vec3 uColor1;
       uniform vec3 uColor2;
       uniform vec3 uColor3;
       uniform vec3 uAccent;
+      uniform vec3 uDeepPurple;
       varying vec2 vUv;
 
       //  Simplex 3D Noise 
@@ -188,36 +313,31 @@ const BackgroundFluid = () => {
         const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
         const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
-        // First corner
         vec3 i  = floor(v + dot(v, C.yyy) );
         vec3 x0 = v - i + dot(i, C.xxx) ;
 
-        // Other corners
         vec3 g = step(x0.yzx, x0.xyz);
         vec3 l = 1.0 - g;
         vec3 i1 = min( g.xyz, l.zxy );
         vec3 i2 = max( g.xyz, l.zxy );
 
-        //  x0 = x0 - 0.0 + 0.0 * C 
         vec3 x1 = x0 - i1 + 1.0 * C.xxx;
         vec3 x2 = x0 - i2 + 2.0 * C.xxx;
         vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
 
-        // Permutations
         i = mod(i, 289.0 ); 
         vec4 p = permute( permute( permute( 
                    i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
                  + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
                  + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
 
-        // Gradients
-        float n_ = 1.0/7.0; // N=7
+        float n_ = 1.0/7.0; 
         vec3  ns = n_ * D.wyz - D.xzx;
 
-        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,N*N)
+        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  
 
         vec4 x_ = floor(j * ns.z);
-        vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+        vec4 y_ = floor(j - 7.0 * x_ );    
 
         vec4 x = x_ *ns.x + ns.yyyy;
         vec4 y = y_ *ns.x + ns.yyyy;
@@ -238,14 +358,12 @@ const BackgroundFluid = () => {
         vec3 p2 = vec3(a1.xy,h.z);
         vec3 p3 = vec3(a1.zw,h.w);
 
-        //Normalise gradients
         vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
         p0 *= norm.x;
         p1 *= norm.y;
         p2 *= norm.z;
         p3 *= norm.w;
 
-        // Mix
         vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
         m = m * m;
         return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
@@ -254,37 +372,46 @@ const BackgroundFluid = () => {
 
       void main() {
         vec2 p = vUv * 2.0 - 1.0;
+        float dist = length(p);
+        float time = uTime * 0.15;
         
-        // Slower, majestic movement
-        float time = uTime * 0.2;
-        
-        // Multi-octave noise for rich texture
-        float n1 = snoise(vec3(p * 1.0, time));
-        float n2 = snoise(vec3(p * 2.0 + vec2(time*0.5), time * 1.5));
-        float n3 = snoise(vec3(p * 4.0 - vec2(time*0.3), time * 2.0));
-        
-        float finalNoise = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
-        
-        // Map noise to color channels
-        // Purple "Nebula" areas
-        float purpleMask = smoothstep(0.0, 0.8, finalNoise + 0.2);
-        
-        // White "Lightning/Energy" areas
-        float whiteMask = smoothstep(0.4, 0.9, n2 * n3 + 0.2);
+        // VOLUMETRIC LIGHT RAYS (Additively blended)
+        float rays = 0.0;
+        vec2 rayP = p * 1.2;
+        float rayAngle = atan(rayP.y, rayP.x);
+        rays += (sin(rayAngle * 8.0 + time) + 1.0) * 0.5;
+        rays += (sin(rayAngle * 5.0 - time * 0.8) + 1.0) * 0.5;
+        rays *= 0.15 * smoothstep(0.5, 0.0, dist);
 
-        vec3 color = mix(uColor1, uDeepBlue, dist * 0.5); // Cinematic background depth
+        float n1 = snoise(vec3(p * 1.5, time));
+        float n2 = snoise(vec3(p * 3.0 + vec2(time * 0.4), time * 1.2));
+        float finalNoise = n1 * 0.5 + n2 * 0.5;
         
-        // Add purple glow
-        color = mix(color, uColor2, purpleMask * 0.6);
+        // MOUSE REACTIVE GLOW
+        float mouseDist = length(p - uMouse);
+        float mouseGlow = smoothstep(0.8, 0.0, mouseDist) * 0.45;
+
+        // Deep Black Base with variable Purple Tint reactive to pulse
+        vec3 color = mix(uColor1, uDeepPurple * (0.8 + uSyncPulse * 0.4), dist * 0.8);
         
-        // Add accents
-        color = mix(color, uAccent, smoothstep(0.3, 0.7, n1) * 0.4);
+        // Dynamic Purple Waves - intensity synced with pulse
+        float purpleWaves = smoothstep(-0.2, 0.6, finalNoise);
+        color = mix(color, uColor2 * (1.0 + uSyncPulse * 0.5), purpleWaves * 0.5);
         
-        // Add white space-dust (softened highlights)
-        color = mix(color, uColor3, whiteMask * 0.4);
+        // Bright Accents synced
+        float accentMask = smoothstep(0.4, 0.8, n2);
+        color = mix(color, uAccent * (1.0 + uSyncPulse * 0.3), accentMask * 0.4);
         
-        // Vignette
-        color *= 1.0 - smoothstep(0.4, 1.4, dist);
+        // Crisp White Energy Highlights synced
+        float energyMask = smoothstep(0.5, 0.95, n1 + 0.3);
+        color = mix(color, uColor3 * (1.0 + uSyncPulse * 0.2), energyMask * 0.35);
+        
+        // Apply Rays and Mouse Glow
+        color += uAccent * rays * (0.4 + uSyncPulse * 0.6);
+        color += uColor2 * mouseGlow * (0.6 + uSyncPulse * 0.4);
+        
+        // Vignette to keep edges black
+        color *= 1.2 - smoothstep(0.3, 1.2, dist);
 
         gl_FragColor = vec4(color, 1.0);
       }
@@ -293,7 +420,13 @@ const BackgroundFluid = () => {
 
     useFrame((state) => {
         if (meshRef.current) {
-            meshRef.current.material.uniforms.uTime.value = state.clock.getElapsedTime();
+            const time = state.clock.getElapsedTime();
+            meshRef.current.material.uniforms.uTime.value = time;
+            meshRef.current.material.uniforms.uSyncPulse.value = (Math.sin(time * 0.5) + 1) * 0.5;
+            meshRef.current.material.uniforms.uMouse.value.lerp(state.mouse, 0.1);
+
+            // Background Parallax
+            meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, state.mouse.y * 0.5, 0.02);
         }
     });
 
@@ -313,13 +446,15 @@ const ShaderHero = () => {
 
                 <color attach="background" args={['#000000']} />
 
-                <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.2} penumbra={1} intensity={5} color="#d8b4fe" />
-                <pointLight position={[-10, 5, -5]} intensity={8} color="#1e40af" /> // New Cinematic Blue Rim Light
-                <pointLight position={[-10, -10, -10]} intensity={2} color="#6366f1" />
+                <ambientLight intensity={0.8} />
+                <spotLight position={[10, 10, 10]} angle={0.2} penumbra={1} intensity={10} color="#a855f7" />
+                <pointLight position={[-10, 5, -5]} intensity={12} color="#7c3aed" />
+                <pointLight position={[-10, -10, -10]} intensity={5} color="#4c1d95" />
 
                 <Suspense fallback={null}>
                     <BackgroundFluid />
+                    <ParticleField />
+                    <ShootingStars />
                     <CinematicObject />
                     <Environment preset="night" />
                     <ContactShadows position={[0, -3.5, 0]} opacity={0.4} scale={20} blur={3} far={4} />
@@ -335,8 +470,9 @@ const ShaderHero = () => {
           left: 0;
           width: 100%;
           height: 100vh;
-          z-index: 1;
+          z-index: -1;
           pointer-events: none;
+          background: #000;
         }
         
         .grain-overlay {

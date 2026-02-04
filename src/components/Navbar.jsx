@@ -394,19 +394,19 @@ const Navbar = () => {
                     min-height: 1.5em;
                     position: relative;
                     text-shadow: 
-                        0 2px 10px rgba(138, 43, 226, 0.6),
-                        0 0 20px rgba(186, 85, 211, 0.4),
-                        0 0 30px rgba(138, 43, 226, 0.3),
+                        0 2px 10px rgba(168, 85, 247, 0.6),
+                        0 0 20px rgba(192, 132, 252, 0.4),
+                        0 0 30px rgba(168, 85, 247, 0.3),
                         2px 2px 0 rgba(255, 255, 255, 0.1),
                         -2px -2px 0 rgba(0, 0, 0, 0.2);
-                    filter: drop-shadow(0 4px 8px rgba(138, 43, 226, 0.5));
+                    filter: drop-shadow(0 4px 8px rgba(168, 85, 247, 0.5));
                 }
 
                 .typing-part {
                     background: linear-gradient(
                         135deg,
                         rgba(255, 255, 255, 0.95) 0%,
-                        rgba(186, 85, 211, 0.9) 50%,
+                        rgba(192, 132, 252, 0.9) 50%,
                         rgba(255, 255, 255, 0.95) 100%
                     );
                     -webkit-background-clip: text;
@@ -440,8 +440,8 @@ const Navbar = () => {
 
                 .logo-bubble {
                     position: absolute;
-                    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(186, 85, 211, 0.15));
-                    border: 1px solid rgba(186, 85, 211, 0.3);
+                    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(192, 132, 252, 0.15));
+                    border: 1px solid rgba(192, 132, 252, 0.3);
                     border-radius: 50%;
                     backdrop-filter: blur(4px);
                     box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);

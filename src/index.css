@@ -3,7 +3,7 @@
 :root {
   --bg-color: #000000;
   --text-color: #ffffff;
-  --accent-color: #d8b4fe;
+  --accent-color: #a855f7;
   /* Lighter Purple for better contrast on black */
   --secondary-text: rgba(255, 255, 255, 0.5);
   --font-main: 'Inter', sans-serif;
@@ -20,7 +20,7 @@
 
 html,
 body {
-  background-color: var(--bg-color);
+  background-color: transparent;
   color: var(--text-color);
   font-family: var(--font-main);
   overflow-x: hidden;
