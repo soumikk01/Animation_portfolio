@@ -17,14 +17,19 @@ function TypingAnimation({
     const indexRef = useRef(0);
 
     useEffect(() => {
-        // Reset when text changes
-        setDisplayedText('');
-        setIsComplete(false);
-        indexRef.current = 0;
+        let isCancelled = false;
 
         // Start typing after delay
         const startTimeout = setTimeout(() => {
+            if (isCancelled) return;
+
+            // Initial reset if needed
+            setDisplayedText('');
+            setIsComplete(false);
+            indexRef.current = 0;
+
             const typingInterval = setInterval(() => {
+                if (isCancelled) return;
                 if (indexRef.current < text.length) {
                     setDisplayedText(text.substring(0, indexRef.current + 1));
                     indexRef.current++;
