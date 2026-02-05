@@ -16,7 +16,13 @@ const Navbar = () => {
     const [logoText, setLogoText] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMuted, setIsMuted] = useState(getMuted());
+    const [showSoundTooltip, setShowSoundTooltip] = useState(true);
+    const [hasEnabledSound, setHasEnabledSound] = useState(false); // Track if user enabled sound this session
+    const [tooltipText, setTooltipText] = useState("");
+    const [tooltipPop, setTooltipPop] = useState("");
     const fullText = "PORTFOLIO";
+    const tooltipFullText = "every click goes";
+    const tooltipPopText = "POP!";
 
     useEffect(() => {
         // Initial entrance animation
@@ -112,6 +118,100 @@ const Navbar = () => {
         };
     }, [isMenuOpen]);
 
+    // Show tooltip for 5 seconds whenever navbar becomes visible (only when muted and user hasn't enabled sound)
+    useEffect(() => {
+        let tooltipTimer;
+        let wasHidden = false; // Track if navbar was previously hidden
+
+        const handleTooltipVisibility = () => {
+            const scrollY = window.scrollY || window.pageYOffset;
+
+            if (scrollY <= 100 && isMuted && !hasEnabledSound) {
+                // Navbar is visible, sound is muted, and user hasn't enabled sound yet
+                if (wasHidden || scrollY === 0) {
+                    setShowSoundTooltip(true);
+                    wasHidden = false;
+
+                    // Hide after 5 seconds
+                    clearTimeout(tooltipTimer);
+                    tooltipTimer = setTimeout(() => {
+                        setShowSoundTooltip(false);
+                    }, 5000);
+                }
+            } else {
+                // Navbar is hidden, sound is on, or user already enabled sound - hide tooltip
+                if (scrollY > 100) {
+                    wasHidden = true;
+                }
+                setShowSoundTooltip(false);
+                clearTimeout(tooltipTimer);
+            }
+        };
+
+        // Initial display on page load (only if muted and user hasn't enabled sound)
+        setTimeout(() => {
+            if (isMuted && !hasEnabledSound) {
+                setShowSoundTooltip(true);
+
+                tooltipTimer = setTimeout(() => {
+                    setShowSoundTooltip(false);
+                }, 5000);
+            }
+        }, 500);
+
+        // Listen to scroll events
+        window.addEventListener('scroll', handleTooltipVisibility);
+
+        return () => {
+            window.removeEventListener('scroll', handleTooltipVisibility);
+            clearTimeout(tooltipTimer);
+        };
+    }, [isMuted, hasEnabledSound]);
+
+    // Typing animation for tooltip text
+    useEffect(() => {
+        if (!showSoundTooltip) {
+            setTooltipText("");
+            setTooltipPop("");
+            return;
+        }
+
+        let textIndex = 0;
+        let popIndex = 0;
+        let textInterval;
+        let popInterval;
+
+        // Start typing main text after entrance animation (800ms delay)
+        const startTextTyping = setTimeout(() => {
+            textInterval = setInterval(() => {
+                if (textIndex < tooltipFullText.length) {
+                    setTooltipText(tooltipFullText.slice(0, textIndex + 1));
+                    textIndex++;
+                } else {
+                    clearInterval(textInterval);
+
+                    // Start typing "POP!" after main text completes (small delay)
+                    setTimeout(() => {
+                        popInterval = setInterval(() => {
+                            if (popIndex < tooltipPopText.length) {
+                                setTooltipPop(tooltipPopText.slice(0, popIndex + 1));
+                                popIndex++;
+                            } else {
+                                clearInterval(popInterval);
+                            }
+                        }, 80);
+                    }, 100);
+                }
+            }, 50);
+        }, 800);
+
+        return () => {
+            clearTimeout(startTextTyping);
+            clearInterval(textInterval);
+            clearInterval(popInterval);
+        };
+    }, [showSoundTooltip]);
+
     const toggleMenu = () => {
         const newState = !isMenuOpen;
         setIsMenuOpen(newState);
@@ -195,8 +295,12 @@ const Navbar = () => {
         const nextMuted = !isMuted;
         setIsMuted(nextMuted);
         setMuted(nextMuted);
+
         if (!nextMuted) {
-            sounds.hover();
+            // User just turned sound ON - permanently dismiss tooltip for this session
+            setHasEnabledSound(true);
+            setShowSoundTooltip(false);
+            sounds.pop();
         }
     };
 
@@ -278,6 +382,24 @@ const Navbar = () => {
                                 <span className="btn-bubble"></span>
                                 <span className="btn-bubble"></span>
                             </div>
+
+                            {/* Tooltip with bubble animation */}
+                            {showSoundTooltip && (
+                                <div className="sound-tooltip">
+                                    <div className="tooltip-bubble tooltip-bubble-1"></div>
+                                    <div className="tooltip-bubble tooltip-bubble-2"></div>
+                                    <div className="tooltip-bubble tooltip-bubble-3"></div>
+                                    <div className="tooltip-bubble tooltip-bubble-4"></div>
+                                    <div className="tooltip-bubble tooltip-bubble-5"></div>
+                                    <div className="tooltip-content">
+                                        <span className="tooltip-text">
+                                            {tooltipText}
+                                            <span className="typing-cursor"></span>
+                                        </span>
+                                        <span className="tooltip-pop">{tooltipPop}</span>
+                                    </div>
+                                </div>
+                            )}
                         </button>
                     </div>
                 </div>
@@ -844,6 +966,286 @@ const Navbar = () => {
                     background: rgba(255, 255, 255, 0.5);
                     transform: rotate(-45deg);
                     border-radius: 2px;
+                }
+
+                /* Sound Tooltip Styles */
+                .sound-tooltip {
+                    position: absolute;
+                    top: 60px;
+                    right: -10px;
+                    background: linear-gradient(135deg, rgba(168, 85, 247, 0.98), rgba(139, 92, 246, 0.95));
+                    backdrop-filter: blur(16px);
+                    -webkit-backdrop-filter: blur(16px);
+                    border: 1.5px solid rgba(255, 255, 255, 0.4);
+                    border-radius: 16px;
+                    padding: 0.5rem 0.9rem;
+                    white-space: nowrap;
+                    pointer-events: none;
+                    box-shadow: 
+                        0 4px 20px rgba(168, 85, 247, 0.5),
+                        0 0 40px rgba(192, 132, 252, 0.25),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+                    animation: 
+                        tooltipEntrance 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+                        tooltipGlow 2s ease-in-out infinite 0.9s,
+                        tooltipFloat 3s ease-in-out infinite 1.2s;
+                    z-index: 10;
+                    transform-origin: top center;
+                }
+
+                .sound-tooltip::before {
+                    content: '';
+                    position: absolute;
+                    top: -8px;
+                    right: 25px;
+                    width: 0;
+                    height: 0;
+                    border-left: 8px solid transparent;
+                    border-right: 8px solid transparent;
+                    border-bottom: 8px solid rgba(168, 85, 247, 0.98);
+                    filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.15));
+                    animation: arrowGlow 2s ease-in-out infinite 0.9s;
+                }
+
+                @keyframes tooltipEntrance {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(-20px) scale(0.5) rotateX(-20deg) rotateZ(-5deg);
+                        filter: blur(8px) brightness(0.5);
+                        box-shadow: 
+                            0 0 0 rgba(168, 85, 247, 0),
+                            0 0 0 rgba(192, 132, 252, 0);
+                    }
+                    30% {
+                        transform: translateY(-15px) scale(0.7) rotateX(-15deg) rotateZ(-3deg);
+                        filter: blur(6px) brightness(0.7);
+                    }
+                    60% {
+                        transform: translateY(5px) scale(1.15) rotateX(3deg) rotateZ(2deg);
+                        filter: blur(0) brightness(1.3);
+                        box-shadow: 
+                            0 8px 40px rgba(168, 85, 247, 0.8),
+                            0 0 80px rgba(192, 132, 252, 0.6);
+                    }
+                    80% {
+                        transform: translateY(-2px) scale(0.98) rotateX(-1deg) rotateZ(-1deg);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0) scale(1) rotateX(0deg) rotateZ(0deg);
+                        filter: blur(0) brightness(1);
+                        box-shadow: 
+                            0 4px 20px rgba(168, 85, 247, 0.5),
+                            0 0 40px rgba(192, 132, 252, 0.25);
+                    }
+                }
+
+                @keyframes tooltipGlow {
+                    0%, 100% {
+                        filter: brightness(1);
+                        box-shadow: 
+                            0 4px 20px rgba(168, 85, 247, 0.5),
+                            0 0 40px rgba(192, 132, 252, 0.25);
+                    }
+                    50% {
+                        filter: brightness(1.1);
+                        box-shadow: 
+                            0 6px 30px rgba(168, 85, 247, 0.6),
+                            0 0 60px rgba(192, 132, 252, 0.35);
+                    }
+                }
+
+                @keyframes arrowGlow {
+                    0%, 100% {
+                        filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.15));
+                    }
+                    50% {
+                        filter: drop-shadow(0 -2px 6px rgba(168, 85, 247, 0.5));
+                    }
+                }
+
+                @keyframes tooltipFloat {
+                    0%, 100% {
+                        transform: translateY(0) scale(1);
+                    }
+                    50% {
+                        transform: translateY(-4px) scale(1.01);
+                    }
+                }
+
+                .tooltip-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.1rem;
+                    position: relative;
+                    z-index: 2;
+                }
+
+                .tooltip-text {
+                    font-size: 0.65rem;
+                    font-weight: 500;
+                    color: rgba(255, 255, 255, 0.85);
+                    text-transform: lowercase;
+                    letter-spacing: 0.03rem;
+                    line-height: 1;
+                    position: relative;
+                    display: inline-block;
+                }
+
+                .typing-cursor {
+                    display: inline-block;
+                    width: 2px;
+                    height: 0.65rem;
+                    background: rgba(255, 255, 255, 0.9);
+                    margin-left: 2px;
+                    animation: cursorBlink 0.8s ease-in-out infinite;
+                    vertical-align: middle;
+                }
+
+                @keyframes cursorBlink {
+                    0%, 49% {
+                        opacity: 1;
+                    }
+                    50%, 100% {
+                        opacity: 0;
+                    }
+                }
+
+                .tooltip-pop {
+                    font-size: 0.95rem;
+                    font-weight: 900;
+                    color: #ffffff;
+                    text-transform: uppercase;
+                    letter-spacing: 0.08rem;
+                    text-shadow: 
+                        0 0 8px rgba(255, 255, 255, 0.9),
+                        0 0 15px rgba(255, 255, 255, 0.6),
+                        2px 2px 3px rgba(0, 0, 0, 0.3);
+                    animation: popPulse 1.5s ease-in-out infinite;
+                    line-height: 1;
+                }
+
+                @keyframes popPulse {
+                    0%, 100% {
+                        transform: scale(1);
+                        filter: brightness(1);
+                    }
+                    50% {
+                        transform: scale(1.08);
+                        filter: brightness(1.25);
+                    }
+                }
+
+                /* Tooltip Bubbles */
+                .tooltip-bubble {
+                    position: absolute;
+                    background: radial-gradient(circle at 30% 30%, 
+                        rgba(255, 255, 255, 0.8), 
+                        rgba(255, 255, 255, 0.3) 40%,
+                        rgba(168, 85, 247, 0.2));
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    border-radius: 50%;
+                    box-shadow: 
+                        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                        0 4px 12px rgba(168, 85, 247, 0.3);
+                    pointer-events: none;
+                }
+
+                .tooltip-bubble-1 {
+                    width: 14px;
+                    height: 14px;
+                    top: -12px;
+                    left: 10%;
+                    animation: tooltipBubbleFloat1 4s ease-in-out infinite;
+                }
+
+                .tooltip-bubble-2 {
+                    width: 10px;
+                    height: 10px;
+                    top: -8px;
+                    right: 15%;
+                    animation: tooltipBubbleFloat2 3.5s ease-in-out infinite 0.5s;
+                }
+
+                .tooltip-bubble-3 {
+                    width: 16px;
+                    height: 16px;
+                    bottom: -14px;
+                    left: 5%;
+                    animation: tooltipBubbleFloat3 5s ease-in-out infinite 1s;
+                }
+
+                .tooltip-bubble-4 {
+                    width: 9px;
+                    height: 9px;
+                    top: 50%;
+                    left: -12px;
+                    animation: tooltipBubbleFloat4 3s ease-in-out infinite 1.5s;
+                }
+
+                .tooltip-bubble-5 {
+                    width: 12px;
+                    height: 12px;
+                    top: 20%;
+                    right: -20px;
+                    animation: tooltipBubbleFloat5 4.5s ease-in-out infinite 2s;
+                }
+
+                @keyframes tooltipBubbleFloat1 {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                        opacity: 0.7;
+                    }
+                    50% {
+                        transform: translate(-10px, -15px) scale(1.2);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes tooltipBubbleFloat2 {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translate(8px, -12px) scale(1.15);
+                        opacity: 0.9;
+                    }
+                }
+
+                @keyframes tooltipBubbleFloat3 {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                        opacity: 0.8;
+                    }
+                    50% {
+                        transform: translate(-5px, 10px) scale(1.3);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes tooltipBubbleFloat4 {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                        opacity: 0.5;
+                    }
+                    50% {
+                        transform: translate(-12px, -8px) scale(1.1);
+                        opacity: 0.8;
+                    }
+                }
+
+                @keyframes tooltipBubbleFloat5 {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                        opacity: 0.65;
+                    }
+                    50% {
+                        transform: translate(10px, -10px) scale(1.25);
+                        opacity: 0.95;
+                    }
                 }
 
                 .menu-btn-bubble:nth-child(2) { 

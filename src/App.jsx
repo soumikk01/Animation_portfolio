@@ -8,6 +8,7 @@ import TextReveal from './components/TextReveal';
 import SocialButtons from './components/SocialButtons';
 import FadeIn from './components/FadeIn';
 import StaggerFadeIn from './components/StaggerFadeIn';
+import ContactForm from './components/ContactForm';
 
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -169,6 +170,9 @@ function App() {
           </div>
         </section>
 
+        {/* CONTACT / MESSAGE SECTION */}
+        <ContactForm />
+
         {/* FOOTER */}
         <footer className="footer-cinematic">
           <div className="footer-bg-bubbles">
@@ -176,29 +180,6 @@ function App() {
             <div className="footer-bubble"></div>
           </div>
 
-          <div className="container footer-content-left">
-            <FadeIn delay={0.2}>
-              <div className="footer-text-wrapper">
-                <TextReveal className="hero-title text-accent">Let's Talk</TextReveal>
-                <div className="text-floats">
-                  <div className="float-bubble"></div>
-                  <div className="float-bubble"></div>
-                  <div className="float-bubble"></div>
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-
-          <div className="footer-bottom">
-            <div className="container">
-              <FadeIn delay={0.4}>
-                <div className="footer-info">
-                  <p>© 2026</p>
-                  <a href="mailto:hello@antigravity.io" className="mail-link">hello@antigravity.io</a>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
         </footer>
       </main>
 
@@ -209,51 +190,11 @@ function App() {
         }
 
         .footer-cinematic {
-          padding: 20vh 0 10vh;
-          background: linear-gradient(180deg, #000000 0%, #1e0a29 100%);
+          padding: 2rem 0;
+          background: #0a0a0f !important;
           overflow: hidden;
           position: relative;
-        }
-
-        .footer-content-left {
-          position: relative;
-          z-index: 5;
-          width: 100%;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-        }
-
-        .footer-text-wrapper {
-          position: relative;
-          padding-left: 2vw;
-        }
-
-        .text-floats {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-        }
-
-        .float-bubble {
-          position: absolute;
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-          animation: bob 4s ease-in-out infinite alternate;
-        }
-
-        .float-bubble:nth-child(1) { width: 60px; height: 60px; top: -20px; right: -40px; animation-delay: 0s; }
-        .float-bubble:nth-child(2) { width: 40px; height: 40px; bottom: 10px; left: -30px; animation-delay: 0.5s; }
-        .float-bubble:nth-child(3) { width: 25px; height: 25px; top: 30%; right: -60px; animation-delay: 1s; }
-
-        @keyframes bob {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(-10px, -20px); }
+          z-index: 10;
         }
 
         .footer-bg-bubbles {
@@ -263,12 +204,13 @@ function App() {
           width: 100%;
           height: 100%;
           pointer-events: none;
+          display: none;
         }
 
         .footer-bubble {
           position: absolute;
           border-radius: 50%;
-          background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(46, 16, 101, 0.3));
+          background: transparent;
           filter: blur(60px);
         }
 
@@ -277,8 +219,7 @@ function App() {
 
         .footer-bottom {
           width: 100%;
-          margin-top: 5vh;
-          padding-top: 2rem;
+          padding: 1rem 0;
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           position: relative;
           z-index: 3;

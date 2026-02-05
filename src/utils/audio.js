@@ -69,5 +69,12 @@ export const sounds = {
             if (isMutedGlobal) return;
             playSound(baseFreq * 2, 0.2, 'sine', 0.01);
         }, 30);
+    },
+    pop: () => {
+        if (isMutedGlobal) return;
+        // Fun pop sound for tooltip
+        playSound(440, 0.15, 'sine', 0.05);
+        setTimeout(() => playSound(660, 0.1, 'sine', 0.03), 50);
+        setTimeout(() => playSound(880, 0.08, 'triangle', 0.02), 100);
     }
 };
