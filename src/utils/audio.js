@@ -5,7 +5,10 @@ let isMutedGlobal = true;
 
 const initAudio = () => {
     if (!audioContext) {
-        audioContext = new AudioContext();
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
     }
     return audioContext;
 };
@@ -13,6 +16,11 @@ const initAudio = () => {
 export const playSound = (frequency, duration, type = 'sine', volume = 0.1) => {
     if (isMutedGlobal) return;
     const ctx = initAudio();
+
+    // Safety check for resume again
+    if (ctx.state === 'suspended') {
+        ctx.resume();
+    }
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 

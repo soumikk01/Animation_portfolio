@@ -24,7 +24,6 @@ function ContactForm() {
 
         // Simulate sending (replace with your actual email service later)
         setTimeout(() => {
-            console.log('Form submitted:', formData);
             setStatus('success');
             setFormData({ name: '', email: '', message: '' });
 
@@ -47,6 +46,9 @@ function ContactForm() {
             </div>
 
             <div className="container">
+                <FadeIn>
+                    <h2 className="section-title">03 / Contact</h2>
+                </FadeIn>
                 <div className="contact-grid">
                     <FadeIn delay={0.2} className="contact-info">
                         <div className="contact-heading-wrapper">

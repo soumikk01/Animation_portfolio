@@ -53,20 +53,6 @@
     animation-delay: 4s;
 }
 
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.3;
-    }
-
-    50% {
-        transform: translate(20px, -30px) scale(1.1);
-        opacity: 0.5;
-    }
-}
-
 /* Social links container */
 .social-links {
     display: flex;
