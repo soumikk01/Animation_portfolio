@@ -5,8 +5,9 @@ import ExperienceModal from './components/ExperienceModal';
 import ShaderHero from './components/ShaderHero';
 import About from './components/About';
 import TextReveal from './components/TextReveal';
-import SocialButtons from './components/SocialButtons';
 import FadeIn from './components/FadeIn';
+import SocialButtons from './components/SocialButtons';
+import TechStack from './components/TechStack';
 import StaggerFadeIn from './components/StaggerFadeIn';
 import ContactForm from './components/ContactForm';
 import './components/GlobalAnimations.css';
@@ -98,52 +99,7 @@ function App() {
         <About />
 
         {/* TECH STACK SECTION */}
-        <section id="tech-stack" className="tech-stack">
-          <div className="container">
-            <FadeIn>
-              <h2 className="section-title">01 / Tech Stack</h2>
-            </FadeIn>
-            <StaggerFadeIn className="tech-grid" staggerDelay={0.15}>
-              <FadeIn delay={0.2}>
-                <div className="tech-category">
-                  <h3 className="category-title">Frontend</h3>
-                  <div className="tech-items">
-                    <div className="tech-item">React</div>
-                    <div className="tech-item">Next.js</div>
-                    <div className="tech-item">TypeScript</div>
-                    <div className="tech-item">Tailwind CSS</div>
-                    <div className="tech-item">GSAP</div>
-                    <div className="tech-item">Three.js</div>
-                  </div>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.3}>
-                <div className="tech-category">
-                  <h3 className="category-title">Backend</h3>
-                  <div className="tech-items">
-                    <div className="tech-item">Node.js</div>
-                    <div className="tech-item">Express</div>
-                    <div className="tech-item">MongoDB</div>
-                    <div className="tech-item">PostgreSQL</div>
-                    <div className="tech-item">Firebase</div>
-                  </div>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.4}>
-                <div className="tech-category">
-                  <h3 className="category-title">Tools & Others</h3>
-                  <div className="tech-items">
-                    <div className="tech-item">Git</div>
-                    <div className="tech-item">Docker</div>
-                    <div className="tech-item">Figma</div>
-                    <div className="tech-item">Blender</div>
-                    <div className="tech-item">WebGL</div>
-                  </div>
-                </div>
-              </FadeIn>
-            </StaggerFadeIn>
-          </div>
-        </section>
+        <TechStack />
 
         {/* PROJECTS SECTION */}
         <section id="projects" className="projects">

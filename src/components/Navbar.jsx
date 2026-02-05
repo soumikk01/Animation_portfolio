@@ -110,13 +110,14 @@ const Navbar = () => {
             }
         });
 
+        const currentTimers = soundTimersRef.current;
         return () => {
             ctx.revert();
             if (scrollTriggerRef.current) {
                 scrollTriggerRef.current.kill();
             }
             // Clean up any pending sound timers
-            soundTimersRef.current.forEach(timer => clearTimeout(timer));
+            currentTimers.forEach(timer => clearTimeout(timer));
         };
     }, [isMenuOpen]);
 
