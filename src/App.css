@@ -97,7 +97,6 @@ section,
   justify-content: center;
   position: relative;
   z-index: 5;
-  pointer-events: none;
 }
 
 .typography-design {
@@ -107,7 +106,6 @@ section,
   align-items: center;
   text-align: center;
   filter: drop-shadow(0 0 50px rgba(0, 0, 0, 0.5));
-  pointer-events: auto;
 }
 
 .main-word {
@@ -217,7 +215,6 @@ section,
   letter-spacing: 0.04em;
   line-height: 1.4;
   text-transform: lowercase;
-  pointer-events: auto;
 }
 
 /* Animated Bubbles use Global slideFloat */

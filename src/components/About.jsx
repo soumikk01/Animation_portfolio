@@ -159,19 +159,6 @@ const About = () => {
                     position: relative;
                     overflow: hidden;
                 }
-                
-                .placeholder-image::after {
-                    content: 'Insert Image Here';
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: rgba(255,255,255,0.2);
-                    font-family: 'Outfit', sans-serif;
-                    font-size: 0.8rem;
-                    letter-spacing: 0.2rem;
-                    text-transform: uppercase;
-                }
 
                 .frame-corner {
                     position: absolute;
