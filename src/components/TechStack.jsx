@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './TechStack.css';
@@ -142,7 +142,7 @@ const TechStack = () => {
                                 const globalIndex = 2 + techData.slice(0, catIdx).reduce((acc, c) => acc + c.items.length, 0) + itemIdx;
 
                                 return (
-                                    <React.Fragment key={`${catIdx}-${itemIdx}`}>
+                                    <>
                                         <path
                                             data-index={globalIndex}
                                             className="branch-path"
@@ -162,7 +162,7 @@ const TechStack = () => {
                                             stroke="url(#branch-gradient)"
                                             strokeWidth="2"
                                         />
-                                    </React.Fragment>
+                                    </>
                                 );
                             })
                         ))}
