@@ -56,11 +56,11 @@ function App() {
 
               {/* Animated Bubbles */}
               <div className="hero-bubbles">
-                <div className="bubble bubble-1"></div>
-                <div className="bubble bubble-2"></div>
-                <div className="bubble bubble-3"></div>
-                <div className="bubble bubble-4"></div>
-                <div className="bubble bubble-5"></div>
+                <div className="bubble-flutter flutter-1"><div className="bubble bubble-1"></div></div>
+                <div className="bubble-flutter flutter-2"><div className="bubble bubble-2"></div></div>
+                <div className="bubble-flutter flutter-3"><div className="bubble bubble-3"></div></div>
+                <div className="bubble-flutter flutter-4"><div className="bubble bubble-4"></div></div>
+                <div className="bubble-flutter flutter-5"><div className="bubble bubble-5"></div></div>
               </div>
 
               {/* Line 2: Developer */}

@@ -235,6 +235,33 @@ section,
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
+  width: 100%;
+  height: 100%;
+}
+
+.bubble-flutter {
+  position: absolute;
+  will-change: transform;
+}
+
+.flutter-1 {
+  animation: flutter 3s ease-in-out infinite;
+}
+
+.flutter-2 {
+  animation: flutter 4s ease-in-out infinite 0.5s;
+}
+
+.flutter-3 {
+  animation: flutter 5s ease-in-out infinite 1s;
+}
+
+.flutter-4 {
+  animation: flutter 3.5s ease-in-out infinite 1.5s;
+}
+
+.flutter-5 {
+  animation: flutter 4.5s ease-in-out infinite 2s;
 }
 
 .bubble-1 {
@@ -309,7 +336,7 @@ section,
 
 .tech-category:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 1);
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
