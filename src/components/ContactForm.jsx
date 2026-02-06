@@ -60,6 +60,12 @@ function ContactForm() {
                                 <div className="contact-float-bubble"></div>
                             </div>
                         </div>
+
+                        {/* Social Media Buttons */}
+                        <div className="contact-social-wrapper">
+                            <SocialButtons />
+                        </div>
+
                         <p className="contact-description">
                             Have a project in mind? Want to collaborate?
                             Drop me a message and let's make it happen.
@@ -74,11 +80,6 @@ function ContactForm() {
                                 <span className="detail-label">Availability</span>
                                 <span className="detail-value">Open for opportunities</span>
                             </div>
-                        </div>
-
-                        {/* Social Media Buttons */}
-                        <div className="contact-social-wrapper">
-                            <SocialButtons />
                         </div>
                     </FadeIn>
 

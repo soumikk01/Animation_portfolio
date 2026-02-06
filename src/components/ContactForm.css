@@ -232,7 +232,8 @@
 
 /* Contact Social Buttons */
 .contact-social-wrapper {
-    margin-top: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .contact-social-wrapper .social-buttons-container {
