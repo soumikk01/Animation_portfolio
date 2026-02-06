@@ -194,7 +194,7 @@ const TechStack = () => {
 
                                     {cat.items.map((item, itemIdx) => (
                                         <div
-                                            key={itemIdx}
+                                            key={`${catIdx}-${item}`}
                                             className="tech-node item-node"
                                             style={{ top: `${startItemY + (itemIdx * techItemGap) - 20}px`, left: '850px' }}
                                         >

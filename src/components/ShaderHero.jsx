@@ -1,4 +1,15 @@
 import { useRef, useMemo, useEffect, useState, Suspense } from 'react';
+
+// Deterministic PRNG to avoid impure Math.random in render (pure and fast)
+function mulberry32(seed) {
+    let t = seed >>> 0;
+    return function() {
+        t += 0x6D2B79F5;
+        let r = Math.imul(t ^ (t >>> 15), t | 1);
+        r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+}
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, PerspectiveCamera, MeshTransmissionMaterial, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -18,19 +29,22 @@ const ParticleField = () => {
         const cols = new Float32Array(count * 3);
         const color1 = new THREE.Color('#ffffff');
         const color2 = new THREE.Color('#a855f7');
-
+        const rand = mulberry32(123456 + count);
         for (let i = 0; i < count; i++) {
-            pos[i * 3] = (Math.random() - 0.5) * 40;
-            pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
-            pos[i * 3 + 2] = (Math.random() - 0.5) * 10 - 2; // Range [-7, 3] which is > -10
+            const r1 = rand();
+            const r2 = rand();
+            const r3 = rand();
+            pos[i * 3] = (r1 - 0.5) * 40;
+            pos[i * 3 + 1] = (r2 - 0.5) * 40;
+            pos[i * 3 + 2] = (r3 - 0.5) * 10 - 2;
 
-            const mixedColor = Math.random() > 0.5 ? color1 : color2;
+            const mixedColor = rand() > 0.5 ? color1 : color2;
             cols[i * 3] = mixedColor.r;
             cols[i * 3 + 1] = mixedColor.g;
             cols[i * 3 + 2] = mixedColor.b;
         }
         return [pos, cols];
-    }, []);
+    }, [count]);
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
@@ -81,19 +95,24 @@ const ParticleField = () => {
 const ShootingStars = () => {
     const groupRef = useRef();
     const count = 6;
-    const stars = useMemo(() => {
-        return [...Array(count)].map(() => ({
-            pos: [(Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40, -5],
-            speed: 0.2 + Math.random() * 0.5,
-            length: 2 + Math.random() * 5,
-            delay: Math.random() * 10
+    const starsRef = useRef([]);
+    const [stars] = useState(() => {
+        const rand = mulberry32(654321 + count);
+        const generated = [...Array(count)].map(() => ({
+            pos: [(rand() - 0.5) * 40, (rand() - 0.5) * 40, -5],
+            speed: 0.2 + rand() * 0.5,
+            length: 2 + rand() * 5,
+            delay: rand() * 10
         }));
-    }, []);
+        return generated;
+    });
+
+    useEffect(() => { starsRef.current = stars; }, [stars]);
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
         groupRef.current.children.forEach((star, i) => {
-            const data = stars[i];
+            const data = starsRef.current[i];
             if (time > data.delay) {
                 star.position.x -= data.speed;
                 star.position.y -= data.speed * 0.3;
@@ -156,6 +175,7 @@ const CinematicObject = () => {
         // Scroll animation timeline
         const tl = gsap.timeline({
             scrollTrigger: {
+                id: 'bubble-trigger',
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
@@ -220,7 +240,10 @@ const CinematicObject = () => {
         });
 
         return () => {
-            if (ScrollTrigger.getById('bubble-trigger')) ScrollTrigger.getById('bubble-trigger').kill();
+            // Kill the timeline (best-effort) and its ScrollTrigger if present
+            try { tl && tl.kill && tl.kill(); } catch { /* ignore errors */ }
+            const trig = ScrollTrigger.getById('bubble-trigger');
+            if (trig) trig.kill();
         };
     }, [bubbleData]);
 

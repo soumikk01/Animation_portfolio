@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 
-const TextReveal = ({ children, className }) => {
+const TextReveal = ({ children, className = '' }) => {
     const textRef = useRef(null);
 
     useEffect(() => {
