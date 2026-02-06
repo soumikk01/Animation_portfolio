@@ -85,8 +85,9 @@
     animation: slideIn 0.6s ease-out backwards;
     /* Enhanced shadow effects */
     box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.4),
-        0 2px 8px rgba(168, 85, 247, 0.2),
+        0 8px 20px rgba(0, 0, 0, 0.5),
+        0 4px 12px rgba(168, 85, 247, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -127,9 +128,9 @@
     border-color: rgba(168, 85, 247, 0.5);
     transform: translateY(-5px) scale(1.05);
     box-shadow:
-        0 15px 50px rgba(168, 85, 247, 0.5),
-        0 8px 25px rgba(0, 0, 0, 0.6),
-        0 0 30px rgba(168, 85, 247, 0.4),
+        0 8px 24px rgba(168, 85, 247, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(168, 85, 247, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     color: #ffffff;
 }
@@ -141,11 +142,33 @@
     justify-content: center;
     position: relative;
     z-index: 1;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.social-button:hover .button-icon {
-    transform: rotate(360deg) scale(1.1);
+/* Individual brand colors on hover */
+.social-github:hover .button-icon {
+    color: #333333;
+    filter: drop-shadow(0 0 12px rgba(51, 51, 51, 0.8));
+}
+
+.social-x:hover .button-icon {
+    color: #000000;
+    filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.8));
+}
+
+.social-linkedin:hover .button-icon {
+    color: #0077b5;
+    filter: drop-shadow(0 0 12px rgba(0, 119, 181, 0.8));
+}
+
+.social-instagram:hover .button-icon {
+    color: #e1306c;
+    filter: drop-shadow(0 0 12px rgba(225, 48, 108, 0.8));
+}
+
+.social-email:hover .button-icon {
+    color: #EA4335;
+    filter: drop-shadow(0 0 12px rgba(234, 67, 53, 0.8));
 }
 
 .button-icon svg {
@@ -178,6 +201,7 @@
     transition: opacity 0.4s ease;
     z-index: -1;
     filter: blur(10px);
+    pointer-events: none;
 }
 
 .social-button:hover::before {

@@ -63,7 +63,7 @@ function SocialButtons() {
                         <a
                             key={social.name}
                             href={social.url}
-                            className="social-button"
+                            className={`social-button social-${social.name.toLowerCase()}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ animationDelay: `${index * 0.1}s` }}
