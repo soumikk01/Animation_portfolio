@@ -18,6 +18,7 @@ function TypingAnimation({
 
     useEffect(() => {
         let isCancelled = false;
+        let typingInterval;
 
         // Start typing after delay
         const startTimeout = setTimeout(() => {
@@ -28,7 +29,7 @@ function TypingAnimation({
             setIsComplete(false);
             indexRef.current = 0;
 
-            const typingInterval = setInterval(() => {
+            typingInterval = setInterval(() => {
                 if (isCancelled) return;
                 if (indexRef.current < text.length) {
                     setDisplayedText(text.substring(0, indexRef.current + 1));
@@ -38,11 +39,13 @@ function TypingAnimation({
                     clearInterval(typingInterval);
                 }
             }, speed);
-
-            return () => clearInterval(typingInterval);
         }, delay);
 
-        return () => clearTimeout(startTimeout);
+        return () => {
+            isCancelled = true;
+            clearTimeout(startTimeout);
+            if (typingInterval) clearInterval(typingInterval);
+        };
     }, [text, speed, delay]);
 
     return (
