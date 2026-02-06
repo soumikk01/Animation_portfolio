@@ -9,305 +9,206 @@ import { sounds, getMuted } from '../utils/audio';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ParticleField = () => {
-    const pointsRef = useRef();
-    const count = 1200;
-
-    const [positions, colors] = useMemo(() => {
-        const pos = new Float32Array(count * 3);
-        const cols = new Float32Array(count * 3);
-        const color1 = new THREE.Color('#ffffff');
-        const color2 = new THREE.Color('#a855f7');
-
-        for (let i = 0; i < count; i++) {
-            pos[i * 3] = (Math.random() - 0.5) * 40;
-            pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
-            pos[i * 3 + 2] = (Math.random() - 0.5) * 10 - 2; // Range [-7, 3] which is > -10
-
-            const mixedColor = Math.random() > 0.5 ? color1 : color2;
-            cols[i * 3] = mixedColor.r;
-            cols[i * 3 + 1] = mixedColor.g;
-            cols[i * 3 + 2] = mixedColor.b;
-        }
-        return [pos, cols];
-    }, []);
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        const pulse = (Math.sin(time * 0.5) + 1) * 0.5;
-        const scroll = state.mouse.y * 2;
-
-        if (pointsRef.current) {
-            pointsRef.current.rotation.y = time * 0.02;
-            pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.05;
-
-            // Parallax shift
-            pointsRef.current.position.y = THREE.MathUtils.lerp(pointsRef.current.position.y, scroll * 0.5, 0.05);
-
-            // Sync particle brightness with pulse
-            pointsRef.current.material.opacity = 0.1 + pulse * 0.4;
-        }
-    });
-
-    return (
-        <points ref={pointsRef}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={count}
-                    array={positions}
-                    itemSize={3}
-                />
-                <bufferAttribute
-                    attach="attributes-color"
-                    count={count}
-                    array={colors}
-                    itemSize={3}
-                />
-            </bufferGeometry>
-            <pointsMaterial
-                size={0.12}
-                vertexColors
-                transparent
-                opacity={0.3}
-                sizeAttenuation
-                blending={THREE.AdditiveBlending}
-                depthWrite={false}
-            />
-        </points>
-    );
-};
-
-const ShootingStars = () => {
-    const groupRef = useRef();
-    const count = 6;
-    const stars = useMemo(() => {
-        return [...Array(count)].map(() => ({
-            pos: [(Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40, -5],
-            speed: 0.2 + Math.random() * 0.5,
-            length: 2 + Math.random() * 5,
-            delay: Math.random() * 10
-        }));
-    }, []);
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        groupRef.current.children.forEach((star, i) => {
-            const data = stars[i];
-            if (time > data.delay) {
-                star.position.x -= data.speed;
-                star.position.y -= data.speed * 0.3;
-
-                if (star.position.x < -30) {
-                    star.position.set(30, (Math.random() - 0.5) * 40, -5);
-                    data.delay = time + Math.random() * 15;
-                }
-            }
-        });
-    });
-
-    return (
-        <group ref={groupRef}>
-            {stars.map((data, i) => (
-                <mesh key={i} position={data.pos} rotation={[0, 0, Math.PI / 6]}>
-                    <planeGeometry args={[data.length, 0.05]} />
-                    <meshBasicMaterial color="#ffffff" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
-                </mesh>
-            ))}
-        </group>
-    );
-};
-
 const CinematicObject = () => {
-    const groupRef = useRef();
-    const bubblesRef = useRef([]);
-    const [isMobile, setIsMobile] = useState(false);
+  const groupRef = useRef();
+  const bubblesRef = useRef([]);
+  const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-    // Higher fidelity data for 12 bubbles (reduced on mobile for performance)
-    const bubbleData = useMemo(() => {
-        const allData = [
-            { id: 0, targetPos: [0, 0, 0], scale: 1.2, speed: 1 },
-            { id: 1, targetPos: [-4, 3, -3], scale: 0.6, speed: 1.2 },
-            { id: 2, targetPos: [4, -3, -2], scale: 0.5, speed: 0.8 },
-            { id: 3, targetPos: [-3, -4, -4], scale: 0.7, speed: 1.5 },
-            { id: 4, targetPos: [5, 4, -5], scale: 0.4, speed: 1.1 },
-            { id: 5, targetPos: [-5, 1, -2], scale: 0.5, speed: 0.9 },
-            { id: 6, targetPos: [3, 5, -4], scale: 0.6, speed: 1.3 },
-            { id: 7, targetPos: [1, -5, -2], scale: 0.4, speed: 0.7 },
-            { id: 8, targetPos: [-6, -2, -3], scale: 0.3, speed: 1.4 },
-            { id: 9, targetPos: [6, 0, -4], scale: 0.5, speed: 1.0 },
-            { id: 10, targetPos: [-2, 6, -3], scale: 0.4, speed: 1.2 },
-            { id: 11, targetPos: [2, -6, -5], scale: 0.3, speed: 0.9 },
-        ];
-        return isMobile ? allData.slice(0, 6) : allData;
-    }, [isMobile]);
+  // Higher fidelity data for 12 bubbles (reduced on mobile for performance)
+  const bubbleData = useMemo(() => {
+    const allData = [
+      { id: 0, targetPos: [0, 0, 0], scale: 1.2, speed: 1 },
+      { id: 1, targetPos: [-4, 3, -3], scale: 0.6, speed: 1.2 },
+      { id: 2, targetPos: [4, -3, -2], scale: 0.5, speed: 0.8 },
+      { id: 3, targetPos: [-3, -4, -4], scale: 0.7, speed: 1.5 },
+      { id: 4, targetPos: [5, 4, -5], scale: 0.4, speed: 1.1 },
+      { id: 5, targetPos: [-5, 1, -2], scale: 0.5, speed: 0.9 },
+      { id: 6, targetPos: [3, 5, -4], scale: 0.6, speed: 1.3 },
+      { id: 7, targetPos: [1, -5, -2], scale: 0.4, speed: 0.7 },
+      { id: 8, targetPos: [-6, -2, -3], scale: 0.3, speed: 1.4 },
+      { id: 9, targetPos: [6, 0, -4], scale: 0.5, speed: 1.0 },
+      { id: 10, targetPos: [-2, 6, -3], scale: 0.4, speed: 1.2 },
+      { id: 11, targetPos: [2, -6, -5], scale: 0.3, speed: 0.9 },
+    ];
+    return isMobile ? allData.slice(0, 6) : allData;
+  }, [isMobile]);
 
-    useEffect(() => {
-        let lastSoundTime = 0;
-        const soundCooldown = 150; // ms
 
-        // Scroll animation timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: 'body',
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: 3, // Increased for a more liquid, high-fidelity smoothing feel
-                onUpdate: (self) => {
-                    // Play bubble sound when scrolling, with a cooldown and check if muted
-                    const now = Date.now();
-                    if (!getMuted() && Math.abs(self.getVelocity()) > 100 && now - lastSoundTime > soundCooldown) {
-                        sounds.bubble();
-                        lastSoundTime = now;
-                    }
-                }
-            }
-        });
+  useEffect(() => {
+    let lastSoundTime = 0;
+    const soundCooldown = 150; // ms
 
-        bubblesRef.current.forEach((bubble, i) => {
-            if (!bubble) return;
-            const data = bubbleData[i];
-            const staggerDelay = i * 0.05; // More pronounced stagger for "smooth unfolding"
-
-            // 1. SPLIT (0 -> 40% scroll)
-            tl.to(bubble.position, {
-                x: data.targetPos[0],
-                y: data.targetPos[1],
-                z: data.targetPos[2],
-                ease: 'power3.out', // Smoother entry
-            }, staggerDelay)
-                .to(bubble.scale, {
-                    x: data.scale,
-                    y: data.scale,
-                    z: data.scale,
-                    ease: 'power3.out',
-                }, staggerDelay);
-
-            // 2. MERGE (40% -> 60% scroll)
-            tl.to(bubble.position, {
-                x: 0,
-                y: 0,
-                z: 0,
-                ease: 'expo.inOut',
-            }, 0.4 + staggerDelay)
-                .to(bubble.scale, {
-                    x: i === 0 ? 1.5 : 0,
-                    y: i === 0 ? 1.5 : 0,
-                    z: i === 0 ? 1.5 : 0,
-                    ease: 'expo.inOut',
-                }, 0.4 + staggerDelay);
-
-            // 3. RE-SPLIT (60% -> 100% scroll)
-            tl.to(bubble.position, {
-                x: data.targetPos[0] * -1.2,
-                y: data.targetPos[1] * 0.8,
-                z: data.targetPos[2] - 2,
-                ease: 'power4.inOut',
-            }, 0.7 + staggerDelay)
-                .to(bubble.scale, {
-                    x: data.scale * 0.7,
-                    y: data.scale * 0.7,
-                    z: data.scale * 0.7,
-                    ease: 'power4.inOut',
-                }, 0.7 + staggerDelay);
-        });
-
-        return () => {
-            if (ScrollTrigger.getById('bubble-trigger')) ScrollTrigger.getById('bubble-trigger').kill();
-        };
-    }, [bubbleData]);
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        const pulse = (Math.sin(time * 0.5) + 1) * 0.5; // Synced 0-1 pulse
-        const mouseX = state.mouse.x * 2;
-        const mouseY = state.mouse.y * 2;
-
-        if (groupRef.current) {
-            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, time * 0.05 + mouseX * 0.1, 0.1);
-            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, mouseY * 0.05, 0.1);
-            groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, Math.sin(time * 0.5) * 0.1 + mouseY * 0.05, 0.1);
+    // Scroll animation timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 3, // Increased for a more liquid, high-fidelity smoothing feel
+        onUpdate: (self) => {
+          // Play bubble sound when scrolling, with a cooldown and check if muted
+          const now = Date.now();
+          if (!getMuted() && Math.abs(self.getVelocity()) > 100 && now - lastSoundTime > soundCooldown) {
+            sounds.bubble();
+            lastSoundTime = now;
+          }
         }
-
-        bubblesRef.current.forEach((bubble, i) => {
-            if (bubble) {
-                const targetRotX = Math.sin(time * (0.2 + i * 0.05)) * 0.2;
-                const targetRotZ = Math.cos(time * (0.1 + i * 0.03)) * 0.1;
-                bubble.rotation.x = THREE.MathUtils.lerp(bubble.rotation.x, targetRotX, 0.1);
-                bubble.rotation.z = THREE.MathUtils.lerp(bubble.rotation.z, targetRotZ, 0.1);
-
-                // Sync bubble color/transmission with pulse
-                const material = bubble.material;
-                if (material) {
-                    // Blend between white and vibrant purple
-                    material.color.lerp(new THREE.Color(pulse > 0.5 ? '#a855f7' : '#ffffff'), 0.02);
-                    material.envMapIntensity = THREE.MathUtils.lerp(material.envMapIntensity, 1.5 + pulse * 2, 0.05);
-                }
-            }
-        });
+      }
     });
 
-    return (
-        <group ref={groupRef}>
-            {bubbleData.map((data, i) => (
-                <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.5} floatIntensity={0.5}>
-                    <mesh ref={el => bubblesRef.current[i] = el} position={[0, 0, 0]}>
-                        <icosahedronGeometry args={[2, 20]} />
-                        <MeshTransmissionMaterial
-                            backside
-                            backsideThickness={isMobile ? 0.5 : 1.5}
-                            thickness={isMobile ? 0.5 : 1.2}
-                            samples={isMobile ? 1 : 4}
-                            resolution={isMobile ? 256 : 512}
-                            transmission={1}
-                            clearcoat={isMobile ? 0.5 : 1}
-                            clearcoatRoughness={0}
-                            envMapIntensity={isMobile ? 1.5 : 2.5}
-                            color="#ffffff"
-                            roughness={0.03}
-                            anisotropy={isMobile ? 0.1 : 0.5}
-                            chromaticAberration={0.06}
-                            distortion={0.3}
-                            distortionScale={0.3}
-                            temporalDistortion={0.5}
-                            ior={1.2}
-                        />
-                    </mesh>
-                </Float>
-            ))}
-        </group>
-    );
+    bubblesRef.current.forEach((bubble, i) => {
+      if (!bubble) return;
+      const data = bubbleData[i];
+      const staggerDelay = i * 0.05; // More pronounced stagger for "smooth unfolding"
+
+      // 1. SPLIT (0 -> 40% scroll)
+      tl.to(bubble.position, {
+        x: data.targetPos[0],
+        y: data.targetPos[1],
+        z: data.targetPos[2],
+        ease: 'power3.out', // Smoother entry
+      }, staggerDelay)
+        .to(bubble.scale, {
+          x: data.scale,
+          y: data.scale,
+          z: data.scale,
+          ease: 'power3.out',
+        }, staggerDelay);
+
+      // 2. MERGE (40% -> 60% scroll)
+      tl.to(bubble.position, {
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: 'expo.inOut',
+      }, 0.4 + staggerDelay)
+        .to(bubble.scale, {
+          x: i === 0 ? 1.5 : 0,
+          y: i === 0 ? 1.5 : 0,
+          z: i === 0 ? 1.5 : 0,
+          ease: 'expo.inOut',
+        }, 0.4 + staggerDelay);
+
+      // 3. RE-SPLIT (60% -> 100% scroll)
+      tl.to(bubble.position, {
+        x: data.targetPos[0] * -1.2,
+        y: data.targetPos[1] * 0.8,
+        z: data.targetPos[2] - 2,
+        ease: 'power4.inOut',
+      }, 0.7 + staggerDelay)
+        .to(bubble.scale, {
+          x: data.scale * 0.7,
+          y: data.scale * 0.7,
+          z: data.scale * 0.7,
+          ease: 'power4.inOut',
+        }, 0.7 + staggerDelay);
+    });
+
+    return () => {
+      if (ScrollTrigger.getById('bubble-trigger')) ScrollTrigger.getById('bubble-trigger').kill();
+    };
+  }, [bubbleData]);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const pulse = (Math.sin(time * 0.5) + 1) * 0.5; // Synced 0-1 pulse
+    const mouseX = state.mouse.x * 2;
+    const mouseY = state.mouse.y * 2;
+
+    if (groupRef.current) {
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, time * 0.05 + mouseX * 0.1, 0.1);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, mouseY * 0.05, 0.1);
+      groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, Math.sin(time * 0.5) * 0.1 + mouseY * 0.05, 0.1);
+    }
+
+    bubblesRef.current.forEach((bubble, i) => {
+      if (bubble) {
+
+        // Organic "Deep" animation using Three.js MathUtils
+        const targetRotX = Math.sin(time * (0.2 + i * 0.05)) * 0.2;
+        const targetRotZ = Math.cos(time * (0.1 + i * 0.03)) * 0.1;
+
+        // Smoother liquid feel with three.js damp/lerp
+        bubble.rotation.x = THREE.MathUtils.lerp(bubble.rotation.x, targetRotX, 0.08);
+        bubble.rotation.z = THREE.MathUtils.lerp(bubble.rotation.z, targetRotZ, 0.08);
+
+        // Subtle organic "breathe" scale
+        const breathe = 1.0 + Math.sin(time * 0.8 + i) * 0.03;
+        bubble.children[0]?.scale.setScalar(breathe);
+
+        // Sync bubble color/transmission with pulse (Deep Styling)
+        const material = bubble.material;
+        if (material) {
+          // Blend between crisp white and more "Deep" indigo/violet
+          const targetColor = new THREE.Color(pulse > 0.5 ? '#6d28d9' : '#ffffff');
+          material.color.lerp(targetColor, 0.02);
+          material.envMapIntensity = THREE.MathUtils.lerp(material.envMapIntensity, 1.0 + pulse * 1.5, 0.05);
+        }
+      }
+    });
+  });
+
+  return (
+    <group ref={groupRef}>
+      {bubbleData.map((data, i) => (
+        <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.5} floatIntensity={0.5}>
+          <mesh ref={el => bubblesRef.current[i] = el} position={[0, 0, 0]}>
+            <icosahedronGeometry args={[2, 20]} />
+            <MeshTransmissionMaterial
+              backside
+              backsideThickness={isMobile ? 0.3 : 1.0}
+              thickness={isMobile ? 0.3 : 0.8}
+              samples={isMobile ? 1 : 4}
+              resolution={isMobile ? 256 : 512}
+              transmission={1}
+              clearcoat={isMobile ? 0.3 : 0.8}
+              clearcoatRoughness={0}
+              envMapIntensity={isMobile ? 1.2 : 2.0}
+              color="#ffffff"
+              roughness={0.05}
+              anisotropy={isMobile ? 0.1 : 0.5}
+              chromaticAberration={0.08}
+              distortion={0.4}
+              distortionScale={0.4}
+              temporalDistortion={0.5}
+              ior={1.2}
+            />
+          </mesh>
+        </Float>
+      ))}
+    </group>
+  );
 };
 
 const BackgroundFluid = () => {
-    const meshRef = useRef();
+  const meshRef = useRef();
 
-    const shaderArgs = useMemo(() => ({
-        uniforms: {
-            uTime: { value: 0 },
-            uSyncPulse: { value: 0 },
-            uMouse: { value: new THREE.Vector2(0, 0) },
-            uColor1: { value: new THREE.Color('#05010a') }, // Very Dark Purple instead of Black
-            uColor2: { value: new THREE.Color('#7c3aed') }, // Vibrant Purple
-            uColor3: { value: new THREE.Color('#ffffff') }, // White Highlights
-            uAccent: { value: new THREE.Color('#a855f7') }, // Lighter Purple Accent
-            uDeepPurple: { value: new THREE.Color('#1e0a45') } // Slightly brighter Deep Purple
-        },
-        vertexShader: `
+  const shaderArgs = useMemo(() => ({
+    uniforms: {
+      uTime: { value: 0 },
+      uSyncPulse: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0, 0) },
+      uColor1: { value: new THREE.Color('#000105') }, // Pure Black Depth
+      uColor2: { value: new THREE.Color('#6d28d9') }, // Deep Professional Violet
+      uColor3: { value: new THREE.Color('#ffffff') }, // Crisp White energy
+      uAccent: { value: new THREE.Color('#a855f7') }, // Vibrant Purple Accent
+      uDeepPurple: { value: new THREE.Color('#1e1b4b') } // Indigo Depth
+    },
+    vertexShader: `
       varying vec2 vUv;
       void main() {
         vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
-        fragmentShader: `
+    fragmentShader: `
       uniform float uTime;
       uniform float uSyncPulse;
       uniform vec2 uMouse;
@@ -388,95 +289,101 @@ const BackgroundFluid = () => {
         float dist = length(p);
         float time = uTime * 0.15;
         
-        // VOLUMETRIC LIGHT RAYS (Additively blended)
+        // DEEP LIGHT RAYS (Subtle and atmospheric)
         float rays = 0.0;
-        vec2 rayP = p * 1.2;
+        vec2 rayP = p * 1.5;
         float rayAngle = atan(rayP.y, rayP.x);
-        rays += (sin(rayAngle * 8.0 + time) + 1.0) * 0.5;
-        rays += (sin(rayAngle * 5.0 - time * 0.8) + 1.0) * 0.5;
-        rays *= 0.15 * smoothstep(0.5, 0.0, dist);
+        rays += (sin(rayAngle * 6.0 + time) + 1.0) * 0.5;
+        rays += (sin(rayAngle * 4.0 - time * 0.5) + 1.0) * 0.5;
+        rays *= 0.08 * smoothstep(0.6, 0.0, dist);
 
         float n1 = snoise(vec3(p * 1.5, time));
         float n2 = snoise(vec3(p * 3.0 + vec2(time * 0.4), time * 1.2));
         float finalNoise = n1 * 0.5 + n2 * 0.5;
         
-        // MOUSE REACTIVE GLOW
+        // DEEP MOUSE GLOW
         float mouseDist = length(p - uMouse);
-        float mouseGlow = smoothstep(0.8, 0.0, mouseDist) * 0.45;
+        float mouseGlow = smoothstep(0.8, 0.0, mouseDist) * 0.35;
 
-        // Deep Black Base with variable Purple Tint reactive to pulse
-        vec3 color = mix(uColor1, uDeepPurple * (0.8 + uSyncPulse * 0.4), dist * 0.8);
+        // Perfect Sync Base: Deep Black with subtle pulse depth
+        vec3 color = mix(uColor1, uDeepPurple * (0.3 + uSyncPulse * 0.3), dist * 0.8);
         
-        // Dynamic Purple Waves - intensity synced with pulse
-        float purpleWaves = smoothstep(-0.2, 0.6, finalNoise);
-        color = mix(color, uColor2 * (1.0 + uSyncPulse * 0.5), purpleWaves * 0.5);
+        // Professional Violet Waves - intensity synced with pulse
+        float violetWaves = smoothstep(-0.3, 0.7, finalNoise);
+        color = mix(color, uColor2 * (0.8 + uSyncPulse * 0.4), violetWaves * 0.35);
         
-        // Bright Accents synced
-        float accentMask = smoothstep(0.4, 0.8, n2);
-        color = mix(color, uAccent * (1.0 + uSyncPulse * 0.3), accentMask * 0.4);
+        // Premium Accents synced
+        float accentMask = smoothstep(0.35, 0.85, n2);
+        color = mix(color, uAccent * (0.9 + uSyncPulse * 0.3), accentMask * 0.25);
         
-        // Crisp White Energy Highlights synced
-        float energyMask = smoothstep(0.5, 0.95, n1 + 0.3);
-        color = mix(color, uColor3 * (1.0 + uSyncPulse * 0.2), energyMask * 0.35);
+        // Kinetic White Energy Highlights - perfectly synced pulse
+        float energyMask = smoothstep(0.5, 0.99, n1 + 0.2);
+        color = mix(color, uColor3 * (1.1 + uSyncPulse * 0.2), energyMask * 0.2);
+
+        // Apply Deep Lights
+        color += mix(uColor2, uDeepPurple, 0.5) * rays * (0.4 + uSyncPulse * 0.4);
+        color += uDeepPurple * mouseGlow * (0.6 + uSyncPulse * 0.3);
         
-        // Apply Rays and Mouse Glow
-        color += uAccent * rays * (0.4 + uSyncPulse * 0.6);
-        color += uColor2 * mouseGlow * (0.6 + uSyncPulse * 0.4);
-        
-        // Vignette to keep edges black
-        color *= 1.2 - smoothstep(0.3, 1.2, dist);
+        // Professional Vignette - sharp focus center, pure black edges
+        color *= 1.1 - smoothstep(0.2, 1.2, dist);
 
         gl_FragColor = vec4(color, 1.0);
       }
     `
-    }), []);
+  }), []);
 
-    useFrame((state) => {
-        if (meshRef.current) {
-            const time = state.clock.getElapsedTime();
-            meshRef.current.material.uniforms.uTime.value = time;
-            meshRef.current.material.uniforms.uSyncPulse.value = (Math.sin(time * 0.5) + 1) * 0.5;
-            meshRef.current.material.uniforms.uMouse.value.lerp(state.mouse, 0.1);
+  useFrame((state) => {
+    if (meshRef.current) {
+      const time = state.clock.getElapsedTime();
+      meshRef.current.material.uniforms.uTime.value = time;
+      meshRef.current.material.uniforms.uSyncPulse.value = (Math.sin(time * 0.5) + 1) * 0.5;
+      meshRef.current.material.uniforms.uMouse.value.lerp(state.mouse, 0.1);
 
-            // Background Parallax
-            meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, state.mouse.y * 0.5, 0.02);
-        }
-    });
+      // Background Parallax
+      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, state.mouse.y * 0.5, 0.02);
+    }
+  });
 
-    return (
-        <mesh ref={meshRef} position={[0, 0, -10]} scale={[100, 100, 1]}>
-            <planeGeometry />
-            <shaderMaterial args={[shaderArgs]} />
-        </mesh>
-    );
+  return (
+    <mesh ref={meshRef} position={[0, 0, -10]} scale={[100, 100, 1]}>
+      <planeGeometry />
+      <shaderMaterial args={[shaderArgs]} />
+    </mesh>
+  );
 };
 
 const ShaderHero = () => {
-    return (
-        <div className="canvas-container">
-            <Canvas dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]} gl={{ antialias: false, alpha: true, stencil: false }} powerPreference="high-performance">
-                <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={window.innerWidth < 768 ? 60 : 45} />
+  return (
+    <div className="canvas-container">
+      <Canvas dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]} gl={{ antialias: false, alpha: true, stencil: false }} powerPreference="high-performance">
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={window.innerWidth < 768 ? 60 : 45} />
 
-                <color attach="background" args={['#000000']} />
+        <color attach="background" args={['#000000']} />
 
-                <ambientLight intensity={0.8} />
-                <spotLight position={[10, 10, 10]} angle={0.2} penumbra={1} intensity={10} color="#a855f7" />
-                <pointLight position={[-10, 5, -5]} intensity={12} color="#7c3aed" />
-                <pointLight position={[-10, -10, -10]} intensity={5} color="#4c1d95" />
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.2} penumbra={1} intensity={8} color="#a855f7" />
+        <pointLight position={[-10, 5, -5]} intensity={10} color="#6d28d9" />
+        <pointLight position={[0, -5, 5]} intensity={5} color="#ffffff" />
 
-                <Suspense fallback={null}>
-                    <BackgroundFluid />
-                    <ParticleField />
-                    <ShootingStars />
-                    <CinematicObject />
-                    <Environment preset="night" />
-                    <ContactShadows position={[0, -3.5, 0]} opacity={0.4} scale={20} blur={3} far={4} />
-                </Suspense>
-            </Canvas>
+        <ContactShadows
+          position={[0, -4, 0]}
+          opacity={0.4}
+          scale={20}
+          blur={2.5}
+          far={4}
+          color="#000000"
+        />
 
-            <div className="grain-overlay" />
+        <Suspense fallback={null}>
+          <BackgroundFluid />
+          <CinematicObject />
+          <Environment preset="night" />
+        </Suspense>
+      </Canvas>
 
-            <style>{`
+      <div className="grain-overlay" />
+
+      <style>{`
         .canvas-container {
           position: fixed;
           top: 0;
@@ -501,8 +408,8 @@ const ShaderHero = () => {
           mix-blend-mode: overlay;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 };
 
 export default ShaderHero;
