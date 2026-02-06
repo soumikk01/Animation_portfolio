@@ -119,6 +119,7 @@ section,
   color: #fff9f0;
   text-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   will-change: transform;
+  opacity: 0;
 }
 
 .text-line {
@@ -150,6 +151,11 @@ section,
   letter-spacing: 0.05em;
 }
 
+.annotation-text {
+  opacity: 0;
+  display: inline-block;
+}
+
 .ligature {
   top: -22%;
   right: -12%;
@@ -161,6 +167,9 @@ section,
   width: 45px;
   height: 1.5px;
   background: rgba(255, 255, 255, 0.6);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
 }
 
 .alternate-left {

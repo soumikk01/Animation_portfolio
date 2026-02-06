@@ -45,15 +45,18 @@ const CinematicObject = () => {
     let lastSoundTime = 0;
     const soundCooldown = 150; // ms
 
+    // Clear any existing triggers
+    if (ScrollTrigger.getById('bubble-trigger')) ScrollTrigger.getById('bubble-trigger').kill();
+
     // Scroll animation timeline
     const tl = gsap.timeline({
       scrollTrigger: {
+        id: 'bubble-trigger',
         trigger: 'body',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 3, // Increased for a more liquid, high-fidelity smoothing feel
+        scrub: 3,
         onUpdate: (self) => {
-          // Play bubble sound when scrolling, with a cooldown and check if muted
           const now = Date.now();
           if (!getMuted() && Math.abs(self.getVelocity()) > 100 && now - lastSoundTime > soundCooldown) {
             sounds.bubble();
@@ -66,49 +69,49 @@ const CinematicObject = () => {
     bubblesRef.current.forEach((bubble, i) => {
       if (!bubble) return;
       const data = bubbleData[i];
-      const staggerDelay = i * 0.05; // More pronounced stagger for "smooth unfolding"
+      const staggerDelay = i * 0.05;
 
-      // 1. SPLIT (0 -> 40% scroll)
-      tl.to(bubble.position, {
-        x: data.targetPos[0],
-        y: data.targetPos[1],
-        z: data.targetPos[2],
-        ease: 'power3.out', // Smoother entry
-      }, staggerDelay)
-        .to(bubble.scale, {
+      // 1. PHASE ONE: MITOSIS BUBBLING (0.0 -> 0.5)
+      // Small bubbles emerge from the master center
+      if (i !== 0) {
+        // Initial state for followers: invisible and at center
+        gsap.set(bubble.scale, { x: 0, y: 0, z: 0, immediateRender: false });
+        gsap.set(bubble.position, { x: 0, y: 0, z: 0, immediateRender: false });
+
+        tl.to(bubble.scale, {
           x: data.scale,
           y: data.scale,
           z: data.scale,
-          ease: 'power3.out',
-        }, staggerDelay);
+          ease: 'back.out(1.7)',
+        }, staggerDelay)
+          .to(bubble.position, {
+            x: data.targetPos[0],
+            y: data.targetPos[1],
+            z: data.targetPos[2],
+            ease: 'power2.out',
+          }, staggerDelay);
+      } else {
+        // Master bubble (i=0) should be visible and at center at scroll 0
+        gsap.set(bubble.scale, { x: 1.2, y: 1.2, z: 1.2, immediateRender: false });
+        gsap.set(bubble.position, { x: 0, y: 0, z: 0, immediateRender: false });
 
-      // 2. MERGE (40% -> 60% scroll)
-      tl.to(bubble.position, {
-        x: 0,
-        y: 0,
-        z: 0,
-        ease: 'expo.inOut',
-      }, 0.4 + staggerDelay)
-        .to(bubble.scale, {
-          x: i === 0 ? 1.5 : 0,
-          y: i === 0 ? 1.5 : 0,
-          z: i === 0 ? 1.5 : 0,
-          ease: 'expo.inOut',
-        }, 0.4 + staggerDelay);
+        // Master bubble can have a subtle movement to feel "dynamic"
+        tl.to(bubble.position, {
+          x: 1,
+          y: -1,
+          z: -1,
+          ease: 'none',
+        }, 0);
+      }
 
-      // 3. RE-SPLIT (60% -> 100% scroll)
+      // 2. PHASE TWO: SECONDARY MOVE (0.5 -> 1.0)
+      const moveOffset = 0.5;
       tl.to(bubble.position, {
-        x: data.targetPos[0] * -1.2,
-        y: data.targetPos[1] * 0.8,
-        z: data.targetPos[2] - 2,
-        ease: 'power4.inOut',
-      }, 0.7 + staggerDelay)
-        .to(bubble.scale, {
-          x: data.scale * 0.7,
-          y: data.scale * 0.7,
-          z: data.scale * 0.7,
-          ease: 'power4.inOut',
-        }, 0.7 + staggerDelay);
+        x: i === 0 ? -2 : (data.targetPos[0] * -1.2),
+        y: i === 0 ? 2 : (data.targetPos[1] * 0.8),
+        z: i === 0 ? -3 : (data.targetPos[2] - 2),
+        ease: 'power1.inOut',
+      }, moveOffset + staggerDelay);
     });
 
     return () => {
@@ -182,6 +185,329 @@ const CinematicObject = () => {
             />
           </mesh>
         </Float>
+      ))}
+    </group>
+  );
+};
+
+// Small decorative bubbles at top with blast animation
+const DecorativeBubbles = () => {
+  const bubblesRef = useRef([]);
+  const particlesRef = useRef([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Create small bubbles positioned around master bubble
+  const topBubbles = useMemo(() => {
+    const count = isMobile ? 8 : 15;
+    return Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * Math.PI * 2; // Evenly distribute in circle
+      const orbitRadius = 2.5; // Distance from master bubble
+
+      return {
+        id: i,
+        angle: angle,
+        orbitPos: [
+          Math.cos(angle) * orbitRadius,
+          Math.sin(angle) * orbitRadius,
+          (Math.random() - 0.5) * 0.5 // Small depth variation
+        ],
+        finalPos: [
+          Math.cos(angle) * (orbitRadius + 8 + Math.random() * 4), // Blast outward
+          Math.sin(angle) * (orbitRadius + 8 + Math.random() * 4),
+          -3 + Math.random() * 2
+        ],
+        scale: 0.15 + Math.random() * 0.15, // Small size
+        speed: 0.5 + Math.random() * 0.5,
+        delay: i * 0.05,
+        rotationSpeed: (Math.random() - 0.5) * 0.4
+      };
+    });
+  }, [isMobile]);
+
+  // Particle system for burst effect
+  const particles = useMemo(() => {
+    return topBubbles.flatMap((bubble, bubbleIdx) =>
+      Array.from({ length: 8 }, (_, i) => ({
+        bubbleId: bubbleIdx,
+        id: `${bubbleIdx}-${i}`,
+        angle: (i / 8) * Math.PI * 2,
+        speed: 0.8 + Math.random() * 0.4
+      }))
+    );
+  }, [topBubbles]);
+
+  useEffect(() => {
+    if (ScrollTrigger.getById('decorative-bubbles-trigger')) {
+      ScrollTrigger.getById('decorative-bubbles-trigger').kill();
+    }
+
+    // BLAST ANIMATION - burst from center to orbit
+    bubblesRef.current.forEach((bubble, i) => {
+      if (!bubble) return;
+      const data = topBubbles[i];
+
+      // Start at center (master bubble position)
+      gsap.set(bubble.position, { x: 0, y: 0, z: 0 });
+      gsap.set(bubble.scale, { x: 0, y: 0, z: 0 });
+
+      // BURST outward to orbit position with stagger
+      gsap.to(bubble.position, {
+        x: data.orbitPos[0],
+        y: data.orbitPos[1],
+        z: data.orbitPos[2],
+        ease: 'back.out(3)',
+        duration: 0.8,
+        delay: data.delay
+      });
+
+      gsap.to(bubble.scale, {
+        x: data.scale,
+        y: data.scale,
+        z: data.scale,
+        ease: 'elastic.out(1, 0.5)',
+        duration: 1,
+        delay: data.delay
+      });
+    });
+
+    // SCROLL ANIMATION - blast effect on scroll (reversible)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        id: 'decorative-bubbles-trigger',
+        trigger: 'body',
+        start: 'top top',
+        end: '+=1200',
+        scrub: 1,
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+
+    bubblesRef.current.forEach((bubble, i) => {
+      if (!bubble) return;
+      const data = topBubbles[i];
+
+      // Pull back to center and shrink (reverse blast when scrolling down)
+      tl.to(bubble.position, {
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: 'power2.in'
+      }, 0);
+
+      tl.to(bubble.scale, {
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: 'power2.in'
+      }, 0);
+    });
+
+    return () => {
+      if (ScrollTrigger.getById('decorative-bubbles-trigger')) {
+        ScrollTrigger.getById('decorative-bubbles-trigger').kill();
+      }
+    };
+  }, [topBubbles]);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+
+    bubblesRef.current.forEach((bubble, i) => {
+      if (bubble) {
+        const data = topBubbles[i];
+
+        // CONTINUOUS ORBITAL ROTATION - always active
+        const rotationSpeed = 0.6;
+        const currentAngle = data.angle + time * rotationSpeed;
+        const orbitRadius = 2.5;
+
+        // Update position to rotate around master bubble continuously
+        bubble.position.x = Math.cos(currentAngle) * orbitRadius;
+        bubble.position.y = Math.sin(currentAngle) * orbitRadius;
+
+        // Mesh rotation for organic feel
+        bubble.rotation.x = Math.sin(time * 0.4 + i) * 0.2;
+        bubble.rotation.y += data.rotationSpeed * 0.01;
+        bubble.rotation.z = Math.cos(time * 0.5 + i * 0.7) * 0.15;
+
+        // Sync color with master bubbles
+        const pulse = (Math.sin(time * 0.5) + 1) * 0.5;
+        const material = bubble.material;
+        if (material) {
+          const targetColor = new THREE.Color(pulse > 0.5 ? '#6d28d9' : '#ffffff');
+          material.color.lerp(targetColor, 0.02);
+        }
+      }
+    });
+  });
+
+  return (
+    <group>
+      {topBubbles.map((data, i) => (
+        <Float key={i} speed={1 + i * 0.15} rotationIntensity={0.3} floatIntensity={0.4}>
+          <mesh ref={el => bubblesRef.current[i] = el}>
+            <icosahedronGeometry args={[1, 12]} />
+            <MeshTransmissionMaterial
+              backside
+              backsideThickness={isMobile ? 0.2 : 0.6}
+              thickness={isMobile ? 0.2 : 0.5}
+              samples={isMobile ? 1 : 3}
+              resolution={isMobile ? 256 : 384}
+              transmission={1}
+              clearcoat={isMobile ? 0.3 : 0.7}
+              clearcoatRoughness={0}
+              envMapIntensity={isMobile ? 1.0 : 1.5}
+              color="#ffffff"
+              roughness={0.05}
+              anisotropy={isMobile ? 0.1 : 0.4}
+              chromaticAberration={0.06}
+              distortion={0.3}
+              distortionScale={0.3}
+              temporalDistortion={0.4}
+              ior={1.2}
+            />
+          </mesh>
+        </Float>
+      ))}
+    </group>
+  );
+};
+
+// Continuously blasting and recreating bubbles
+const BlastingBubbles = () => {
+  const bubblesRef = useRef([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Small bubbles that blast and recreate
+  const blastBubbles = useMemo(() => {
+    const count = isMobile ? 6 : 10;
+    return Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * Math.PI * 2;
+      return {
+        id: i,
+        angle: angle,
+        scale: 0.08 + Math.random() * 0.08,
+        delay: i * 0.15,
+        duration: 1.5 + Math.random() * 0.5
+      };
+    });
+  }, [isMobile]);
+
+  useEffect(() => {
+    bubblesRef.current.forEach((bubble, i) => {
+      if (!bubble) return;
+      const data = blastBubbles[i];
+
+      // Infinite blast loop
+      const blastLoop = () => {
+        // Start at center
+        gsap.set(bubble.position, { x: 0, y: 0, z: 0 });
+        gsap.set(bubble.scale, { x: 0, y: 0, z: 0 });
+
+        // Blast outward
+        const distance = 4 + Math.random() * 3;
+        const targetAngle = data.angle + (Math.random() - 0.5) * 0.5;
+
+        gsap.to(bubble.position, {
+          x: Math.cos(targetAngle) * distance,
+          y: Math.sin(targetAngle) * distance,
+          z: (Math.random() - 0.5) * 2,
+          duration: data.duration,
+          ease: 'power2.out',
+          delay: data.delay
+        });
+
+        gsap.to(bubble.scale, {
+          x: data.scale,
+          y: data.scale,
+          z: data.scale,
+          duration: 0.3,
+          ease: 'back.out(2)',
+          delay: data.delay
+        });
+
+        // Fade out and restart
+        gsap.to(bubble.scale, {
+          x: 0,
+          y: 0,
+          z: 0,
+          duration: 0.4,
+          ease: 'power2.in',
+          delay: data.delay + data.duration,
+          onComplete: blastLoop
+        });
+      };
+
+      blastLoop();
+    });
+
+    return () => {
+      bubblesRef.current.forEach(bubble => {
+        if (bubble) gsap.killTweensOf(bubble);
+      });
+    };
+  }, [blastBubbles]);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+
+    bubblesRef.current.forEach((bubble, i) => {
+      if (bubble) {
+        // Continuous rotation
+        bubble.rotation.x = Math.sin(time * 2 + i) * 0.5;
+        bubble.rotation.y = time * 1.5 + i;
+        bubble.rotation.z = Math.cos(time * 1.8 + i) * 0.3;
+
+        // Color sync
+        const pulse = (Math.sin(time * 0.5) + 1) * 0.5;
+        const material = bubble.material;
+        if (material) {
+          const targetColor = new THREE.Color(pulse > 0.5 ? '#6d28d9' : '#ffffff');
+          material.color.lerp(targetColor, 0.03);
+        }
+      }
+    });
+  });
+
+  return (
+    <group>
+      {blastBubbles.map((data, i) => (
+        <mesh key={i} ref={el => bubblesRef.current[i] = el}>
+          <icosahedronGeometry args={[1, 8]} />
+          <MeshTransmissionMaterial
+            backside
+            backsideThickness={isMobile ? 0.15 : 0.4}
+            thickness={isMobile ? 0.15 : 0.35}
+            samples={isMobile ? 1 : 2}
+            resolution={isMobile ? 128 : 256}
+            transmission={1}
+            clearcoat={isMobile ? 0.2 : 0.5}
+            clearcoatRoughness={0}
+            envMapIntensity={isMobile ? 0.8 : 1.2}
+            color="#ffffff"
+            roughness={0.1}
+            anisotropy={0.3}
+            chromaticAberration={0.05}
+            distortion={0.2}
+            distortionScale={0.2}
+            temporalDistortion={0.3}
+            ior={1.2}
+          />
+        </mesh>
       ))}
     </group>
   );
@@ -377,6 +703,8 @@ const ShaderHero = () => {
         <Suspense fallback={null}>
           <BackgroundFluid />
           <CinematicObject />
+          <DecorativeBubbles />
+          <BlastingBubbles />
           <Environment preset="night" />
         </Suspense>
       </Canvas>

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SmoothScroll from './components/SmoothScroll';
 import Navbar from './components/Navbar';
 import ExperienceModal from './components/ExperienceModal';
@@ -13,8 +15,61 @@ import ContactForm from './components/ContactForm';
 import './components/GlobalAnimations.css';
 import './App.css';
 
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
+  const heroSectionRef = useRef(null);
+
+  useEffect(() => {
+    if (hasStarted && heroSectionRef.current) {
+      const tl = gsap.timeline({ paused: true });
+
+      // Define the professional intro sequence
+      tl.to('.main-word', {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        stagger: 0.3,
+        ease: 'power4.out'
+      })
+        .to('.annotation-line', {
+          scaleX: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'expo.inOut'
+        }, '-=0.6')
+        .to('.annotation-text', {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out'
+        }, '-=0.4');
+
+      // Controlled by ScrollTrigger to replay on entry
+      ScrollTrigger.create({
+        trigger: '#home',
+        start: 'top center',
+        onEnter: () => tl.play(),
+        onEnterBack: () => tl.restart(),
+        onLeave: () => {
+          // Reset to hidden state when scrolling away for a fresh entrance next time
+          gsap.set('.main-word', { opacity: 0, y: 30 });
+          gsap.set('.annotation-line', { scaleX: 0 });
+          gsap.set('.annotation-text', { opacity: 0, x: -10 });
+          tl.pause(0);
+        },
+        onLeaveBack: () => {
+          gsap.set('.main-word', { opacity: 0, y: 30 });
+          gsap.set('.annotation-line', { scaleX: 0 });
+          gsap.set('.annotation-text', { opacity: 0, x: -10 });
+          tl.pause(0);
+        }
+      });
+    }
+  }, [hasStarted]);
 
   return (
     <SmoothScroll>
@@ -27,7 +82,7 @@ function App() {
       <main className={`main-content ${hasStarted ? 'started' : ''}`}>
         {/* HERO SECTION - REPLICATING "LOCKED AWAY" DESIGN */}
         <section id="home" className="hero hero-vibe">
-          <div className="container hero-container">
+          <div className="container hero-container" ref={heroSectionRef}>
             <div className="typography-design">
               {/* Line 1: Full-Stack */}
               <div className="text-line line-1">
