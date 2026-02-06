@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import FadeIn from './FadeIn';
 import TextReveal from './TextReveal';
+import SocialButtons from './SocialButtons';
 import './ContactForm.css';
 
 function ContactForm() {
@@ -46,9 +47,6 @@ function ContactForm() {
             </div>
 
             <div className="container">
-                <FadeIn>
-                    <h2 className="section-title">03 / Contact</h2>
-                </FadeIn>
                 <div className="contact-grid">
                     <FadeIn delay={0.2} className="contact-info">
                         <div className="contact-heading-wrapper">
@@ -76,6 +74,11 @@ function ContactForm() {
                                 <span className="detail-label">Availability</span>
                                 <span className="detail-value">Open for opportunities</span>
                             </div>
+                        </div>
+
+                        {/* Social Media Buttons */}
+                        <div className="contact-social-wrapper">
+                            <SocialButtons />
                         </div>
                     </FadeIn>
 

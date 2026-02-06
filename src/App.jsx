@@ -8,7 +8,6 @@ import ShaderHero from './components/ShaderHero';
 import About from './components/About';
 import TextReveal from './components/TextReveal';
 import FadeIn from './components/FadeIn';
-import SocialButtons from './components/SocialButtons';
 import TechStack from './components/TechStack';
 import StaggerFadeIn from './components/StaggerFadeIn';
 import ContactForm from './components/ContactForm';
@@ -175,32 +174,11 @@ function App() {
                 </div>
               ))}
             </StaggerFadeIn>
-
-            {/* Social Media Buttons with Bubble Animation */}
-            <FadeIn delay={0.3}>
-              <SocialButtons />
-            </FadeIn>
           </div>
         </section>
 
         {/* CONTACT / MESSAGE SECTION */}
         <ContactForm />
-
-        {/* FOOTER */}
-        <footer className="footer-cinematic">
-          <div className="footer-bg-bubbles">
-            <div className="footer-bubble"></div>
-            <div className="footer-bubble"></div>
-          </div>
-          <div className="container">
-            <div className="footer-bottom">
-              <div className="footer-info">
-                <p>&copy; {new Date().getFullYear()} Soumya. All rights reserved.</p>
-                <p>Designed with passion</p>
-              </div>
-            </div>
-          </div>
-        </footer>
       </main>
     </SmoothScroll>
   );

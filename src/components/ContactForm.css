@@ -230,6 +230,30 @@
     color: var(--accent-color);
 }
 
+/* Contact Social Buttons */
+.contact-social-wrapper {
+    margin-top: 3rem;
+}
+
+.contact-social-wrapper .social-buttons-container {
+    padding: 0;
+    justify-content: flex-start;
+}
+
+.contact-social-wrapper .social-buttons {
+    padding: 0;
+}
+
+.contact-social-wrapper .social-links {
+    justify-content: flex-start;
+    gap: 1.5rem;
+}
+
+.contact-social-wrapper .social-button {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.85rem;
+}
+
 /* Form Styling */
 .contact-form-wrapper {
     background: rgba(255, 255, 255, 0.02);
