@@ -1,39 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import FadeIn from './FadeIn';
 import TextReveal from './TextReveal';
 import SocialButtons from './SocialButtons';
 import './ContactForm.css';
 
 function ContactForm() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: ''
-    });
-    const [status, setStatus] = useState(''); // 'sending', 'success', 'error'
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setStatus('sending');
-
-        // Simulate sending (replace with your actual email service later)
-        setTimeout(() => {
-            setStatus('success');
-            setFormData({ name: '', email: '', message: '' });
-
-            setTimeout(() => {
-                setStatus('');
-            }, 3000);
-        }, 1000);
-    };
-
     return (
         <section id="contact" className="contact-section">
             <div className="contact-bg-effects">
@@ -84,79 +55,155 @@ function ContactForm() {
                     </FadeIn>
 
                     <FadeIn delay={0.4} className="contact-form-wrapper">
-                        <form onSubmit={handleSubmit} className="contact-form">
-                            <div className="form-group">
-                                <label htmlFor="name">Your Name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                    placeholder="John Doe"
-                                    disabled={status === 'sending'}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="email">Your Email</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    placeholder="john@example.com"
-                                    disabled={status === 'sending'}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="message">Your Message</label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                    rows="6"
-                                    placeholder="Tell me about your project..."
-                                    disabled={status === 'sending'}
-                                ></textarea>
-                            </div>
-
-                            <button
-                                type="submit"
-                                className={`submit-btn ${status}`}
-                                disabled={status === 'sending'}
-                            >
-                                {status === 'sending' ? (
-                                    <>
-                                        <span className="btn-spinner"></span>
-                                        Sending...
-                                    </>
-                                ) : status === 'success' ? (
-                                    <>
-                                        <span className="btn-checkmark">✓</span>
-                                        Message Sent!
-                                    </>
-                                ) : (
-                                    'Send Message'
-                                )}
-                            </button>
-
-                            {status === 'error' && (
-                                <p className="error-message">
-                                    Something went wrong. Please try again.
-                                </p>
-                            )}
-                        </form>
+                        <AIAssistantChat />
                     </FadeIn>
                 </div>
             </div>
         </section>
+    );
+}
+
+// AI Assistant Chat Component
+function AIAssistantChat() {
+    const [messages, setMessages] = useState([
+        {
+            role: 'assistant',
+            content: "👋 Hi! I'm your AI assistant. Ask me anything about this portfolio, the projects, skills, or experience!"
+        }
+    ]);
+    const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    const getGeminiResponse = async (userMessage) => {
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+        if (!apiKey) {
+            return "⚠️ API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.";
+        }
+
+        const portfolioContext = `You are an AI assistant for a Full-Stack Developer's portfolio website. 
+The developer specializes in:
+- Frontend: React, JavaScript, HTML/CSS, responsive design, animations
+- Backend: Java, RESTful APIs, Node.js
+- Tools: Git, CI/CD, databases
+- Current focus: Building modern web experiences with cutting-edge technologies
+
+Answer questions about the portfolio, projects, skills, and experience in a friendly, professional manner. 
+Keep responses concise and helpful.`;
+
+        try {
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [
+                                    { text: `${portfolioContext}\n\nUser question: ${userMessage}` }
+                                ]
+                            }
+                        ],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 500,
+                        }
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                return data.candidates[0].content.parts[0].text;
+            } else if (data.error) {
+                return `Error: ${data.error.message}`;
+            } else {
+                return "Sorry, I couldn't generate a response. Please try again.";
+            }
+        } catch (error) {
+            return `Sorry, there was an error: ${error.message}`;
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!input.trim() || isLoading) return;
+
+        const userMessage = input.trim();
+        setInput('');
+
+        setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+        setIsLoading(true);
+
+        const aiResponse = await getGeminiResponse(userMessage);
+
+        setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+        setIsLoading(false);
+    };
+
+    return (
+        <div className="ai-chat-box">
+            <div className="chat-messages">
+                {messages.map((message, index) => (
+                    <div
+                        key={index}
+                        className={`message ${message.role}`}
+                    >
+                        <div className="message-bubble">
+                            {message.content}
+                        </div>
+                    </div>
+                ))}
+                {isLoading && (
+                    <div className="message assistant">
+                        <div className="message-bubble loading">
+                            <div className="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                <div ref={messagesEndRef} />
+            </div>
+
+            <form onSubmit={handleSubmit} className="chat-input-form">
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Ask about projects, skills, experience..."
+                        disabled={isLoading}
+                        className="chat-input"
+                    />
+                    <button
+                        type="submit"
+                        disabled={isLoading || !input.trim()}
+                        className="send-button"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 }
 
