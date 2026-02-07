@@ -11,6 +11,7 @@ import FadeIn from './components/FadeIn';
 import TechStack from './components/TechStack';
 import StaggerFadeIn from './components/StaggerFadeIn';
 import ContactForm from './components/ContactForm';
+import LoadingScreen from './components/LoadingScreen';
 import './components/GlobalAnimations.css';
 import './App.css';
 
@@ -19,7 +20,18 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const heroSectionRef = useRef(null);
+
+  // Handle initial loading
+  useEffect(() => {
+    // Simulate asset loading (fonts, images, etc.)
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); // Adjust based on actual asset load time
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (hasStarted && heroSectionRef.current) {
@@ -56,7 +68,7 @@ function App() {
         );
 
       // Controlled by ScrollTrigger to replay on entry
-      ScrollTrigger.create({
+      const trigger = ScrollTrigger.create({
         trigger: '#home',
         start: 'top center',
         onEnter: () => tl.play(),
@@ -75,11 +87,19 @@ function App() {
           tl.pause(0);
         },
       });
+
+      // Cleanup function to prevent memory leaks
+      return () => {
+        trigger.kill();
+        tl.kill();
+      };
     }
   }, [hasStarted]);
 
   return (
-    <SmoothScroll>
+    <>
+      {isLoading && <LoadingScreen />}
+      <SmoothScroll>
       <Navbar />
       <ExperienceModal onStart={() => setHasStarted(true)} />
 
@@ -197,6 +217,7 @@ function App() {
         <ContactForm />
       </main>
     </SmoothScroll>
+    </>
   );
 }
 

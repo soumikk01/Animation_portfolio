@@ -25,7 +25,11 @@ const TechStack = () => {
   const svgRef = useRef(null);
 
   useEffect(() => {
-    const paths = svgRef.current.querySelectorAll('.branch-path');
+    const section = sectionRef.current;
+    const svg = svgRef.current;
+    if (!section || !svg) return;
+
+    const paths = svg.querySelectorAll('.branch-path');
 
     paths.forEach((path) => {
       const length = path.getTotalLength();
@@ -42,7 +46,7 @@ const TechStack = () => {
         delay: 0.1 + path.getAttribute('data-index') * 0.03,
         ease: 'power2.inOut',
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: 'top 65%',
           once: true, // Play animation only once
         },
@@ -60,12 +64,21 @@ const TechStack = () => {
         stagger: 0.04,
         ease: 'back.out(1.5)',
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: 'top 65%',
           once: true, // Play animation only once
         },
       }
     );
+
+    // Cleanup all ScrollTriggers tied to this section
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger === section) {
+          trigger.kill();
+        }
+      });
+    };
   }, []);
 
   return (

@@ -3,6 +3,7 @@ import FadeIn from './FadeIn';
 import TextReveal from './TextReveal';
 import TypingAnimation from './TypingAnimation';
 import SocialButtons from './SocialButtons';
+import { getGeminiEndpoint, API_CONFIG } from '../utils/apiConfig';
 import './ContactForm.css';
 
 function ContactForm() {
@@ -75,7 +76,15 @@ function AIAssistantChat() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKeyMissing, setApiKeyMissing] = useState(false);
   const messagesEndRef = useRef(null);
+  const MAX_MESSAGE_LENGTH = 500;
+
+  // Check if API key is configured
+  useEffect(() => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    setApiKeyMissing(!apiKey);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -103,39 +112,39 @@ Answer questions about the portfolio, projects, skills, and experience in a frie
 Keep responses concise and helpful.`;
 
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [{ text: `${portfolioContext}\n\nUser question: ${userMessage}` }],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 500,
+      const response = await fetch(getGeminiEndpoint(apiKey), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: `${portfolioContext}\n\nUser question: ${userMessage}` }],
             },
-          }),
-        }
-      );
+          ],
+          generationConfig: API_CONFIG.GEMINI.DEFAULT_PARAMS,
+        }),
+      });
 
       const data = await response.json();
 
       if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
         return data.candidates[0].content.parts[0].text;
       } else if (data.error) {
-        console.error('Gemini API Error:', data.error.message);
+        // Only log in development
+        if (import.meta.env.DEV) {
+          console.error('Gemini API Error:', data.error.message);
+        }
         return 'Error...!!';
       } else {
         return 'Error...!!';
       }
     } catch (error) {
-      console.error('AI Assistant Error:', error.message);
+      // Only log in development
+      if (import.meta.env.DEV) {
+        console.error('AI Assistant Error:', error.message);
+      }
       return 'Error...!!';
     }
   };
@@ -143,9 +152,22 @@ Keep responses concise and helpful.`;
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!input.trim() || isLoading) return;
+    // Validation: trim spaces, check loading state, validate length
+    const trimmedInput = input.trim();
+    if (!trimmedInput || isLoading) return;
 
-    const userMessage = input.trim();
+    if (trimmedInput.length > MAX_MESSAGE_LENGTH) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: `⚠️ Message too long! Please keep messages under ${MAX_MESSAGE_LENGTH} characters.`,
+        },
+      ]);
+      return;
+    }
+
+    const userMessage = trimmedInput;
     setInput('');
 
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
@@ -155,6 +177,14 @@ Keep responses concise and helpful.`;
 
     setMessages((prev) => [...prev, { role: 'assistant', content: aiResponse }]);
     setIsLoading(false);
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    // Prevent typing beyond max length
+    if (value.length <= MAX_MESSAGE_LENGTH) {
+      setInput(value);
+    }
   };
 
   return (
@@ -193,12 +223,23 @@ Keep responses concise and helpful.`;
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about projects, skills, experience..."
-            disabled={isLoading}
+            onChange={handleInputChange}
+            placeholder={
+              apiKeyMissing
+                ? 'AI chat unavailable - API key not configured'
+                : 'Ask about projects, skills, experience...'
+            }
+            disabled={isLoading || apiKeyMissing}
             className="chat-input"
+            maxLength={MAX_MESSAGE_LENGTH}
+            aria-label="Chat message input"
           />
-          <button type="submit" disabled={isLoading || !input.trim()} className="send-button">
+          <button
+            type="submit"
+            disabled={isLoading || !input.trim() || apiKeyMissing}
+            className="send-button"
+            aria-label="Send message"
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"

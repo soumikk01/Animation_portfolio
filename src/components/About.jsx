@@ -27,35 +27,35 @@ const About = () => {
     tl.fromTo(
       textRef.current.querySelector('.section-title'),
       { y: 60, opacity: 0, scale: 0.95 },
-      { 
-        y: 0, 
-        opacity: 1, 
-        scale: 1, 
-        duration: 1, 
-        ease: 'power3.out' 
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: 'power3.out',
       }
     )
       .fromTo(
         textRef.current.querySelector('.about-headline'),
         { y: 60, opacity: 0, scale: 0.95 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          scale: 1, 
-          duration: 1, 
-          ease: 'power3.out' 
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: 'power3.out',
         },
         '-=0.7'
       )
       .fromTo(
         textRef.current.querySelector('.about-description'),
         { y: 60, opacity: 0, scale: 0.95 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          scale: 1, 
-          duration: 1, 
-          ease: 'power3.out' 
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: 'power3.out',
         },
         '-=0.7'
       );
@@ -63,9 +63,9 @@ const About = () => {
     // Image animation with smooth entrance
     gsap.fromTo(
       imageRef.current,
-      { 
-        x: 100, 
-        opacity: 0, 
+      {
+        x: 100,
+        opacity: 0,
         scale: 0.9,
       },
       {
