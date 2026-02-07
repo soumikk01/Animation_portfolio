@@ -63,7 +63,7 @@ const CinematicObject = () => {
         trigger: 'body',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 3,
+        scrub: 1.5,
         onUpdate: (self) => {
           const now = Date.now();
           if (
@@ -211,21 +211,21 @@ const CinematicObject = () => {
                 Desktop: Higher quality for visual fidelity */}
             <MeshTransmissionMaterial
               backside
-              backsideThickness={isMobile ? 0.3 : 1.0}
-              thickness={isMobile ? 0.3 : 0.8}
-              samples={isMobile ? 1 : 4}
-              resolution={isMobile ? 256 : 512}
+              backsideThickness={isMobile ? 0.2 : 0.5}
+              thickness={isMobile ? 0.2 : 0.4}
+              samples={isMobile ? 1 : 2}
+              resolution={isMobile ? 128 : 256}
               transmission={1}
-              clearcoat={isMobile ? 0.3 : 0.8}
+              clearcoat={isMobile ? 0.2 : 0.5}
               clearcoatRoughness={0}
-              envMapIntensity={isMobile ? 1.2 : 2.0}
+              envMapIntensity={isMobile ? 1.0 : 1.5}
               color="#ffffff"
               roughness={0.05}
-              anisotropy={isMobile ? 0.1 : 0.5}
-              chromaticAberration={0.08}
-              distortion={0.4}
-              distortionScale={0.4}
-              temporalDistortion={0.5}
+              anisotropy={isMobile ? 0.1 : 0.25}
+              chromaticAberration={0.04}
+              distortion={0.3}
+              distortionScale={0.3}
+              temporalDistortion={0.4}
               ior={1.2}
             />
           </mesh>
@@ -329,7 +329,7 @@ const DecorativeBubbles = () => {
         trigger: 'body',
         start: 'top top',
         end: '+=1200',
-        scrub: 1,
+        scrub: 1.2,
         toggleActions: 'play reverse play reverse',
       },
     });
@@ -407,24 +407,14 @@ const DecorativeBubbles = () => {
         <Float key={i} speed={1 + i * 0.15} rotationIntensity={0.3} floatIntensity={0.4}>
           <mesh ref={(el) => (bubblesRef.current[i] = el)}>
             <icosahedronGeometry args={[1, 12]} />
-            <MeshTransmissionMaterial
-              backside
-              backsideThickness={isMobile ? 0.2 : 0.6}
-              thickness={isMobile ? 0.2 : 0.5}
-              samples={isMobile ? 1 : 3}
-              resolution={isMobile ? 256 : 384}
-              transmission={1}
-              clearcoat={isMobile ? 0.3 : 0.7}
-              clearcoatRoughness={0}
-              envMapIntensity={isMobile ? 1.0 : 1.5}
+            <meshStandardMaterial
               color="#ffffff"
               roughness={0.05}
-              anisotropy={isMobile ? 0.1 : 0.4}
-              chromaticAberration={0.06}
-              distortion={0.3}
-              distortionScale={0.3}
-              temporalDistortion={0.4}
-              ior={1.2}
+              metalness={0.9}
+              emissive="#6d28d9"
+              emissiveIntensity={0.2}
+              transparent
+              opacity={0.8}
             />
           </mesh>
         </Float>
@@ -541,24 +531,14 @@ const BlastingBubbles = () => {
       {blastBubbles.map((data, i) => (
         <mesh key={i} ref={(el) => (bubblesRef.current[i] = el)}>
           <icosahedronGeometry args={[1, 8]} />
-          <MeshTransmissionMaterial
-            backside
-            backsideThickness={isMobile ? 0.15 : 0.4}
-            thickness={isMobile ? 0.15 : 0.35}
-            samples={isMobile ? 1 : 2}
-            resolution={isMobile ? 128 : 256}
-            transmission={1}
-            clearcoat={isMobile ? 0.2 : 0.5}
-            clearcoatRoughness={0}
-            envMapIntensity={isMobile ? 0.8 : 1.2}
+          <meshStandardMaterial
             color="#ffffff"
             roughness={0.1}
-            anisotropy={0.3}
-            chromaticAberration={0.05}
-            distortion={0.2}
-            distortionScale={0.2}
-            temporalDistortion={0.3}
-            ior={1.2}
+            metalness={0.8}
+            emissive="#a855f7"
+            emissiveIntensity={0.3}
+            transparent
+            opacity={0.7}
           />
         </mesh>
       ))}
@@ -776,8 +756,7 @@ const ShaderHero = () => {
     <div className="canvas-container">
       <Canvas
         dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]}
-        gl={{ antialias: false, alpha: true, stencil: false }}
-        powerPreference="high-performance"
+        gl={{ antialias: false, alpha: true, stencil: false, powerPreference: "high-performance" }}
       >
         <PerspectiveCamera
           makeDefault

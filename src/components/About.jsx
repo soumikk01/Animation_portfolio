@@ -82,9 +82,9 @@ const About = () => {
       }
     );
 
-    // Animate gradient background
-    gsap.to('.about-section::before', {
-      backgroundPosition: '200% center',
+    // Animate gradient background via CSS variable
+    gsap.to(el, {
+      '--bg-pos': '200% center',
       duration: 20,
       repeat: -1,
       ease: 'none',
@@ -188,6 +188,7 @@ const About = () => {
                         rgba(59, 130, 246, 0.1) 0%,
                         transparent 50%
                     );
+                    background-position: var(--bg-pos, 0% center);
                     animation: gradient-shift 15s ease infinite;
                     pointer-events: none;
                 }

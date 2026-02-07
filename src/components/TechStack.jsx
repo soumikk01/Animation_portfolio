@@ -26,7 +26,8 @@ import {
   SiSpringboot,
   SiGithubactions,
   SiMysql,
-  SiSqlite
+  SiSqlite,
+  SiNgrok
 } from 'react-icons/si';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -75,6 +76,7 @@ const techData = [
     items: [
       { name: 'Git', icon: FaGitAlt },
       { name: 'Blender', icon: SiBlender },
+      { name: 'ngrok', icon: SiNgrok },
     ],
   },
 ];
@@ -122,6 +124,15 @@ const TechStack = () => {
         newPaths.push(pathData);
       });
     });
+
+    // Draw curvy spine connecting category hubs
+    for (let i = 0; i < categoryPoints.length - 1; i++) {
+        const p1 = categoryPoints[i];
+        const p2 = categoryPoints[i + 1];
+        const midY = (p1.y + p2.y) / 2;
+        const path = `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`;
+        newSpinePaths.push(path);
+    }
 
     setPaths(newPaths);
     setHubs(newHubs);
