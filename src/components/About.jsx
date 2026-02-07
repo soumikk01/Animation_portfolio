@@ -15,50 +15,69 @@ const About = () => {
   useEffect(() => {
     const el = sectionRef.current;
 
-    // Staggered text animation with enhanced effects
+    // Staggered text animation with subtle effects
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play none none reverse',
+        start: 'top 85%',
+        once: true,
       },
     });
 
     tl.fromTo(
       textRef.current.querySelector('.section-title'),
-      { y: 50, opacity: 0, filter: 'blur(10px)' },
-      { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }
+      { y: 60, opacity: 0, scale: 0.95 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        scale: 1, 
+        duration: 1, 
+        ease: 'power3.out' 
+      }
     )
       .fromTo(
         textRef.current.querySelector('.about-headline'),
-        { y: 50, opacity: 0, filter: 'blur(10px)' },
-        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
-        '-=0.4'
+        { y: 60, opacity: 0, scale: 0.95 },
+        { 
+          y: 0, 
+          opacity: 1, 
+          scale: 1, 
+          duration: 1, 
+          ease: 'power3.out' 
+        },
+        '-=0.7'
       )
       .fromTo(
         textRef.current.querySelector('.about-description'),
-        { y: 50, opacity: 0, filter: 'blur(10px)' },
-        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
-        '-=0.4'
+        { y: 60, opacity: 0, scale: 0.95 },
+        { 
+          y: 0, 
+          opacity: 1, 
+          scale: 1, 
+          duration: 1, 
+          ease: 'power3.out' 
+        },
+        '-=0.7'
       );
 
-    // Enhanced image animation with rotation
+    // Image animation with smooth entrance
     gsap.fromTo(
       imageRef.current,
-      { x: 100, opacity: 0, scale: 0.8, rotateY: 45 },
+      { 
+        x: 100, 
+        opacity: 0, 
+        scale: 0.9,
+      },
       {
         x: 0,
         opacity: 1,
         scale: 1,
-        rotateY: 0,
         duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: el,
           start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse',
+          once: true,
         },
       }
     );

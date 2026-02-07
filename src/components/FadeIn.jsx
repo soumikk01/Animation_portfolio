@@ -34,11 +34,14 @@ function FadeIn({ children, className = '', delay = 0, direction = 'up', duratio
         break;
     }
 
-    // Set initial state
+    // Set initial state with subtle effects
     gsap.set(element, {
       opacity: 0,
       y: yStart,
       x: xStart,
+      scale: 0.95,
+      rotateX: direction === 'up' ? 5 : direction === 'down' ? -5 : 0,
+      rotateY: direction === 'left' ? -5 : direction === 'right' ? 5 : 0,
     });
 
     // Create scroll-triggered animation
@@ -46,13 +49,16 @@ function FadeIn({ children, className = '', delay = 0, direction = 'up', duratio
       opacity: 1,
       y: 0,
       x: 0,
+      scale: 1,
+      rotateX: 0,
+      rotateY: 0,
       duration: duration,
       delay: delay,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: element,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
+        start: 'top 90%',
+        once: true,
       },
     });
 

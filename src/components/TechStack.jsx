@@ -38,13 +38,13 @@ const TechStack = () => {
       gsap.to(path, {
         strokeDashoffset: 0,
         opacity: 1,
-        duration: 1.2,
-        delay: 0.2 + path.getAttribute('data-index') * 0.05, // Sync with node stagger
+        duration: 1,
+        delay: 0.1 + path.getAttribute('data-index') * 0.03,
         ease: 'power2.inOut',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 60%',
-          toggleActions: 'play none none reverse',
+          start: 'top 65%',
+          once: true, // Play animation only once
         },
       });
     });
@@ -57,11 +57,12 @@ const TechStack = () => {
         scale: 1,
         opacity: 1,
         duration: 0.5,
-        stagger: 0.05,
-        ease: 'back.out(1.7)',
+        stagger: 0.04,
+        ease: 'back.out(1.5)',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 60%',
+          start: 'top 65%',
+          once: true, // Play animation only once
         },
       }
     );
