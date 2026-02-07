@@ -2,14 +2,26 @@ import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 const ExperienceModal = ({ onStart }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  // Check if user has already started the experience in this session
+  const hasStarted = sessionStorage.getItem('experienceStarted') === 'true';
+  
+  const [isVisible, setIsVisible] = useState(!hasStarted);
   const [ripples, setRipples] = useState([]);
   const modalRef = useRef(null);
   const contentRef = useRef(null);
   const logoRef = useRef(null);
   const buttonRef = useRef(null);
 
+  // If user has already started, call onStart immediately
   useEffect(() => {
+    if (hasStarted) {
+      onStart();
+    }
+  }, [hasStarted, onStart]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    
     // Initial entrance animation
     const tl = gsap.timeline();
     tl.fromTo(
@@ -104,6 +116,9 @@ const ExperienceModal = ({ onStart }) => {
   };
 
   const handleStart = () => {
+    // Mark that user has started the experience (persists across refreshes)
+    sessionStorage.setItem('experienceStarted', 'true');
+    
     const tl = gsap.timeline({
       onComplete: () => {
         setIsVisible(false);
@@ -479,6 +494,11 @@ const ExperienceModal = ({ onStart }) => {
           height: 4px;
           background-color: var(--accent-color);
           border-radius: 50%;
+        }
+
+        .time-icon {
+          font-size: 1.2rem;
+          filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
         }
 
         /* Button Container with Side Lines */
