@@ -4,8 +4,9 @@ import gsap from 'gsap';
 const ExperienceModal = ({ onStart }) => {
   // Check if user has already started the experience in this session
   const hasStarted = sessionStorage.getItem('experienceStarted') === 'true';
-  
+
   const [isVisible, setIsVisible] = useState(!hasStarted);
+  const [isAnimating, setIsAnimating] = useState(false); // Prevent race conditions
   const [ripples, setRipples] = useState([]);
   const modalRef = useRef(null);
   const contentRef = useRef(null);
@@ -21,7 +22,7 @@ const ExperienceModal = ({ onStart }) => {
 
   useEffect(() => {
     if (!isVisible) return;
-    
+
     // Initial entrance animation
     const tl = gsap.timeline();
     tl.fromTo(
@@ -92,6 +93,9 @@ const ExperienceModal = ({ onStart }) => {
   }, []);
 
   const handleButtonClick = (e) => {
+    // Prevent multiple clicks during animation
+    if (isAnimating) return;
+    
     // Create ripple effect
     const btn = e.currentTarget;
     const rect = btn.getBoundingClientRect();
@@ -116,9 +120,14 @@ const ExperienceModal = ({ onStart }) => {
   };
 
   const handleStart = () => {
+    // Prevent race condition if already animating
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    
     // Mark that user has started the experience (persists across refreshes)
     sessionStorage.setItem('experienceStarted', 'true');
-    
+
     const tl = gsap.timeline({
       onComplete: () => {
         setIsVisible(false);

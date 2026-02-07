@@ -31,6 +31,9 @@ const SmoothScroll = ({ children }) => {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.8,
+      // Design choice: smoothTouch disabled for mobile performance
+      // Touch device scrolling uses native browser behavior for better responsiveness
+      // Desktop gets the enhanced smooth scroll experience
       smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
@@ -51,7 +54,7 @@ const SmoothScroll = ({ children }) => {
 
     gsap.ticker.lagSmoothing(0);
 
-    // Multiple attempts to ensure scroll stays at top after animations
+    // Ensure scroll starts at top - optimized to reduce layout thrashing
     const forceScrollTop = () => {
       window.scrollTo(0, 0);
       if (lenisRef.current) {
@@ -59,11 +62,13 @@ const SmoothScroll = ({ children }) => {
       }
     };
 
-    setTimeout(forceScrollTop, 0);
-    setTimeout(forceScrollTop, 50);
-    setTimeout(forceScrollTop, 100);
-    setTimeout(forceScrollTop, 200);
-    setTimeout(forceScrollTop, 500);
+    // Immediate scroll to top
+    forceScrollTop();
+
+    // One delayed attempt to ensure it sticks after initial render
+    requestAnimationFrame(() => {
+      setTimeout(forceScrollTop, 100);
+    });
 
     return () => {
       lenis.destroy();

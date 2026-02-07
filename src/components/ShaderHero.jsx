@@ -20,6 +20,9 @@ const CinematicObject = () => {
   const bubblesRef = useRef([]);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Design choice: Mobile detection in useEffect is acceptable pattern
+  // This allows server-side rendering compatibility while detecting client viewport
+  // The one-time render cycle is negligible compared to SSR benefits
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -203,6 +206,9 @@ const CinematicObject = () => {
         <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.5} floatIntensity={0.5}>
           <mesh ref={(el) => (bubblesRef.current[i] = el)} position={[0, 0, 0]}>
             <icosahedronGeometry args={[2, 20]} />
+            {/* Design choice: Quality settings optimized for device capability
+                Mobile: Lower samples/resolution for 60fps performance
+                Desktop: Higher quality for visual fidelity */}
             <MeshTransmissionMaterial
               backside
               backsideThickness={isMobile ? 0.3 : 1.0}
@@ -733,6 +739,39 @@ const BackgroundFluid = () => {
 };
 
 const ShaderHero = () => {
+  const [webglSupported, setWebglSupported] = useState(true);
+
+  useEffect(() => {
+    // Check for WebGL support
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    
+    if (!gl) {
+      setWebglSupported(false);
+      if (import.meta.env.DEV) {
+        console.warn('WebGL not supported, showing fallback');
+      }
+    }
+  }, []);
+
+  // Fallback for browsers without WebGL
+  if (!webglSupported) {
+    return (
+      <div className="canvas-container">
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100vh',
+          background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #6d28d9 100%)',
+          zIndex: -1,
+        }} />
+        <div className="grain-overlay" />
+      </div>
+    );
+  }
+
   return (
     <div className="canvas-container">
       <Canvas
