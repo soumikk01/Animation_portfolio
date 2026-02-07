@@ -1,96 +1,98 @@
 import { useState, useRef, useEffect } from 'react';
 import FadeIn from './FadeIn';
 import TextReveal from './TextReveal';
+import TypingAnimation from './TypingAnimation';
 import SocialButtons from './SocialButtons';
 import './ContactForm.css';
 
 function ContactForm() {
-    return (
-        <section id="contact" className="contact-section">
-            <div className="contact-bg-effects">
-                <div className="glass-pane"></div>
-                <div className="contact-glow"></div>
-                <div className="contact-glow contact-glow-2"></div>
-                <div className="bg-bubble bubble-1"></div>
-                <div className="bg-bubble bubble-2"></div>
-                <div className="bg-bubble bubble-3"></div>
-                <div className="bg-bubble bubble-4"></div>
+  return (
+    <section id="contact" className="contact-section">
+      <div className="contact-bg-effects">
+        <div className="glass-pane"></div>
+        <div className="contact-glow"></div>
+        <div className="contact-glow contact-glow-2"></div>
+        <div className="bg-bubble bubble-1"></div>
+        <div className="bg-bubble bubble-2"></div>
+        <div className="bg-bubble bubble-3"></div>
+        <div className="bg-bubble bubble-4"></div>
+      </div>
+
+      <div className="container">
+        <div className="contact-grid">
+          <FadeIn delay={0.2} className="contact-info">
+            <div className="contact-heading-wrapper">
+              <div className="contact-heading-reveal">
+                <TextReveal className="heading-lets">Let's</TextReveal>
+                <TextReveal className="heading-talk">Talk</TextReveal>
+              </div>
+              <div className="contact-floats">
+                <div className="contact-float-bubble"></div>
+                <div className="contact-float-bubble"></div>
+                <div className="contact-float-bubble"></div>
+              </div>
             </div>
 
-            <div className="container">
-                <div className="contact-grid">
-                    <FadeIn delay={0.2} className="contact-info">
-                        <div className="contact-heading-wrapper">
-                            <div className="contact-heading-reveal">
-                                <TextReveal className="heading-lets">Let's</TextReveal>
-                                <TextReveal className="heading-talk">Talk</TextReveal>
-                            </div>
-                            <div className="contact-floats">
-                                <div className="contact-float-bubble"></div>
-                                <div className="contact-float-bubble"></div>
-                                <div className="contact-float-bubble"></div>
-                            </div>
-                        </div>
-
-                        {/* Social Media Buttons */}
-                        <div className="contact-social-wrapper">
-                            <SocialButtons />
-                        </div>
-
-                        <p className="contact-description">
-                            Have a project in mind? Want to collaborate?
-                            Drop me a message and let's make it happen.
-                        </p>
-
-                        <div className="contact-details">
-                            <div className="contact-detail-item">
-                                <span className="detail-label">Location</span>
-                                <span className="detail-value">West Bengal, India</span>
-                            </div>
-                            <div className="contact-detail-item">
-                                <span className="detail-label">Availability</span>
-                                <span className="detail-value">Open for opportunities</span>
-                            </div>
-                        </div>
-                    </FadeIn>
-
-                    <FadeIn delay={0.4} className="contact-form-wrapper">
-                        <AIAssistantChat />
-                    </FadeIn>
-                </div>
+            {/* Social Media Buttons */}
+            <div className="contact-social-wrapper">
+              <SocialButtons />
             </div>
-        </section>
-    );
+
+            <p className="contact-description">
+              Have a project in mind? Want to collaborate? Drop me a message and let's make it
+              happen.
+            </p>
+
+            <div className="contact-details">
+              <div className="contact-detail-item">
+                <span className="detail-label">Location</span>
+                <span className="detail-value">West Bengal, India</span>
+              </div>
+              <div className="contact-detail-item">
+                <span className="detail-label">Availability</span>
+                <span className="detail-value">Open for opportunities</span>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.4} className="contact-form-wrapper">
+            <AIAssistantChat />
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 // AI Assistant Chat Component
 function AIAssistantChat() {
-    const [messages, setMessages] = useState([
-        {
-            role: 'assistant',
-            content: "👋 Hi! I'm your AI assistant. Ask me anything about this portfolio, the projects, skills, or experience!"
-        }
-    ]);
-    const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content:
+        "👋 Hi! I'm Airi, your AI assistant. Ask me anything about this portfolio, the projects, skills, or experience!",
+    },
+  ]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-    const getGeminiResponse = async (userMessage) => {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const getGeminiResponse = async (userMessage) => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-        if (!apiKey) {
-            return "⚠️ API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.";
-        }
+    if (!apiKey) {
+      return '⚠️ API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.';
+    }
 
-        const portfolioContext = `You are an AI assistant for a Full-Stack Developer's portfolio website. 
+    const portfolioContext = `You are Airi, an AI assistant for a Full-Stack Developer's portfolio website. 
 The developer specializes in:
 - Frontend: React, JavaScript, HTML/CSS, responsive design, animations
 - Backend: Java, RESTful APIs, Node.js
@@ -100,111 +102,117 @@ The developer specializes in:
 Answer questions about the portfolio, projects, skills, and experience in a friendly, professional manner. 
 Keep responses concise and helpful.`;
 
-        try {
-            const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [
-                            {
-                                parts: [
-                                    { text: `${portfolioContext}\n\nUser question: ${userMessage}` }
-                                ]
-                            }
-                        ],
-                        generationConfig: {
-                            temperature: 0.7,
-                            maxOutputTokens: 500,
-                        }
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-                return data.candidates[0].content.parts[0].text;
-            } else if (data.error) {
-                return `Error: ${data.error.message}`;
-            } else {
-                return "Sorry, I couldn't generate a response. Please try again.";
-            }
-        } catch (error) {
-            return `Sorry, there was an error: ${error.message}`;
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [{ text: `${portfolioContext}\n\nUser question: ${userMessage}` }],
+              },
+            ],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 500,
+            },
+          }),
         }
-    };
+      );
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+      const data = await response.json();
 
-        if (!input.trim() || isLoading) return;
+      if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+        return data.candidates[0].content.parts[0].text;
+      } else if (data.error) {
+        console.error('Gemini API Error:', data.error.message);
+        return 'Error...!!';
+      } else {
+        return 'Error...!!';
+      }
+    } catch (error) {
+      console.error('AI Assistant Error:', error.message);
+      return 'Error...!!';
+    }
+  };
 
-        const userMessage = input.trim();
-        setInput('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-        setIsLoading(true);
+    if (!input.trim() || isLoading) return;
 
-        const aiResponse = await getGeminiResponse(userMessage);
+    const userMessage = input.trim();
+    setInput('');
 
-        setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-        setIsLoading(false);
-    };
+    setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
+    setIsLoading(true);
 
-    return (
-        <div className="ai-chat-box">
-            <div className="chat-messages">
-                {messages.map((message, index) => (
-                    <div
-                        key={index}
-                        className={`message ${message.role}`}
-                    >
-                        <div className="message-bubble">
-                            {message.content}
-                        </div>
-                    </div>
-                ))}
-                {isLoading && (
-                    <div className="message assistant">
-                        <div className="message-bubble loading">
-                            <div className="typing-indicator">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <div ref={messagesEndRef} />
+    const aiResponse = await getGeminiResponse(userMessage);
+
+    setMessages((prev) => [...prev, { role: 'assistant', content: aiResponse }]);
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="ai-chat-box">
+      <div className="chat-messages">
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`message ${message.role} ${message.content === 'Error...!!' ? 'error' : ''}`}
+          >
+            <div className="message-bubble">
+              {message.role === 'assistant' && index === messages.length - 1 ? (
+                <TypingAnimation text={message.content} speed={25} showCursor={false} />
+              ) : (
+                message.content
+              )}
             </div>
+          </div>
+        ))}
+        {isLoading && (
+          <div className="message assistant">
+            <div className="message-bubble loading">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
 
-            <form onSubmit={handleSubmit} className="chat-input-form">
-                <div className="input-wrapper">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask about projects, skills, experience..."
-                        disabled={isLoading}
-                        className="chat-input"
-                    />
-                    <button
-                        type="submit"
-                        disabled={isLoading || !input.trim()}
-                        className="send-button"
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                </div>
-            </form>
+      <form onSubmit={handleSubmit} className="chat-input-form">
+        <div className="input-wrapper">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask about projects, skills, experience..."
+            disabled={isLoading}
+            className="chat-input"
+          />
+          <button type="submit" disabled={isLoading || !input.trim()} className="send-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
-    );
+      </form>
+    </div>
+  );
 }
 
 export default ContactForm;

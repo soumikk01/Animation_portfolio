@@ -1,6 +1,12 @@
 import { useRef, useMemo, useEffect, useState, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, PerspectiveCamera, MeshTransmissionMaterial, Environment, ContactShadows } from '@react-three/drei';
+import {
+  Float,
+  PerspectiveCamera,
+  MeshTransmissionMaterial,
+  Environment,
+  ContactShadows,
+} from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -40,7 +46,6 @@ const CinematicObject = () => {
     return isMobile ? allData.slice(0, 6) : allData;
   }, [isMobile]);
 
-
   useEffect(() => {
     let lastSoundTime = 0;
     const soundCooldown = 150; // ms
@@ -58,12 +63,16 @@ const CinematicObject = () => {
         scrub: 3,
         onUpdate: (self) => {
           const now = Date.now();
-          if (!getMuted() && Math.abs(self.getVelocity()) > 100 && now - lastSoundTime > soundCooldown) {
+          if (
+            !getMuted() &&
+            Math.abs(self.getVelocity()) > 100 &&
+            now - lastSoundTime > soundCooldown
+          ) {
             sounds.bubble();
             lastSoundTime = now;
           }
-        }
-      }
+        },
+      },
     });
 
     bubblesRef.current.forEach((bubble, i) => {
@@ -78,40 +87,55 @@ const CinematicObject = () => {
         gsap.set(bubble.scale, { x: 0, y: 0, z: 0, immediateRender: false });
         gsap.set(bubble.position, { x: 0, y: 0, z: 0, immediateRender: false });
 
-        tl.to(bubble.scale, {
-          x: data.scale,
-          y: data.scale,
-          z: data.scale,
-          ease: 'back.out(1.7)',
-        }, staggerDelay)
-          .to(bubble.position, {
+        tl.to(
+          bubble.scale,
+          {
+            x: data.scale,
+            y: data.scale,
+            z: data.scale,
+            ease: 'back.out(1.7)',
+          },
+          staggerDelay
+        ).to(
+          bubble.position,
+          {
             x: data.targetPos[0],
             y: data.targetPos[1],
             z: data.targetPos[2],
             ease: 'power2.out',
-          }, staggerDelay);
+          },
+          staggerDelay
+        );
       } else {
         // Master bubble (i=0) should be visible and at center at scroll 0
         gsap.set(bubble.scale, { x: 1.2, y: 1.2, z: 1.2, immediateRender: false });
         gsap.set(bubble.position, { x: 0, y: 0, z: 0, immediateRender: false });
 
         // Master bubble can have a subtle movement to feel "dynamic"
-        tl.to(bubble.position, {
-          x: 1,
-          y: -1,
-          z: -1,
-          ease: 'none',
-        }, 0);
+        tl.to(
+          bubble.position,
+          {
+            x: 1,
+            y: -1,
+            z: -1,
+            ease: 'none',
+          },
+          0
+        );
       }
 
       // 2. PHASE TWO: SECONDARY MOVE (0.5 -> 1.0)
       const moveOffset = 0.5;
-      tl.to(bubble.position, {
-        x: i === 0 ? -2 : (data.targetPos[0] * -1.2),
-        y: i === 0 ? 2 : (data.targetPos[1] * 0.8),
-        z: i === 0 ? -3 : (data.targetPos[2] - 2),
-        ease: 'power1.inOut',
-      }, moveOffset + staggerDelay);
+      tl.to(
+        bubble.position,
+        {
+          x: i === 0 ? -2 : data.targetPos[0] * -1.2,
+          y: i === 0 ? 2 : data.targetPos[1] * 0.8,
+          z: i === 0 ? -3 : data.targetPos[2] - 2,
+          ease: 'power1.inOut',
+        },
+        moveOffset + staggerDelay
+      );
     });
 
     return () => {
@@ -126,14 +150,25 @@ const CinematicObject = () => {
     const mouseY = state.mouse.y * 2;
 
     if (groupRef.current) {
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, time * 0.05 + mouseX * 0.1, 0.1);
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, mouseY * 0.05, 0.1);
-      groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, Math.sin(time * 0.5) * 0.1 + mouseY * 0.05, 0.1);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        time * 0.05 + mouseX * 0.1,
+        0.1
+      );
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        mouseY * 0.05,
+        0.1
+      );
+      groupRef.current.position.y = THREE.MathUtils.lerp(
+        groupRef.current.position.y,
+        Math.sin(time * 0.5) * 0.1 + mouseY * 0.05,
+        0.1
+      );
     }
 
     bubblesRef.current.forEach((bubble, i) => {
       if (bubble) {
-
         // Organic "Deep" animation using Three.js MathUtils
         const targetRotX = Math.sin(time * (0.2 + i * 0.05)) * 0.2;
         const targetRotZ = Math.cos(time * (0.1 + i * 0.03)) * 0.1;
@@ -152,7 +187,11 @@ const CinematicObject = () => {
           // Blend between crisp white and more "Deep" indigo/violet
           const targetColor = new THREE.Color(pulse > 0.5 ? '#6d28d9' : '#ffffff');
           material.color.lerp(targetColor, 0.02);
-          material.envMapIntensity = THREE.MathUtils.lerp(material.envMapIntensity, 1.0 + pulse * 1.5, 0.05);
+          material.envMapIntensity = THREE.MathUtils.lerp(
+            material.envMapIntensity,
+            1.0 + pulse * 1.5,
+            0.05
+          );
         }
       }
     });
@@ -162,7 +201,7 @@ const CinematicObject = () => {
     <group ref={groupRef}>
       {bubbleData.map((data, i) => (
         <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.5} floatIntensity={0.5}>
-          <mesh ref={el => bubblesRef.current[i] = el} position={[0, 0, 0]}>
+          <mesh ref={(el) => (bubblesRef.current[i] = el)} position={[0, 0, 0]}>
             <icosahedronGeometry args={[2, 20]} />
             <MeshTransmissionMaterial
               backside
@@ -216,17 +255,17 @@ const DecorativeBubbles = () => {
         orbitPos: [
           Math.cos(angle) * orbitRadius,
           Math.sin(angle) * orbitRadius,
-          (Math.random() - 0.5) * 0.5 // Small depth variation
+          (Math.random() - 0.5) * 0.5, // Small depth variation
         ],
         finalPos: [
           Math.cos(angle) * (orbitRadius + 8 + Math.random() * 4), // Blast outward
           Math.sin(angle) * (orbitRadius + 8 + Math.random() * 4),
-          -3 + Math.random() * 2
+          -3 + Math.random() * 2,
         ],
         scale: 0.15 + Math.random() * 0.15, // Small size
         speed: 0.5 + Math.random() * 0.5,
         delay: i * 0.05,
-        rotationSpeed: (Math.random() - 0.5) * 0.4
+        rotationSpeed: (Math.random() - 0.5) * 0.4,
       };
     });
   }, [isMobile]);
@@ -238,7 +277,7 @@ const DecorativeBubbles = () => {
         bubbleId: bubbleIdx,
         id: `${bubbleIdx}-${i}`,
         angle: (i / 8) * Math.PI * 2,
-        speed: 0.8 + Math.random() * 0.4
+        speed: 0.8 + Math.random() * 0.4,
       }))
     );
   }, [topBubbles]);
@@ -264,7 +303,7 @@ const DecorativeBubbles = () => {
         z: data.orbitPos[2],
         ease: 'back.out(3)',
         duration: 0.8,
-        delay: data.delay
+        delay: data.delay,
       });
 
       gsap.to(bubble.scale, {
@@ -273,7 +312,7 @@ const DecorativeBubbles = () => {
         z: data.scale,
         ease: 'elastic.out(1, 0.5)',
         duration: 1,
-        delay: data.delay
+        delay: data.delay,
       });
     });
 
@@ -285,8 +324,8 @@ const DecorativeBubbles = () => {
         start: 'top top',
         end: '+=1200',
         scrub: 1,
-        toggleActions: 'play reverse play reverse'
-      }
+        toggleActions: 'play reverse play reverse',
+      },
     });
 
     bubblesRef.current.forEach((bubble, i) => {
@@ -294,19 +333,27 @@ const DecorativeBubbles = () => {
       const data = topBubbles[i];
 
       // Pull back to center and shrink (reverse blast when scrolling down)
-      tl.to(bubble.position, {
-        x: 0,
-        y: 0,
-        z: 0,
-        ease: 'power2.in'
-      }, 0);
+      tl.to(
+        bubble.position,
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          ease: 'power2.in',
+        },
+        0
+      );
 
-      tl.to(bubble.scale, {
-        x: 0,
-        y: 0,
-        z: 0,
-        ease: 'power2.in'
-      }, 0);
+      tl.to(
+        bubble.scale,
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          ease: 'power2.in',
+        },
+        0
+      );
     });
 
     return () => {
@@ -352,7 +399,7 @@ const DecorativeBubbles = () => {
     <group>
       {topBubbles.map((data, i) => (
         <Float key={i} speed={1 + i * 0.15} rotationIntensity={0.3} floatIntensity={0.4}>
-          <mesh ref={el => bubblesRef.current[i] = el}>
+          <mesh ref={(el) => (bubblesRef.current[i] = el)}>
             <icosahedronGeometry args={[1, 12]} />
             <MeshTransmissionMaterial
               backside
@@ -402,7 +449,7 @@ const BlastingBubbles = () => {
         angle: angle,
         scale: 0.08 + Math.random() * 0.08,
         delay: i * 0.15,
-        duration: 1.5 + Math.random() * 0.5
+        duration: 1.5 + Math.random() * 0.5,
       };
     });
   }, [isMobile]);
@@ -428,7 +475,7 @@ const BlastingBubbles = () => {
           z: (Math.random() - 0.5) * 2,
           duration: data.duration,
           ease: 'power2.out',
-          delay: data.delay
+          delay: data.delay,
         });
 
         gsap.to(bubble.scale, {
@@ -437,7 +484,7 @@ const BlastingBubbles = () => {
           z: data.scale,
           duration: 0.3,
           ease: 'back.out(2)',
-          delay: data.delay
+          delay: data.delay,
         });
 
         // Fade out and restart
@@ -448,7 +495,7 @@ const BlastingBubbles = () => {
           duration: 0.4,
           ease: 'power2.in',
           delay: data.delay + data.duration,
-          onComplete: blastLoop
+          onComplete: blastLoop,
         });
       };
 
@@ -456,7 +503,7 @@ const BlastingBubbles = () => {
     });
 
     return () => {
-      bubblesRef.current.forEach(bubble => {
+      bubblesRef.current.forEach((bubble) => {
         if (bubble) gsap.killTweensOf(bubble);
       });
     };
@@ -486,7 +533,7 @@ const BlastingBubbles = () => {
   return (
     <group>
       {blastBubbles.map((data, i) => (
-        <mesh key={i} ref={el => bubblesRef.current[i] = el}>
+        <mesh key={i} ref={(el) => (bubblesRef.current[i] = el)}>
           <icosahedronGeometry args={[1, 8]} />
           <MeshTransmissionMaterial
             backside
@@ -516,25 +563,26 @@ const BlastingBubbles = () => {
 const BackgroundFluid = () => {
   const meshRef = useRef();
 
-  const shaderArgs = useMemo(() => ({
-    uniforms: {
-      uTime: { value: 0 },
-      uSyncPulse: { value: 0 },
-      uMouse: { value: new THREE.Vector2(0, 0) },
-      uColor1: { value: new THREE.Color('#000105') }, // Pure Black Depth
-      uColor2: { value: new THREE.Color('#6d28d9') }, // Deep Professional Violet
-      uColor3: { value: new THREE.Color('#ffffff') }, // Crisp White energy
-      uAccent: { value: new THREE.Color('#a855f7') }, // Vibrant Purple Accent
-      uDeepPurple: { value: new THREE.Color('#1e1b4b') } // Indigo Depth
-    },
-    vertexShader: `
+  const shaderArgs = useMemo(
+    () => ({
+      uniforms: {
+        uTime: { value: 0 },
+        uSyncPulse: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uColor1: { value: new THREE.Color('#000105') }, // Pure Black Depth
+        uColor2: { value: new THREE.Color('#6d28d9') }, // Deep Professional Violet
+        uColor3: { value: new THREE.Color('#ffffff') }, // Crisp White energy
+        uAccent: { value: new THREE.Color('#a855f7') }, // Vibrant Purple Accent
+        uDeepPurple: { value: new THREE.Color('#1e1b4b') }, // Indigo Depth
+      },
+      vertexShader: `
       varying vec2 vUv;
       void main() {
         vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
-    fragmentShader: `
+      fragmentShader: `
       uniform float uTime;
       uniform float uSyncPulse;
       uniform vec2 uMouse;
@@ -655,8 +703,10 @@ const BackgroundFluid = () => {
 
         gl_FragColor = vec4(color, 1.0);
       }
-    `
-  }), []);
+    `,
+    }),
+    []
+  );
 
   useFrame((state) => {
     if (meshRef.current) {
@@ -666,7 +716,11 @@ const BackgroundFluid = () => {
       meshRef.current.material.uniforms.uMouse.value.lerp(state.mouse, 0.1);
 
       // Background Parallax
-      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, state.mouse.y * 0.5, 0.02);
+      meshRef.current.position.y = THREE.MathUtils.lerp(
+        meshRef.current.position.y,
+        state.mouse.y * 0.5,
+        0.02
+      );
     }
   });
 
@@ -681,8 +735,16 @@ const BackgroundFluid = () => {
 const ShaderHero = () => {
   return (
     <div className="canvas-container">
-      <Canvas dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]} gl={{ antialias: false, alpha: true, stencil: false }} powerPreference="high-performance">
-        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={window.innerWidth < 768 ? 60 : 45} />
+      <Canvas
+        dpr={window.devicePixelRatio > 1 ? [1, 1.5] : [1, 2]}
+        gl={{ antialias: false, alpha: true, stencil: false }}
+        powerPreference="high-performance"
+      >
+        <PerspectiveCamera
+          makeDefault
+          position={[0, 0, 10]}
+          fov={window.innerWidth < 768 ? 60 : 45}
+        />
 
         <color attach="background" args={['#000000']} />
 

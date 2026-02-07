@@ -1,638 +1,649 @@
 .contact-section {
-    padding: 10rem 0 3rem;
-    position: relative;
-    overflow: hidden;
-    background: transparent;
+  padding: 10rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
 }
 
 .contact-bg-effects {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .glass-pane {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 80%);
-    backdrop-filter: blur(10px);
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 80%);
+  backdrop-filter: blur(10px);
+  z-index: 1;
 }
 
 .contact-glow {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
-    filter: blur(100px);
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -100px;
-    animation: pulseGlow 8s ease-in-out infinite;
-    z-index: 0;
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+  filter: blur(100px);
+  width: 600px;
+  height: 600px;
+  top: -200px;
+  right: -100px;
+  animation: pulseGlow 8s ease-in-out infinite;
+  z-index: 0;
 }
 
 .contact-glow-2 {
-    width: 500px;
-    height: 500px;
-    bottom: -100px;
-    left: -100px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-    animation-delay: 2s;
+  width: 500px;
+  height: 500px;
+  bottom: -100px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  animation-delay: 2s;
 }
 
 .bg-bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(168, 85, 247, 0.1));
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 2;
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(168, 85, 247, 0.1));
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 2;
 }
 
 .bubble-1 {
-    width: 15rem;
-    height: 15rem;
-    top: 10%;
-    left: -5%;
-    animation: floatBubble 15s ease-in-out infinite;
+  width: 15rem;
+  height: 15rem;
+  top: 10%;
+  left: -5%;
+  animation: floatBubble 15s ease-in-out infinite;
 }
 
 .bubble-2 {
-    width: 10rem;
-    height: 10rem;
-    bottom: 20%;
-    right: 5%;
-    animation: floatBubble 12s ease-in-out infinite reverse;
+  width: 10rem;
+  height: 10rem;
+  bottom: 20%;
+  right: 5%;
+  animation: floatBubble 12s ease-in-out infinite reverse;
 }
 
 .bubble-3 {
-    width: 6rem;
-    height: 6rem;
-    top: 40%;
-    right: 30%;
-    animation: floatBubble 10s ease-in-out infinite;
-    animation-delay: -2s;
+  width: 6rem;
+  height: 6rem;
+  top: 40%;
+  right: 30%;
+  animation: floatBubble 10s ease-in-out infinite;
+  animation-delay: -2s;
 }
 
 .bubble-4 {
-    width: 8rem;
-    height: 8rem;
-    bottom: -5%;
-    left: 20%;
-    animation: floatBubble 18s ease-in-out infinite;
-    animation-delay: -5s;
+  width: 8rem;
+  height: 8rem;
+  bottom: -5%;
+  left: 20%;
+  animation: floatBubble 18s ease-in-out infinite;
+  animation-delay: -5s;
 }
 
 @keyframes contactBob {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.4;
-    }
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
 
-    100% {
-        transform: translate(-15px, -25px) scale(1.05);
-        opacity: 0.6;
-    }
+  100% {
+    transform: translate(-15px, -25px) scale(1.05);
+    opacity: 0.6;
+  }
 }
 
 .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 4rem;
-    margin-top: 4rem;
-    position: relative;
-    z-index: 2;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4rem;
+  margin-top: 4rem;
+  position: relative;
+  z-index: 2;
+  align-items: start;
 }
 
 .contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .contact-heading-wrapper {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
 }
 
 .contact-heading-reveal {
-    color: var(--accent-color);
-    margin: 0;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    line-height: 0.9;
+  color: var(--accent-color);
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
 }
 
 .heading-lets {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 600;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
 }
 
 .heading-talk {
-    font-size: clamp(3.5rem, 8vw, 6rem);
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-top: -0.2rem;
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: -0.2rem;
 }
 
 .contact-floats {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .contact-float-bubble {
-    position: absolute;
-    background: rgba(168, 85, 247, 0.08);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(168, 85, 247, 0.2);
-    border-radius: 50%;
-    animation: contactBob 4s ease-in-out infinite alternate;
+  position: absolute;
+  background: rgba(168, 85, 247, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 50%;
+  animation: contactBob 4s ease-in-out infinite alternate;
 }
 
 .contact-float-bubble:nth-child(1) {
-    width: 70px;
-    height: 70px;
-    top: -25px;
-    right: -50px;
-    animation-delay: 0s;
+  width: 70px;
+  height: 70px;
+  top: -25px;
+  right: -50px;
+  animation-delay: 0s;
 }
 
 .contact-float-bubble:nth-child(2) {
-    width: 50px;
-    height: 50px;
-    bottom: -10px;
-    left: -40px;
-    animation-delay: 0.5s;
+  width: 50px;
+  height: 50px;
+  bottom: -10px;
+  left: -40px;
+  animation-delay: 0.5s;
 }
 
 .contact-float-bubble:nth-child(3) {
-    width: 35px;
-    height: 35px;
-    top: 20%;
-    right: -70px;
-    animation-delay: 1s;
+  width: 35px;
+  height: 35px;
+  top: 20%;
+  right: -70px;
+  animation-delay: 1s;
 }
 
 .contact-description {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 500px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 500px;
 }
 
 .contact-details {
-    display: flex;
-    flex-direction: row;
-    gap: 3rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .contact-detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .detail-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent-color);
-    font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-color);
+  font-weight: 600;
 }
 
 .detail-value {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    transition: color 0.3s ease;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .detail-value:hover {
-    color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 /* Contact Social Buttons */
 .contact-social-wrapper {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .contact-social-wrapper .social-buttons-container {
-    padding: 0;
-    justify-content: flex-start;
+  padding: 0;
+  justify-content: flex-start;
 }
 
 .contact-social-wrapper .social-buttons {
-    padding: 0;
+  padding: 0;
 }
 
 .contact-social-wrapper .social-links {
-    justify-content: flex-start;
-    gap: 1.5rem;
+  justify-content: flex-start;
+  gap: 1.5rem;
 }
 
 .contact-social-wrapper .social-button {
-    padding: 0.85rem 1.5rem;
-    font-size: 0.85rem;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.85rem;
 }
 
 /* Form Styling */
 .contact-form-wrapper {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: 3rem;
-    box-shadow:
-        0 4px 24px rgba(0, 0, 0, 0.3),
-        inset 0 0 40px rgba(168, 85, 247, 0.05);
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 0 40px rgba(168, 85, 247, 0.05);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .contact-form-wrapper:hover {
-    border-color: rgba(168, 85, 247, 0.3);
-    box-shadow:
-        0 8px 32px rgba(168, 85, 247, 0.2),
-        inset 0 0 60px rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow:
+    0 8px 32px rgba(168, 85, 247, 0.2),
+    inset 0 0 60px rgba(168, 85, 247, 0.08);
 }
 
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 }
 
 .form-group label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .form-group input,
 .form-group textarea {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    font-size: 1rem;
-    color: #ffffff;
-    font-family: 'Outfit', sans-serif;
-    transition: all 0.3s ease;
-    outline: none;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .form-group textarea {
-    resize: vertical;
-    min-height: 150px;
+  resize: vertical;
+  min-height: 150px;
 }
 
 .form-group input:disabled,
 .form-group textarea:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Submit Button */
 .submit-btn {
-    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
-    border: none;
-    border-radius: 12px;
-    padding: 1.2rem 2.5rem;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    position: relative;
-    overflow: hidden;
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 1.2rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
 }
 
 .submit-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 .submit-btn:hover::before {
-    left: 100%;
+  left: 100%;
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.5);
 }
 
 .submit-btn:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .submit-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .submit-btn.sending {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
 }
 
 .submit-btn.success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 /* Loading Spinner */
 .btn-spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #ffffff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-checkmark {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 .error-message {
-    color: #ef4444;
-    font-size: 0.9rem;
-    text-align: center;
-    margin-top: 0.5rem;
+  color: #ef4444;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
 }
 
 /* Responsive Design */
 @media (max-width: 968px) {
-    .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-    }
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
 
-    .contact-form-wrapper {
-        padding: 2rem;
-    }
+  .contact-form-wrapper {
+    padding: 2rem;
+  }
 
-    .contact-heading {
-        font-size: 2rem;
-    }
+  .contact-heading {
+    font-size: 2rem;
+  }
 
-    .contact-heading-reveal {
-        font-size: 2.5rem;
-    }
+  .contact-heading-reveal {
+    font-size: 2.5rem;
+  }
 }
 
 @media (max-width: 640px) {
-    .contact-section {
-        padding: 6rem 0;
-    }
+  .contact-section {
+    padding: 6rem 0;
+  }
 
-    .contact-form-wrapper {
-        padding: 1.5rem;
-    }
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
 
-    .submit-btn {
-        padding: 1rem 2rem;
-        font-size: 0.9rem;
-    }
+  .submit-btn {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* AI Chat Box Styling */
 .ai-chat-box {
-    display: flex;
-    flex-direction: column;
-    height: 550px;
+  display: flex;
+  flex-direction: column;
+  height: 550px;
 }
 
 .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    scroll-behavior: smooth;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scroll-behavior: smooth;
 }
 
 .chat-messages::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-    background: rgba(168, 85, 247, 0.3);
-    border-radius: 3px;
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.5);
 }
 
 .message {
-    display: flex;
-    margin-bottom: 0.5rem;
+  display: flex;
+  margin-bottom: 0.5rem;
 }
 
 .message.user {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .message.assistant {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .message-bubble {
-    max-width: 75%;
-    padding: 0.9rem 1.3rem;
-    border-radius: 16px;
-    word-wrap: break-word;
-    line-height: 1.5;
-    font-size: 0.9rem;
+  max-width: 75%;
+  padding: 0.9rem 1.3rem;
+  border-radius: 16px;
+  word-wrap: break-word;
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 .message.user .message-bubble {
-    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
-    color: #ffffff;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 3px 10px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 3px 10px rgba(168, 85, 247, 0.3);
 }
 
 .message.assistant .message-bubble {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
-    border-bottom-left-radius: 4px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .message-bubble.loading {
-    padding: 1rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .typing-indicator {
-    display: flex;
-    gap: 0.4rem;
-    align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
 }
 
 .typing-indicator span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(168, 85, 247, 0.7);
-    animation: typing 1.4s infinite;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.7);
+  animation: typing 1.4s infinite;
 }
 
 .typing-indicator span:nth-child(2) {
-    animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .typing-indicator span:nth-child(3) {
-    animation-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 @keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
 
-    0%,
-    60%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.7;
-    }
-
-    30% {
-        transform: translateY(-8px);
-        opacity: 1;
-    }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
 }
 
 .chat-input-form {
-    padding: 1.2rem 1.5rem;
-    background: rgba(0, 0, 0, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.2rem 1.5rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .input-wrapper {
-    display: flex;
-    gap: 0.8rem;
-    align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
 }
 
 .chat-input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 0.9rem 1.2rem;
-    font-size: 0.95rem;
-    color: #ffffff;
-    font-family: 'Outfit', sans-serif;
-    transition: all 0.3s ease;
-    outline: none;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
 .chat-input:focus {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
 }
 
 .chat-input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .chat-input:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .send-button {
-    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
-    border: none;
-    border-radius: 10px;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 10px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
 }
 
 .send-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.5);
 }
 
 .send-button:active:not(:disabled) {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* AI Chat Error Styles */
+.message.assistant.error .message-bubble {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+  font-weight: 500;
+}
+
+.message.assistant.error .message-bubble::after {
+  display: none;
 }

@@ -12,18 +12,23 @@ const ExperienceModal = ({ onStart }) => {
   useEffect(() => {
     // Initial entrance animation
     const tl = gsap.timeline();
-    tl.fromTo(logoRef.current,
+    tl.fromTo(
+      logoRef.current,
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 1.5, ease: 'power4.out' }
-    ).fromTo('.modal-option',
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' },
-      '-=1'
-    ).fromTo('.start-btn',
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' },
-      '-=0.5'
-    );
+    )
+      .fromTo(
+        '.modal-option',
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' },
+        '-=1'
+      )
+      .fromTo(
+        '.start-btn',
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' },
+        '-=0.5'
+      );
 
     // Magnetic button effect
     const handleMouseMove = (e) => {
@@ -43,7 +48,7 @@ const ExperienceModal = ({ onStart }) => {
           x: x * strength * 0.3,
           y: y * strength * 0.3,
           duration: 0.3,
-          ease: 'power2.out'
+          ease: 'power2.out',
         });
       } else {
         gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'power2.out' });
@@ -56,7 +61,7 @@ const ExperienceModal = ({ onStart }) => {
           x: 0,
           y: 0,
           duration: 0.5,
-          ease: 'elastic.out(1, 0.5)'
+          ease: 'elastic.out(1, 0.5)',
         });
       }
     };
@@ -84,14 +89,14 @@ const ExperienceModal = ({ onStart }) => {
     const ripple = {
       x,
       y,
-      id: Date.now()
+      id: Date.now(),
     };
 
-    setRipples(prev => [...prev, ripple]);
+    setRipples((prev) => [...prev, ripple]);
 
     // Remove ripple after animation
     setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== ripple.id));
+      setRipples((prev) => prev.filter((r) => r.id !== ripple.id));
     }, 600);
 
     // Proceed with normal start action
@@ -103,35 +108,51 @@ const ExperienceModal = ({ onStart }) => {
       onComplete: () => {
         setIsVisible(false);
         onStart();
-      }
+      },
     });
 
     // Cinematic rush animation for lines
-    tl.to('.left-line', {
-      x: -window.innerWidth,
-      opacity: 0,
-      duration: 1,
-      ease: 'power4.in'
-    }, 0)
-      .to('.right-line', {
-        x: window.innerWidth,
+    tl.to(
+      '.left-line',
+      {
+        x: -window.innerWidth,
         opacity: 0,
         duration: 1,
-        ease: 'power4.in'
-      }, 0)
-      .to(contentRef.current, {
-        opacity: 0,
-        scale: 1.1,
-        filter: 'blur(10px)',
-        duration: 1.2,
-        ease: 'power3.inOut'
-      }, 0.2)
-      .to(modalRef.current, {
-        backgroundColor: 'rgba(8, 8, 8, 0)',
-        backdropFilter: 'blur(0px)',
-        duration: 1,
-        ease: 'power4.inOut'
-      }, 0.5)
+        ease: 'power4.in',
+      },
+      0
+    )
+      .to(
+        '.right-line',
+        {
+          x: window.innerWidth,
+          opacity: 0,
+          duration: 1,
+          ease: 'power4.in',
+        },
+        0
+      )
+      .to(
+        contentRef.current,
+        {
+          opacity: 0,
+          scale: 1.1,
+          filter: 'blur(10px)',
+          duration: 1.2,
+          ease: 'power3.inOut',
+        },
+        0.2
+      )
+      .to(
+        modalRef.current,
+        {
+          backgroundColor: 'rgba(8, 8, 8, 0)',
+          backdropFilter: 'blur(0px)',
+          duration: 1,
+          ease: 'power4.inOut',
+        },
+        0.5
+      )
       .set(modalRef.current, { display: 'none' });
   };
 
@@ -141,14 +162,30 @@ const ExperienceModal = ({ onStart }) => {
     <div ref={modalRef} className="experience-modal">
       {/* Floating Bubbles */}
       <div className="bubbles-container">
-        <div className="bubble bubble-1"><span>Code</span></div>
-        <div className="bubble bubble-2"><span>Creative</span></div>
-        <div className="bubble bubble-3"><span>Dynamic</span></div>
-        <div className="bubble bubble-4"><span>Bubble</span></div>
-        <div className="bubble bubble-5"><span>AI</span></div>
-        <div className="bubble bubble-6"><span>Pop</span></div>
-        <div className="bubble bubble-7"><span>Design</span></div>
-        <div className="bubble bubble-8"><span>React</span></div>
+        <div className="bubble bubble-1">
+          <span>Code</span>
+        </div>
+        <div className="bubble bubble-2">
+          <span>Creative</span>
+        </div>
+        <div className="bubble bubble-3">
+          <span>Dynamic</span>
+        </div>
+        <div className="bubble bubble-4">
+          <span>Bubble</span>
+        </div>
+        <div className="bubble bubble-5">
+          <span>AI</span>
+        </div>
+        <div className="bubble bubble-6">
+          <span>Pop</span>
+        </div>
+        <div className="bubble bubble-7">
+          <span>Design</span>
+        </div>
+        <div className="bubble bubble-8">
+          <span>React</span>
+        </div>
       </div>
 
       {/* Decorative Background Phrases */}
@@ -175,20 +212,16 @@ const ExperienceModal = ({ onStart }) => {
 
         <div className="button-container">
           <div className="side-line left-line"></div>
-          <button
-            ref={buttonRef}
-            className="start-btn"
-            onClick={handleButtonClick}
-          >
+          <button ref={buttonRef} className="start-btn" onClick={handleButtonClick}>
             <span className="btn-bg"></span>
             <span className="btn-glow"></span>
-            {ripples.map(ripple => (
+            {ripples.map((ripple) => (
               <span
                 key={ripple.id}
                 className="ripple"
                 style={{
                   left: ripple.x,
-                  top: ripple.y
+                  top: ripple.y,
                 }}
               />
             ))}
@@ -201,7 +234,8 @@ const ExperienceModal = ({ onStart }) => {
 
         <div className="fashion-soul-container">
           <p className="fashion-soul-text">
-            Scrolling with <span className="word-fashion">Fashion</span> & <span className="word-soul">Soul</span>
+            Scrolling with <span className="word-fashion">Fashion</span> &{' '}
+            <span className="word-soul">Soul</span>
           </p>
         </div>
       </div>

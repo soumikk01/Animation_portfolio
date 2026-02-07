@@ -6,142 +6,145 @@ import TypingAnimation from './TypingAnimation';
 gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
-    const sectionRef = useRef(null);
-    const textRef = useRef(null);
-    const imageRef = useRef(null);
-    const glowRef = useRef(null);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const sectionRef = useRef(null);
+  const textRef = useRef(null);
+  const imageRef = useRef(null);
+  const glowRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-    useEffect(() => {
-        const el = sectionRef.current;
+  useEffect(() => {
+    const el = sectionRef.current;
 
-        // Staggered text animation with enhanced effects
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: el,
-                start: "top 80%",
-                end: "bottom 20%",
-                toggleActions: "play none none reverse"
-            }
+    // Staggered text animation with enhanced effects
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 80%',
+        end: 'bottom 20%',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
+    tl.fromTo(
+      textRef.current.querySelector('.section-title'),
+      { y: 50, opacity: 0, filter: 'blur(10px)' },
+      { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }
+    )
+      .fromTo(
+        textRef.current.querySelector('.about-headline'),
+        { y: 50, opacity: 0, filter: 'blur(10px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
+      )
+      .fromTo(
+        textRef.current.querySelector('.about-description'),
+        { y: 50, opacity: 0, filter: 'blur(10px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
+      );
+
+    // Enhanced image animation with rotation
+    gsap.fromTo(
+      imageRef.current,
+      { x: 100, opacity: 0, scale: 0.8, rotateY: 45 },
+      {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        rotateY: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+
+    // Animate gradient background
+    gsap.to('.about-section::before', {
+      backgroundPosition: '200% center',
+      duration: 20,
+      repeat: -1,
+      ease: 'none',
+    });
+  }, []);
+
+  // Mouse tracking for glow effect
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (glowRef.current) {
+        const rect = glowRef.current.getBoundingClientRect();
+        setMousePos({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
         });
+      }
+    };
 
-        tl.fromTo(textRef.current.querySelector('.section-title'),
-            { y: 50, opacity: 0, filter: 'blur(10px)' },
-            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: "power3.out" }
-        )
-            .fromTo(textRef.current.querySelector('.about-headline'),
-                { y: 50, opacity: 0, filter: 'blur(10px)' },
-                { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: "power3.out" },
-                "-=0.4"
-            )
-            .fromTo(textRef.current.querySelector('.about-description'),
-                { y: 50, opacity: 0, filter: 'blur(10px)' },
-                { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: "power3.out" },
-                "-=0.4"
-            );
+    const element = glowRef.current;
+    if (element) {
+      element.addEventListener('mousemove', handleMouseMove);
+      return () => element.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, []);
 
-        // Enhanced image animation with rotation
-        gsap.fromTo(imageRef.current,
-            { x: 100, opacity: 0, scale: 0.8, rotateY: 45 },
-            {
-                x: 0,
-                opacity: 1,
-                scale: 1,
-                rotateY: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
+  return (
+    <section ref={sectionRef} id="about" className="about-section">
+      <div className="container about-container">
+        <div className="about-content" ref={glowRef}>
+          <div
+            className="mouse-glow"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+            }}
+          />
 
-        // Animate gradient background
-        gsap.to('.about-section::before', {
-            backgroundPosition: '200% center',
-            duration: 20,
-            repeat: -1,
-            ease: "none"
-        });
-
-    }, []);
-
-    // Mouse tracking for glow effect
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            if (glowRef.current) {
-                const rect = glowRef.current.getBoundingClientRect();
-                setMousePos({
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top
-                });
-            }
-        };
-
-        const element = glowRef.current;
-        if (element) {
-            element.addEventListener('mousemove', handleMouseMove);
-            return () => element.removeEventListener('mousemove', handleMouseMove);
-        }
-    }, []);
-
-    return (
-        <section ref={sectionRef} id="about" className="about-section">
-            <div className="container about-container">
-                <div className="about-content" ref={glowRef}>
-                    <div
-                        className="mouse-glow"
-                        style={{
-                            left: `${mousePos.x}px`,
-                            top: `${mousePos.y}px`
-                        }}
-                    />
-
-                    <div ref={textRef} className="about-text-wrapper">
-                        <h2 className="section-title">
-                            <span className="title-glow">00</span> / About
-                        </h2>
-                        <h3 className="about-headline">
-                            <TypingAnimation
-                                text="B.Tech in Computer Science & Engineering (AI & Machine Learning)"
-                                speed={40}
-                                delay={500}
-                            />
-                        </h3>
-                        <p className="about-description">
-                            <TypingAnimation
-                                text="I am currently pursuing a B.Tech in Computer Science and Engineering (Artificial Intelligence & Machine Learning). I am actively learning backend development and AI concepts, with a strong interest in building real-world software systems. I specialize in Java backend development combined with modern frontend technologies such as JavaScript, React, and Three.js, and I focus on building scalable, efficient, and production-ready full-stack applications."
-                                speed={25}
-                                delay={3500}
-                            />
-                        </p>
-                        <div className="tech-highlights">
-                            <span className="tech-badge">AI/ML</span>
-                            <span className="tech-badge">Full-Stack</span>
-                            <span className="tech-badge">Three.js</span>
-                        </div>
-                    </div>
-
-                    <div ref={imageRef} className="about-image-wrapper">
-                        <div className="image-frame">
-                            <div className="animated-border"></div>
-                            <div className="placeholder-image">
-                                <div className="scan-line"></div>
-                                <div className="grid-overlay"></div>
-                            </div>
-                            <div className="frame-corner top-left"></div>
-                            <div className="frame-corner top-right"></div>
-                            <div className="frame-corner bottom-left"></div>
-                            <div className="frame-corner bottom-right"></div>
-                        </div>
-                    </div>
-                </div>
+          <div ref={textRef} className="about-text-wrapper">
+            <h2 className="section-title">
+              <span className="title-glow">00</span> / About
+            </h2>
+            <h3 className="about-headline">
+              <TypingAnimation
+                text="B.Tech in Computer Science & Engineering (AI & Machine Learning)"
+                speed={40}
+                delay={500}
+              />
+            </h3>
+            <p className="about-description">
+              <TypingAnimation
+                text="I am currently pursuing a B.Tech in Computer Science and Engineering (Artificial Intelligence & Machine Learning). I am actively learning backend development and AI concepts, with a strong interest in building real-world software systems. I specialize in Java backend development combined with modern frontend technologies such as JavaScript, React, and Three.js, and I focus on building scalable, efficient, and production-ready full-stack applications."
+                speed={25}
+                delay={3500}
+              />
+            </p>
+            <div className="tech-highlights">
+              <span className="tech-badge">AI/ML</span>
+              <span className="tech-badge">Full-Stack</span>
+              <span className="tech-badge">Three.js</span>
             </div>
+          </div>
 
-            <style>{`
+          <div ref={imageRef} className="about-image-wrapper">
+            <div className="image-frame">
+              <div className="animated-border"></div>
+              <div className="placeholder-image">
+                <div className="scan-line"></div>
+                <div className="grid-overlay"></div>
+              </div>
+              <div className="frame-corner top-left"></div>
+              <div className="frame-corner top-right"></div>
+              <div className="frame-corner bottom-left"></div>
+              <div className="frame-corner bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
                 .about-section {
                     padding: 10rem 0;
                     position: relative;
@@ -500,8 +503,8 @@ const About = () => {
                     }
                 }
             `}</style>
-        </section>
-    );
+    </section>
+  );
 };
 
 export default About;
