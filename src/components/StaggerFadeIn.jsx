@@ -37,11 +37,12 @@ function StaggerFadeIn({ children, className = '', staggerDelay = 0.1, direction
         break;
     }
 
-    // Set initial state for all items
+    // Set initial state with subtle effects
     gsap.set(items, {
       opacity: 0,
       y: yStart,
       x: xStart,
+      scale: 0.95,
     });
 
     // Create staggered animation
@@ -49,13 +50,14 @@ function StaggerFadeIn({ children, className = '', staggerDelay = 0.1, direction
       opacity: 1,
       y: 0,
       x: 0,
-      duration: 0.6,
+      scale: 1,
+      duration: 0.7,
       stagger: staggerDelay,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: container,
-        start: 'top 80%',
-        toggleActions: 'play none none none',
+        start: 'top 85%',
+        once: true,
       },
     });
 

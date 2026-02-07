@@ -21,14 +21,20 @@ const SmoothScroll = ({ children }) => {
 
     const lenis = new Lenis({
       duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: (t) => {
+        // Ultra-smooth easing with momentum feel
+        const c1 = 1.70158;
+        const c3 = c1 + 1;
+        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+      },
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.1,
+      wheelMultiplier: 0.8,
       smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
+      normalizeWheel: true,
     });
 
     lenisRef.current = lenis;

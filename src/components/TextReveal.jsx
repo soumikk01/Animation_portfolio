@@ -13,21 +13,23 @@ const TextReveal = ({ children, className }) => {
     gsap.fromTo(
       split.chars,
       {
-        y: 100,
+        y: 80,
         opacity: 0,
-        rotateX: -90,
+        rotateX: -45,
+        scale: 0.8,
       },
       {
         y: 0,
         opacity: 1,
         rotateX: 0,
+        scale: 1,
         stagger: 0.02,
         duration: 1,
-        ease: 'power4.out',
+        ease: 'back.out(1.5)',
         scrollTrigger: {
           trigger: textRef.current,
           start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          once: true,
         },
       }
     );
