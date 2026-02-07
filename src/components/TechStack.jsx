@@ -1,77 +1,213 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './TechStack.css';
+import { 
+  FaReact, 
+  FaNode, 
+  FaGitAlt, 
+  FaDocker, 
+  FaFigma,
+  FaAws,
+  FaInfinity
+} from 'react-icons/fa';
+import { 
+  SiNextdotjs, 
+  SiTypescript, 
+  SiTailwindcss, 
+  SiExpress, 
+  SiMongodb, 
+  SiPostgresql, 
+  SiFirebase, 
+  SiBlender, 
+  SiWebgl,
+  SiThreedotjs,
+  SiGreensock,
+  SiSpringboot,
+  SiGithubactions,
+  SiMysql,
+  SiSqlite
+} from 'react-icons/si';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const techData = [
   {
     category: 'Frontend',
-    items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Three.js'],
+    items: [
+      { name: 'React', icon: FaReact },
+      { name: 'Next.js', icon: SiNextdotjs },
+      { name: 'TypeScript', icon: SiTypescript },
+      { name: 'Tailwind CSS', icon: SiTailwindcss },
+      { name: 'GSAP', icon: SiGreensock },
+      { name: 'Three.js', icon: SiThreedotjs },
+      { name: 'WebGL', icon: SiWebgl },
+    ],
   },
   {
     category: 'Backend',
-    items: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'Firebase'],
+    items: [
+      { name: 'Node.js', icon: FaNode },
+      { name: 'Express', icon: SiExpress },
+      { name: 'SpringBoot', icon: SiSpringboot },
+    ],
+  },
+  {
+    category: 'Database',
+    items: [
+      { name: 'PostgreSQL', icon: SiPostgresql },
+      { name: 'MySQL', icon: SiMysql },
+      { name: 'MongoDB', icon: SiMongodb },
+      { name: 'SQLite', icon: SiSqlite },
+    ],
+  },
+  {
+    category: 'devops & cloud',
+    items: [
+      { name: 'AWS', icon: FaAws },
+      { name: 'Firebase', icon: SiFirebase },
+      { name: 'CI/CD (GitHub Actions)', icon: SiGithubactions },
+      { name: 'Docker', icon: FaDocker },
+    ],
   },
   {
     category: 'Tools',
-    items: ['Git', 'Docker', 'Figma', 'Blender', 'WebGL'],
+    items: [
+      { name: 'Git', icon: FaGitAlt },
+      { name: 'Blender', icon: SiBlender },
+    ],
   },
 ];
 
 const TechStack = () => {
   const sectionRef = useRef(null);
-  const svgRef = useRef(null);
+  const containerRef = useRef(null);
+  const [paths, setPaths] = useState([]);
+  const [hubs, setHubs] = useState([]);
+  const [spinePaths, setSpinePaths] = useState([]);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    const svg = svgRef.current;
-    if (!section || !svg) return;
+  const calculatePaths = () => {
+    if (!containerRef.current) return;
+    const newPaths = [];
+    const newHubs = [];
+    const newSpinePaths = [];
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const categories = containerRef.current.querySelectorAll('.tech-category');
+    const title = containerRef.current.querySelector('.section-title');
 
-    const paths = svg.querySelectorAll('.branch-path');
+    const categoryPoints = [];
 
-    paths.forEach((path) => {
-      const length = path.getTotalLength();
-      gsap.set(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-        opacity: 0,
-      });
+    categories.forEach((cat) => {
+      const header = cat.querySelector('.category-header');
+      const items = cat.querySelectorAll('.tech-item');
+      if (!header || items.length === 0) return;
 
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.1 + path.getAttribute('data-index') * 0.03,
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 65%',
-          once: true, // Play animation only once
-        },
+      const headerRect = header.getBoundingClientRect();
+      const startX = headerRect.left + headerRect.width / 2 - containerRect.left;
+      const startY = headerRect.bottom - containerRect.top + 5;
+
+      newHubs.push({ x: startX, y: startY });
+      categoryPoints.push({ x: startX, y: startY });
+
+      items.forEach((item) => {
+        const itemRect = item.getBoundingClientRect();
+        const endX = itemRect.left + itemRect.width / 2 - containerRect.left;
+        const endY = itemRect.top - containerRect.top;
+
+        const distY = endY - startY;
+        const cp1y = startY + distY * 0.4;
+        const cp2y = endY - distY * 0.4;
+        
+        const pathData = `M ${startX} ${startY} C ${startX} ${cp1y}, ${endX} ${cp2y}, ${endX} ${endY}`;
+        newPaths.push(pathData);
       });
     });
 
-    // Animate nodes
+    setPaths(newPaths);
+    setHubs(newHubs);
+    setSpinePaths(newSpinePaths);
+  };
+
+  useLayoutEffect(() => {
+    calculatePaths();
+    window.addEventListener('resize', calculatePaths);
+    return () => window.removeEventListener('resize', calculatePaths);
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // Animate category headers
     gsap.fromTo(
-      '.tech-node',
+      '.category-header',
+      { x: -50, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 65%',
+          once: true,
+        },
+      }
+    );
+
+    // Animate tech items
+    gsap.fromTo(
+      '.tech-item',
       { scale: 0, opacity: 0 },
       {
         scale: 1,
         opacity: 1,
         duration: 0.5,
-        stagger: 0.04,
+        stagger: 0.05,
         ease: 'back.out(1.5)',
         scrollTrigger: {
           trigger: section,
           start: 'top 65%',
-          once: true, // Play animation only once
+          once: true,
+          onEnter: () => {
+            document.querySelectorAll('.tech-category').forEach(cat => {
+              cat.classList.add('active');
+            });
+            // Animate Master Spine
+            gsap.fromTo('.curvy-spine',
+              { strokeDashoffset: 1000, opacity: 0 },
+              {
+                strokeDashoffset: 0,
+                opacity: 0.5,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: 'power2.inOut'
+              }
+            );
+
+            // Animate SVG paths
+            gsap.fromTo('.curvy-path', 
+              { strokeDashoffset: 1000, opacity: 0 },
+              { 
+                strokeDashoffset: 0, 
+                opacity: 0.7, 
+                duration: 2.5, 
+                stagger: 0.03,
+                ease: 'power2.inOut' 
+              }
+            );
+            // Animate Hubs
+            gsap.to('.curvy-hub', {
+              opacity: 1,
+              duration: 1,
+              ease: 'power2.out'
+            });
+          }
         },
       }
     );
 
-    // Cleanup all ScrollTriggers tied to this section
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
         if (trigger.trigger === section) {
@@ -83,155 +219,79 @@ const TechStack = () => {
 
   return (
     <section ref={sectionRef} id="tech-stack" className="tech-stack-premium">
-      <div className="container">
+      <div className="container" ref={containerRef} style={{ position: 'relative' }}>
         <h2 className="section-title">01 / Tech Stack</h2>
 
-        <div className="tech-map-container">
-          <svg
-            ref={svgRef}
-            className="connectivity-svg"
-            viewBox="0 0 1100 1400"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            {/* Organic Branches (Tentacles) */}
-
-            {/* 1. Vertical Spinal Trunk (Left) */}
-            <path
-              className="branch-path spinal-trunk"
-              data-index="0"
-              d={`M 15 230 L 15 1070`} // Centered margin (x=15)
-              fill="none"
-              stroke="url(#branch-gradient)"
-              strokeWidth="3"
+        {/* Dynamic Curvy Connections */}
+        <svg className="tech-curves-svg" style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 0
+        }}>
+          {/* Master Spine */}
+          {spinePaths.map((p, i) => (
+            <path 
+              key={`spine-${i}`} 
+              d={p} 
+              className="curvy-spine"
+              fill="none" 
+              stroke="var(--accent-color)" 
+              strokeWidth="2"
+              strokeDasharray="1000"
+              strokeDashoffset="1000"
+              style={{ opacity: 0 }}
             />
+          ))}
 
-            {techData.map((cat, catIdx) => {
-              const baseTop = 200 + catIdx * 420; // Professional 420px step
-              const categoryNodeCenterY = baseTop + 30;
-
-              return (
-                <path
-                  key={`trunk-conn-${catIdx}`}
-                  className="branch-path connection-trunk"
-                  data-index="1"
-                  d={`M 15 ${categoryNodeCenterY} L 30 ${categoryNodeCenterY}`} // Connection to x=30 (node start)
-                  fill="none"
-                  stroke="url(#branch-gradient)"
-                  strokeWidth="3"
-                />
-              );
-            })}
-
-            {/* 2. Vertical Spinal Trunk (Right) */}
-            <path
-              className="branch-path spinal-trunk-right"
-              data-index="100" // Animate after all items
-              d={`M 1085 150 L 1085 1150`} // Centered margin (x=1085)
-              fill="none"
-              stroke="url(#branch-gradient)"
-              strokeWidth="3"
+          {/* Individual Curves */}
+          {paths.map((p, i) => (
+            <path 
+              key={i} 
+              d={p} 
+              className="curvy-path"
+              fill="none" 
+              stroke="var(--accent-color)" 
+              strokeWidth="2.5"
+              strokeDasharray="1000"
+              strokeDashoffset="1000"
+              style={{ opacity: 0 }}
             />
+          ))}
+          {hubs.map((hub, i) => (
+            <circle 
+              key={i}
+              cx={hub.x}
+              cy={hub.y}
+              r="4"
+              className="curvy-hub"
+              fill="var(--accent-color)"
+              style={{ opacity: 0 }}
+            />
+          ))}
+        </svg>
 
-            {techData.map((cat, catIdx) =>
-              cat.items.map((item, itemIdx) => {
-                // Vertical spacing: 420px step per category
-                const baseTop = 200 + catIdx * 420;
-
-                // Category node: Left side
-                const categoryNodeCenterY = baseTop + 30;
-                const categoryNodeRightX = 30 + 180; // 30 (left) + 180 (width) = 210
-
-                // Tech items: Right side
-                const techItemGap = 65; // Professional balanced gap
-                const totalItemsHeight = (cat.items.length - 1) * techItemGap;
-                const startItemY = categoryNodeCenterY - totalItemsHeight / 2;
-
-                const itemNodeCenterY = startItemY + itemIdx * techItemGap;
-                const itemNodeLeftX = 850;
-                const itemNodeRightX = itemNodeLeftX + 160;
-
-                // Middle point for "bundling" effect
-                const midX = (categoryNodeRightX + itemNodeLeftX) / 2;
-
-                // Control points for organic "tentacle" curve
-                const controlX1 = categoryNodeRightX + 150;
-                const controlX2 = midX - 50;
-                const controlX4 = itemNodeLeftX - 150;
-
-                // Global index for stagger
-                const globalIndex =
-                  2 +
-                  techData.slice(0, catIdx).reduce((acc, c) => acc + c.items.length, 0) +
-                  itemIdx;
-
-                return (
-                  <>
-                    <path
-                      data-index={globalIndex}
-                      className="branch-path"
-                      d={`M ${categoryNodeRightX} ${categoryNodeCenterY} 
-                                               C ${controlX1} ${categoryNodeCenterY}, ${controlX2} ${itemNodeCenterY}, ${midX} ${itemNodeCenterY}
-                                               S ${controlX4} ${itemNodeCenterY}, ${itemNodeLeftX} ${itemNodeCenterY}`}
-                      fill="none"
-                      stroke="url(#branch-gradient)"
-                      strokeWidth="2.5"
-                    />
-                    {/* Connection to Right Trunk */}
-                    <path
-                      data-index={globalIndex + 1}
-                      className="branch-path connection-trunk-right"
-                      d={`M ${itemNodeRightX} ${itemNodeCenterY} L 1085 ${itemNodeCenterY}`}
-                      fill="none"
-                      stroke="url(#branch-gradient)"
-                      strokeWidth="2"
-                    />
-                  </>
-                );
-              })
-            )}
-
-            <defs>
-              <linearGradient id="branch-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="rgba(168, 85, 247, 0.2)" />
-                <stop offset="30%" stopColor="rgba(168, 85, 247, 0.8)" />
-                <stop offset="70%" stopColor="rgba(168, 85, 247, 0.8)" />
-                <stop offset="100%" stopColor="rgba(168, 85, 247, 0.2)" />
-              </linearGradient>
-            </defs>
-          </svg>
-
-          <div className="tech-nodes">
-            {techData.map((cat, catIdx) => {
-              const baseTop = 200 + catIdx * 420;
-              const categoryNodeCenterY = baseTop + 30;
-              const techItemGap = 65;
-              const totalItemsHeight = (cat.items.length - 1) * techItemGap;
-              const startItemY = categoryNodeCenterY - totalItemsHeight / 2;
-
-              return (
-                <div key={catIdx} className="tech-category-group">
-                  <div
-                    className="tech-node category-node"
-                    style={{ top: `${baseTop}px`, left: '30px' }}
-                  >
-                    <span className="node-label">{cat.category}</span>
-                    <div className="node-glow"></div>
-                  </div>
-
-                  {cat.items.map((item, itemIdx) => (
-                    <div
-                      key={itemIdx}
-                      className="tech-node item-node"
-                      style={{ top: `${startItemY + itemIdx * techItemGap - 20}px`, left: '850px' }}
-                    >
-                      <span className="node-label small">{item}</span>
-                      <div className="node-glow small"></div>
+        <div className="tech-stack-content">
+          {techData.map((category, catIdx) => (
+            <div key={catIdx} className="tech-category">
+              <h3 className="category-header">{category.category}</h3>
+              <div className="tech-items-row">
+                {category.items.map((item, itemIdx) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <div key={itemIdx} className="tech-item">
+                      <IconComponent className="tech-icon" />
+                      <span className="item-label">{item.name}</span>
+                      <div className="item-glow"></div>
                     </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

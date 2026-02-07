@@ -325,66 +325,11 @@ section,
   display: inline-block;
 }
 
+/* Global Tech Stack styles removed in favor of component-specific styles in TechStack.css */
 .tech-stack {
   padding: 8rem 0;
 }
 
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.tech-category {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 2rem;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.tech-category:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 1);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.category-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--accent-color);
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.tech-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-}
-
-.tech-item {
-  padding: 0.6rem 1.2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.tech-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-color);
-  color: #ffffff;
-  transform: translateY(-2px);
-}
 
 .project-item {
   display: flex;

@@ -10,8 +10,8 @@ function LoadingScreen() {
       <div className="loading-grain"></div>
 
       <div className="loading-content">
-        {/* Portfolio text with premium styling */}
-        <div className="loading-title-container">
+        {/* Portfolio text with premium styling inside a glass pill */}
+        <div className="loading-title-container glass-pill">
           <h1 className="loading-title">
             <span className="title-letter">P</span>
             <span className="title-letter">O</span>
@@ -24,13 +24,15 @@ function LoadingScreen() {
             <span className="title-letter">O</span>
           </h1>
           <div className="loading-subtitle">Experience Loading...</div>
-        </div>
-
-        {/* Bubble loading animation */}
-        <div className="bubble-loader">
-          <div className="bubble-dot"></div>
-          <div className="bubble-dot"></div>
-          <div className="bubble-dot"></div>
+          
+          {/* Integrated Bubble dots floating around the content */}
+          <div className="bubble-loader">
+            <div className="bubble-dot"></div>
+            <div className="bubble-dot"></div>
+            <div className="bubble-dot"></div>
+            <div className="bubble-dot"></div>
+            <div className="bubble-dot"></div>
+          </div>
         </div>
       </div>
     </div>
