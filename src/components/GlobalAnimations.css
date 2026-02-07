@@ -1,121 +1,114 @@
 /* Global Shared Animations */
 
 @keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.3;
-    }
-
-    50% {
-        transform: translate(20px, -30px) scale(1.1);
-        opacity: 0.5;
-    }
+  50% {
+    transform: translate(20px, -30px) scale(1.1);
+    opacity: 0.5;
+  }
 }
 
 @keyframes floatBubble {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
 
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
-    }
-
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
 }
 
 @keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
 
-    0%,
-    100% {
-        opacity: 0.5;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.8;
-        transform: scale(1.1);
-    }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes slideFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.3;
-    }
+  25% {
+    transform: translate(20px, -30px) scale(1.1);
+    opacity: 0.5;
+  }
 
-    25% {
-        transform: translate(20px, -30px) scale(1.1);
-        opacity: 0.5;
-    }
+  50% {
+    transform: translate(40px, -10px) scale(0.9);
+    opacity: 0.4;
+  }
 
-    50% {
-        transform: translate(40px, -10px) scale(0.9);
-        opacity: 0.4;
-    }
-
-    75% {
-        transform: translate(15px, 20px) scale(1.05);
-        opacity: 0.35;
-    }
+  75% {
+    transform: translate(15px, 20px) scale(1.05);
+    opacity: 0.35;
+  }
 }
 
 @keyframes logoFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.6;
-    }
-
-    50% {
-        transform: translate(-8px, -12px) scale(1.2);
-        opacity: 1;
-    }
+  50% {
+    transform: translate(-8px, -12px) scale(1.2);
+    opacity: 1;
+  }
 }
 
 @keyframes tooltipBubbleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.7;
-    }
-
-    50% {
-        transform: translate(-10px, -15px) scale(1.2);
-        opacity: 1;
-    }
+  50% {
+    transform: translate(-10px, -15px) scale(1.2);
+    opacity: 1;
+  }
 }
 
 @keyframes flutter {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 
-    0%,
-    100% {
-        transform: translate(0, 0) rotate(0deg);
-    }
+  20% {
+    transform: translate(3px, -2px) rotate(1.5deg);
+  }
 
-    20% {
-        transform: translate(3px, -2px) rotate(1.5deg);
-    }
+  40% {
+    transform: translate(-2px, 3px) rotate(-1deg);
+  }
 
-    40% {
-        transform: translate(-2px, 3px) rotate(-1deg);
-    }
+  60% {
+    transform: translate(2px, 2px) rotate(1deg);
+  }
 
-    60% {
-        transform: translate(2px, 2px) rotate(1deg);
-    }
-
-    80% {
-        transform: translate(-3px, -1px) rotate(-1.5deg);
-    }
+  80% {
+    transform: translate(-3px, -1px) rotate(-1.5deg);
+  }
 }

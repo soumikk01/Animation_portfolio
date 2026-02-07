@@ -14,6 +14,7 @@ Your AI Assistant is now integrated! Follow these steps to activate it:
 ### 2. Configure Environment Variables
 
 1. Create a `.env` file in the project root:
+
    ```bash
    # In the Animation_portfolio directory
    copy .env.example .env
@@ -62,11 +63,13 @@ Want to modify the AI's knowledge? Edit the `portfolioContext` in `src/component
 ## ❓ Troubleshooting
 
 **"API key not configured" message?**
+
 - Make sure `.env` file exists in root directory
 - Verify the key is named `VITE_GEMINI_API_KEY`
 - Restart the dev server after creating/editing `.env`
 
 **AI not responding?**
+
 - Check browser console for errors
 - Verify your API key is valid
 - Ensure you have internet connection

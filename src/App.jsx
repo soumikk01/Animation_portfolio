@@ -31,21 +31,29 @@ function App() {
         y: 0,
         duration: 1.2,
         stagger: 0.3,
-        ease: 'power4.out'
+        ease: 'power4.out',
       })
-        .to('.annotation-line', {
-          scaleX: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'expo.inOut'
-        }, '-=0.6')
-        .to('.annotation-text', {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out'
-        }, '-=0.4');
+        .to(
+          '.annotation-line',
+          {
+            scaleX: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'expo.inOut',
+          },
+          '-=0.6'
+        )
+        .to(
+          '.annotation-text',
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+          },
+          '-=0.4'
+        );
 
       // Controlled by ScrollTrigger to replay on entry
       ScrollTrigger.create({
@@ -65,7 +73,7 @@ function App() {
           gsap.set('.annotation-line', { scaleX: 0 });
           gsap.set('.annotation-text', { opacity: 0, x: -10 });
           tl.pause(0);
-        }
+        },
       });
     }
   }, [hasStarted]);
@@ -104,17 +112,25 @@ function App() {
                   <div className="annotation-line"></div>
                   <span className="annotation-text">"RESTful APIs"</span>
                 </div>
-
-
               </div>
 
               {/* Animated Bubbles */}
               <div className="hero-bubbles">
-                <div className="bubble-flutter flutter-1"><div className="bubble bubble-1"></div></div>
-                <div className="bubble-flutter flutter-2"><div className="bubble bubble-2"></div></div>
-                <div className="bubble-flutter flutter-3"><div className="bubble bubble-3"></div></div>
-                <div className="bubble-flutter flutter-4"><div className="bubble bubble-4"></div></div>
-                <div className="bubble-flutter flutter-5"><div className="bubble bubble-5"></div></div>
+                <div className="bubble-flutter flutter-1">
+                  <div className="bubble bubble-1"></div>
+                </div>
+                <div className="bubble-flutter flutter-2">
+                  <div className="bubble bubble-2"></div>
+                </div>
+                <div className="bubble-flutter flutter-3">
+                  <div className="bubble bubble-3"></div>
+                </div>
+                <div className="bubble-flutter flutter-4">
+                  <div className="bubble bubble-4"></div>
+                </div>
+                <div className="bubble-flutter flutter-5">
+                  <div className="bubble bubble-5"></div>
+                </div>
               </div>
 
               {/* Line 2: Developer */}
@@ -165,7 +181,7 @@ function App() {
               {[
                 { name: 'Motion Identity', cat: 'Interaction Design' },
                 { name: 'Vortex System', cat: 'WebGL / Shader' },
-                { name: 'Orias Portal', cat: 'Creative Dev' }
+                { name: 'Orias Portal', cat: 'Creative Dev' },
               ].map((proj, i) => (
                 <div key={i} className="project-item">
                   <span className="project-num">0{i + 1}</span>
