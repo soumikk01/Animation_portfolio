@@ -195,19 +195,47 @@ function App() {
         <section id="projects" className="projects">
           <div className="container">
             <FadeIn>
-              <h2 className="section-title">02 / Selected Works</h2>
+              <h2 className="section-title">02 / Projects</h2>
             </FadeIn>
-            <StaggerFadeIn className="project-list" staggerDelay={0.2}>
+            <StaggerFadeIn className="project-grid" staggerDelay={0.2}>
               {[
-                { name: 'Motion Identity', cat: 'Interaction Design' },
-                { name: 'Vortex System', cat: 'WebGL / Shader' },
-                { name: 'Orias Portal', cat: 'Creative Dev' },
+                { 
+                  name: 'Motion Identity', 
+                  cat: 'Interaction Design', 
+                  url: 'https://example.com/project-1',
+                  image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                  name: 'Vortex System', 
+                  cat: 'WebGL / Shader', 
+                  url: 'https://example.com/project-2',
+                  image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
+                },
+                { 
+                  name: 'Orias Portal', 
+                  cat: 'Creative Dev', 
+                  url: 'https://example.com/project-3',
+                  image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
+                },
               ].map((proj, i) => (
-                <div key={i} className="project-item">
-                  <span className="project-num">0{i + 1}</span>
-                  <TextReveal className="project-name">{proj.name}</TextReveal>
-                  <span className="project-category">{proj.cat}</span>
-                </div>
+                <a 
+                  key={i} 
+                  href={proj.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="project-card"
+                >
+                  <div className="project-card-image" style={{ backgroundImage: `url(${proj.image})` }}>
+                    <div className="project-card-overlay">
+                      <span className="view-link">View Project</span>
+                    </div>
+                  </div>
+                  <div className="project-card-info">
+                    <span className="project-num">0{i + 1}</span>
+                    <TextReveal className="project-name">{proj.name}</TextReveal>
+                    <span className="project-category">{proj.cat}</span>
+                  </div>
+                </a>
               ))}
             </StaggerFadeIn>
           </div>
