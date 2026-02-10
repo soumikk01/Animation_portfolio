@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import SmoothScroll from './components/SmoothScroll';
 import Navbar from './components/Navbar';
 import ExperienceModal from './components/ExperienceModal';
@@ -245,6 +246,7 @@ function App() {
         <ContactForm />
       </main>
     </SmoothScroll>
+    <SpeedInsights />
     </>
   );
 }
