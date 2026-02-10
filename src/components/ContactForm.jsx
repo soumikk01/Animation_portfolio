@@ -4,6 +4,7 @@ import TextReveal from './TextReveal';
 import TypingAnimation from './TypingAnimation';
 import SocialButtons from './SocialButtons';
 import { getGeminiEndpoint, API_CONFIG } from '../utils/apiConfig';
+import airiLogo from '../assets/airi-logo.png';
 import './ContactForm.css';
 
 function ContactForm() {
@@ -71,14 +72,19 @@ function AIAssistantChat() {
     {
       role: 'assistant',
       content:
-        "👋 Hi! I'm Airi, your AI assistant. Ask me anything about this portfolio, the projects, skills, or experience!",
+        "👋 Hi! I'm Airi🌸, your AI assistant. Ask me anything about this portfolio, the projects, skills, or experience!",
     },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKeyMissing, setApiKeyMissing] = useState(false);
   const messagesEndRef = useRef(null);
+  const lastMessageTime = useRef(0);
   const MAX_MESSAGE_LENGTH = 500;
+  const SESSION_MESSAGE_LIMIT = 15;
+  const RATE_LIMIT_MS = 1500;
+
+  const [messageCount, setMessageCount] = useState(0);
 
   // Check if API key is configured
   useEffect(() => {
@@ -101,7 +107,7 @@ function AIAssistantChat() {
       return '⚠️ API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.';
     }
 
-    const portfolioContext = `You are Airi, an AI assistant for a Full-Stack Developer's portfolio website. 
+    const portfolioContext = `You are Airi🌸, an AI assistant for a Full-Stack Developer's portfolio website. 
 The developer specializes in:
 - Frontend: React, JavaScript, HTML/CSS, responsive design, animations
 - Backend: Java, RESTful APIs, Node.js
@@ -109,7 +115,7 @@ The developer specializes in:
 - Current focus: Building modern web experiences with cutting-edge technologies
 
 Answer questions about the portfolio, projects, skills, and experience in a friendly, professional manner. 
-Keep responses concise and helpful.`;
+Keep responses very concise and helpful (maximum 80 words).`;
 
     try {
       const response = await fetch(getGeminiEndpoint(apiKey), {
@@ -156,6 +162,32 @@ Keep responses concise and helpful.`;
     const trimmedInput = input.trim();
     if (!trimmedInput || isLoading) return;
 
+    // Rate Limiting
+    const now = Date.now();
+    if (now - lastMessageTime.current < RATE_LIMIT_MS) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: '⚠️ Slow down! Please wait a moment before sending another message.',
+        },
+      ]);
+      return;
+    }
+
+    // Session Limit
+    if (messageCount >= SESSION_MESSAGE_LIMIT) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content:
+            "⚠️ Session limit reached. You've sent 15 messages already! Please refresh to chat more.",
+        },
+      ]);
+      return;
+    }
+
     if (trimmedInput.length > MAX_MESSAGE_LENGTH) {
       setMessages((prev) => [
         ...prev,
@@ -172,6 +204,8 @@ Keep responses concise and helpful.`;
 
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
+    setMessageCount((prev) => prev + 1);
+    lastMessageTime.current = Date.now();
 
     const aiResponse = await getGeminiResponse(userMessage);
 
@@ -189,12 +223,26 @@ Keep responses concise and helpful.`;
 
   return (
     <div className="ai-chat-box">
-      <div className="chat-messages">
+      <div className="chat-header">
+        <div className="assistant-logo">
+          <img src={airiLogo} alt="Airi Logo" />
+        </div>
+        <div className="assistant-name-status">
+          <span className="assistant-name">Airi🌸</span>
+          <span className="assistant-status">Online</span>
+        </div>
+      </div>
+      <div className="chat-messages" data-lenis-prevent>
         {messages.map((message, index) => (
           <div
             key={index}
             className={`message ${message.role} ${message.content === 'Error...!!' ? 'error' : ''}`}
           >
+            {message.role === 'assistant' && (
+              <div className="message-avatar">
+                <img src={airiLogo} alt="Airi" />
+              </div>
+            )}
             <div className="message-bubble">
               {message.role === 'assistant' && index === messages.length - 1 ? (
                 <TypingAnimation text={message.content} speed={25} showCursor={false} />
