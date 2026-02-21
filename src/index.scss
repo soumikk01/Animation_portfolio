@@ -121,3 +121,149 @@ html.lenis {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+// ─── TROIKA GEOMETRY TEXT EFFECT ──────────────────────────────────────────────
+// Layered depth extrusion + animated chrome shimmer on all key text elements
+
+// Chrome shimmer keyframe
+@keyframes troika-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+// Depth pulse — subtle 3D breathe
+@keyframes troika-depth {
+  0%, 100% {
+    text-shadow:
+      1px 1px 0 rgba(168, 85, 247, 0.35),
+      2px 2px 0 rgba(139, 57, 220, 0.28),
+      3px 3px 0 rgba(109, 40, 217, 0.20),
+      4px 4px 0 rgba(80, 20, 180, 0.12),
+      5px 5px 12px rgba(0,0,0,0.6),
+      0 0 40px rgba(168, 85, 247, 0.18);
+  }
+  50% {
+    text-shadow:
+      1px 1px 0 rgba(216, 180, 254, 0.4),
+      2px 2px 0 rgba(168, 85, 247, 0.33),
+      3px 3px 0 rgba(139, 57, 220, 0.25),
+      4px 4px 6px rgba(80, 20, 180, 0.15),
+      5px 5px 16px rgba(0,0,0,0.7),
+      0 0 60px rgba(168, 85, 247, 0.28);
+  }
+}
+
+// ── Shared mixin (avoids @extend across files) ───────────────────────────
+%troika-base {
+  position: relative;
+  display: inline-block;
+  animation: troika-depth 4s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              letter-spacing 0.4s ease;
+
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.55) 40%,
+      rgba(216, 180, 254, 0.7)  50%,
+      rgba(255, 255, 255, 0.55) 60%,
+      transparent 75%
+    );
+    background-size: 300% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: troika-shimmer 5s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &:hover {
+    transform: perspective(600px) rotateX(4deg) translateY(-3px);
+    letter-spacing: 0.01em;
+  }
+}
+
+// ── Section headings (02 / Projects, 00 / About, etc.) ──────────────────
+.section-title {
+  @extend %troika-base;
+}
+
+// ── Hero main words (Full-Stack, Developer) ──────────────────────────────
+.main-word {
+  @extend %troika-base;
+}
+
+// ── Navbar logo typed text ───────────────────────────────────────────────
+.logo-text .typing-part {
+  @extend %troika-base;
+}
+
+// ── Loading screen PORTFOLIO letters ────────────────────────────────────
+.loading-title .title-letter {
+  display: inline-block;
+  animation: troika-depth 4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.15s);
+  text-shadow:
+    1px 1px 0 rgba(168, 85, 247, 0.35),
+    2px 2px 0 rgba(139, 57, 220, 0.25),
+    3px 3px 8px rgba(0,0,0,0.6),
+    0 0 30px rgba(168, 85, 247, 0.2);
+  transition: transform 0.3s ease;
+  cursor: default;
+
+  &:hover {
+    transform: perspective(400px) rotateX(8deg) translateY(-4px) scale(1.05);
+  }
+}
+
+// ── Contact heading "Let's Talk" ─────────────────────────────────────────
+.heading-lets,
+.heading-talk {
+  @extend %troika-base;
+}
+
+// ── About section headline — subtle depth only (typing animation active) ─
+.about-headline {
+  text-shadow:
+    1px 1px 0 rgba(168, 85, 247, 0.22),
+    2px 2px 6px rgba(0,0,0,0.5),
+    0 0 25px rgba(168, 85, 247, 0.12);
+}
+
+// ── Project card names ───────────────────────────────────────────────────
+.project-name {
+  @extend %troika-base;
+}
+
+
+// ── Mobile: disable heavy effects for performance ─────────────────────────
+@media (max-width: 768px) {
+  %troika-base {
+    animation: none;
+    text-shadow:
+      1px 1px 0 rgba(168, 85, 247, 0.3),
+      2px 2px 6px rgba(0,0,0,0.5);
+
+    &::before { display: none; }
+    &:hover { transform: none; }
+  }
+
+  .loading-title .title-letter {
+    animation: none;
+    text-shadow:
+      1px 1px 0 rgba(168, 85, 247, 0.3),
+      0 0 20px rgba(168, 85, 247, 0.2);
+    &:hover { transform: none; }
+  }
+}
+

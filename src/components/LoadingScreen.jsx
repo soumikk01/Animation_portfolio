@@ -13,15 +13,11 @@ function LoadingScreen() {
         {/* Portfolio text with premium styling inside a glass pill */}
         <div className="loading-title-container glass-pill">
           <h1 className="loading-title">
-            <span className="title-letter">P</span>
-            <span className="title-letter">O</span>
-            <span className="title-letter">R</span>
-            <span className="title-letter">T</span>
-            <span className="title-letter">F</span>
-            <span className="title-letter">O</span>
-            <span className="title-letter">L</span>
-            <span className="title-letter">I</span>
-            <span className="title-letter">O</span>
+            {['P','O','R','T','F','O','L','I','O'].map((letter, i) => (
+              <span key={i} className="title-letter" style={{ '--i': i }}>
+                {letter}
+              </span>
+            ))}
           </h1>
           <div className="loading-subtitle">Experience Loading...</div>
           

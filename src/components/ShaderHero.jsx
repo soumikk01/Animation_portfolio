@@ -213,7 +213,7 @@ const CinematicObject = () => {
               backside
               backsideThickness={isMobile ? 0.2 : 0.5}
               thickness={isMobile ? 0.2 : 0.4}
-              samples={isMobile ? 1 : 2}
+              samples={isMobile ? 2 : 4}
               resolution={isMobile ? 128 : 256}
               transmission={1}
               clearcoat={isMobile ? 0.2 : 0.5}
@@ -545,6 +545,7 @@ const BlastingBubbles = () => {
     </group>
   );
 };
+
 
 const BackgroundFluid = () => {
   const meshRef = useRef();

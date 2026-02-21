@@ -195,7 +195,7 @@ function App() {
         <section id="projects" className="projects">
           <div className="container">
             <FadeIn>
-              <h2 className="section-title">02 / Projects</h2>
+              <h2 className="section-title" data-text="02 / Projects">02 / Projects</h2>
             </FadeIn>
             <StaggerFadeIn className="project-grid" staggerDelay={0.2}>
               {[
