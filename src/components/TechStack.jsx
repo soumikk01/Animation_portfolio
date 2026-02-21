@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import './TechStack.css';
+import './TechStack.scss';
 import { 
   FaReact, 
   FaNode, 

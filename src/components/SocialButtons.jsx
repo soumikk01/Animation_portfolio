@@ -1,4 +1,4 @@
-import './SocialButtons.css';
+import './SocialButtons.scss';
 
 function SocialButtons() {
   const socialLinks = [

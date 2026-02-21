@@ -5,7 +5,7 @@ import TypingAnimation from './TypingAnimation';
 import SocialButtons from './SocialButtons';
 import { getGeminiEndpoint, API_CONFIG } from '../utils/apiConfig';
 import airiLogo from '../assets/airi-logo.png';
-import './ContactForm.css';
+import './ContactForm.scss';
 
 function ContactForm() {
   return (

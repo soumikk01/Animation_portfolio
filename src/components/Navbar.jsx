@@ -5,8 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 import { sounds, setMuted, getMuted } from '../utils/audio';
-import './GlobalAnimations.css';
-import './Navbar.css';
+import './GlobalAnimations.scss';
+import './Navbar.scss';
 
 const Navbar = () => {
   const navRef = useRef();
