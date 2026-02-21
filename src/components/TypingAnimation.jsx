@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import './TypingAnimation.css';
+import './TypingAnimation.scss';
 
 /**
  * TypingAnimation component - Creates a realistic typing effect

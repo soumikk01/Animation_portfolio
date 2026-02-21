@@ -12,8 +12,8 @@ import TechStack from './components/TechStack';
 import StaggerFadeIn from './components/StaggerFadeIn';
 import ContactForm from './components/ContactForm';
 import LoadingScreen from './components/LoadingScreen';
-import './components/GlobalAnimations.css';
-import './App.css';
+import './components/GlobalAnimations.scss';
+import './App.scss';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
