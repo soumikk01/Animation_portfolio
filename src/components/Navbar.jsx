@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-import { sounds, setMuted, getMuted } from '../utils/audio';
+
 import './GlobalAnimations.scss';
 import './Navbar.scss';
 
@@ -13,18 +13,10 @@ const Navbar = () => {
   const navSectionRightRef = useRef();
   const menuBtnRef = useRef();
   const scrollTriggerRef = useRef(null);
-  const soundTimersRef = useRef([]);
   const menuOpenedAtRef = useRef(0);
   const [logoText, setLogoText] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(getMuted());
-  const [showSoundTooltip, setShowSoundTooltip] = useState(true);
-  const [hasEnabledSound, setHasEnabledSound] = useState(false); // Track if user enabled sound this session
-  const [tooltipText, setTooltipText] = useState('');
-  const [tooltipPop, setTooltipPop] = useState('');
   const fullText = 'PORTFOLIO';
-  const tooltipFullText = 'every click goes';
-  const tooltipPopText = 'POP!';
 
   useEffect(() => {
     // Initial entrance animation
@@ -111,118 +103,21 @@ const Navbar = () => {
       },
     });
 
-    const currentTimers = soundTimersRef.current;
     return () => {
       ctx.revert();
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
       }
-      // Clean up any pending sound timers
-      currentTimers.forEach((timer) => clearTimeout(timer));
     };
   }, [isMenuOpen]);
 
-  // Show tooltip for 5 seconds whenever navbar becomes visible (only when muted and user hasn't enabled sound)
-  useEffect(() => {
-    let tooltipTimer;
-    let wasHidden = false; // Track if navbar was previously hidden
 
-    const handleTooltipVisibility = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-
-      if (scrollY <= 100 && isMuted && !hasEnabledSound) {
-        // Navbar is visible, sound is muted, and user hasn't enabled sound yet
-        if (wasHidden || scrollY === 0) {
-          setShowSoundTooltip(true);
-          wasHidden = false;
-
-          // Hide after 5 seconds
-          clearTimeout(tooltipTimer);
-          tooltipTimer = setTimeout(() => {
-            setShowSoundTooltip(false);
-          }, 5000);
-        }
-      } else {
-        // Navbar is hidden, sound is on, or user already enabled sound - hide tooltip
-        if (scrollY > 100) {
-          wasHidden = true;
-        }
-        setShowSoundTooltip(false);
-        clearTimeout(tooltipTimer);
-      }
-    };
-
-    // Initial display on page load (only if muted and user hasn't enabled sound)
-    setTimeout(() => {
-      if (isMuted && !hasEnabledSound) {
-        setShowSoundTooltip(true);
-
-        tooltipTimer = setTimeout(() => {
-          setShowSoundTooltip(false);
-        }, 5000);
-      }
-    }, 500);
-
-    // Listen to scroll events
-    window.addEventListener('scroll', handleTooltipVisibility);
-
-    return () => {
-      window.removeEventListener('scroll', handleTooltipVisibility);
-      clearTimeout(tooltipTimer);
-    };
-  }, [isMuted, hasEnabledSound]);
-
-  // Typing animation for tooltip text
-  useEffect(() => {
-    if (!showSoundTooltip) {
-      setTooltipText('');
-      setTooltipPop('');
-      return;
-    }
-
-    let textIndex = 0;
-    let popIndex = 0;
-    let textInterval;
-    let popInterval;
-
-    // Start typing main text after entrance animation (800ms delay)
-    const startTextTyping = setTimeout(() => {
-      textInterval = setInterval(() => {
-        if (textIndex < tooltipFullText.length) {
-          setTooltipText(tooltipFullText.slice(0, textIndex + 1));
-          textIndex++;
-        } else {
-          clearInterval(textInterval);
-
-          // Start typing "POP!" after main text completes (small delay)
-          setTimeout(() => {
-            popInterval = setInterval(() => {
-              if (popIndex < tooltipPopText.length) {
-                setTooltipPop(tooltipPopText.slice(0, popIndex + 1));
-                popIndex++;
-              } else {
-                clearInterval(popInterval);
-              }
-            }, 80);
-          }, 100);
-        }
-      }, 50);
-    }, 800);
-
-    return () => {
-      clearTimeout(startTextTyping);
-      clearInterval(textInterval);
-      clearInterval(popInterval);
-    };
-  }, [showSoundTooltip]);
 
   const toggleMenu = () => {
     const newState = !isMenuOpen;
     setIsMenuOpen(newState);
 
-    // Play menu sound and show/hide navbar section
     if (newState) {
-      sounds.menuOpen();
       menuOpenedAtRef.current = window.scrollY || window.pageYOffset;
 
       // Disable ScrollTrigger animations while menu is open
@@ -250,7 +145,7 @@ const Navbar = () => {
         display: 'none',
       });
     } else {
-      sounds.menuClose();
+
       // Re-enable ScrollTrigger
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.enable();
@@ -295,18 +190,7 @@ const Navbar = () => {
     }
   };
 
-  const toggleSound = () => {
-    const nextMuted = !isMuted;
-    setIsMuted(nextMuted);
-    setMuted(nextMuted);
 
-    if (!nextMuted) {
-      // User just turned sound ON - permanently dismiss tooltip for this session
-      setHasEnabledSound(true);
-      setShowSoundTooltip(false);
-      sounds.pop();
-    }
-  };
 
   return (
     <nav ref={navRef} className="navbar">
@@ -326,19 +210,19 @@ const Navbar = () => {
         <div ref={navSectionRightRef} className="nav-section nav-section-right">
           <ul className="nav-links">
             <li>
-              <a href="#home" className="nav-link" onClick={() => sounds.click()}>
+              <a href="#home" className="nav-link">
                 <span className="link-text">Home</span>
 
               </a>
             </li>
             <li>
-              <a href="#tech-stack" className="nav-link" onClick={() => sounds.click()}>
+              <a href="#tech-stack" className="nav-link">
                 <span className="link-text">Tech Stack</span>
 
               </a>
             </li>
             <li>
-              <a href="#projects" className="nav-link" onClick={() => sounds.click()}>
+              <a href="#projects" className="nav-link">
                 <span className="link-text">Projects</span>
 
               </a>
@@ -346,39 +230,13 @@ const Navbar = () => {
           </ul>
 
           <div className="nav-action">
-            <a href="#contact" className="contact-btn" onClick={() => sounds.click()}>
+            <a href="#contact" className="contact-btn">
               <span className="btn-text">Let's Talk</span>
 
               <div className="btn-glow" />
             </a>
 
-            <button
-              className={`sound-toggle ${isMuted ? 'muted' : ''}`}
-              onClick={toggleSound}
-              onMouseEnter={() => !isMuted && sounds.hover()}
-              aria-label={isMuted ? 'Unmute' : 'Mute'}
-            >
-              <div className="sound-waves">
-                <span className="sound-wave"></span>
-                <span className="sound-wave"></span>
-                <span className="sound-wave"></span>
-                <span className="sound-wave"></span>
-              </div>
 
-
-              {/* Sound tooltip */}
-              {showSoundTooltip && (
-                <div className="sound-tooltip">
-                  <div className="tooltip-content">
-                    <span className="tooltip-text">
-                      {tooltipText}
-                      <span className="typing-cursor"></span>
-                    </span>
-                    <span className="tooltip-pop">{tooltipPop}</span>
-                  </div>
-                </div>
-              )}
-            </button>
           </div>
         </div>
 
