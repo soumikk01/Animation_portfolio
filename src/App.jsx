@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SmoothScroll from './components/SmoothScroll';
 import Navbar from './components/Navbar';
-import ExperienceModal from './components/ExperienceModal';
+
 import ShaderHero from './components/ShaderHero';
 import About from './components/About';
 import TextReveal from './components/TextReveal';
@@ -19,7 +19,6 @@ import './App.scss';
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const [hasStarted, setHasStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const heroSectionRef = useRef(null);
 
@@ -34,7 +33,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (hasStarted && heroSectionRef.current) {
+    if (heroSectionRef.current) {
       const tl = gsap.timeline({ paused: true });
 
       // Define the professional intro sequence
@@ -94,19 +93,19 @@ function App() {
         tl.kill();
       };
     }
-  }, [hasStarted]);
+  }, []);
 
   return (
     <>
       {isLoading && <LoadingScreen />}
       <SmoothScroll>
       <Navbar />
-      <ExperienceModal onStart={() => setHasStarted(true)} />
+
 
       {/* Background is now outside main-content to show behind modal */}
       <ShaderHero />
 
-      <main className={`main-content ${hasStarted ? 'started' : ''}`}>
+      <main className="main-content started">
         {/* HERO SECTION - REPLICATING "LOCKED AWAY" DESIGN */}
         <section id="home" className="hero hero-vibe">
           <div className="container hero-container" ref={heroSectionRef}>
@@ -134,24 +133,8 @@ function App() {
                 </div>
               </div>
 
-              {/* Animated Bubbles */}
-              <div className="hero-bubbles">
-                <div className="bubble-flutter flutter-1">
-                  <div className="bubble bubble-1"></div>
-                </div>
-                <div className="bubble-flutter flutter-2">
-                  <div className="bubble bubble-2"></div>
-                </div>
-                <div className="bubble-flutter flutter-3">
-                  <div className="bubble bubble-3"></div>
-                </div>
-                <div className="bubble-flutter flutter-4">
-                  <div className="bubble bubble-4"></div>
-                </div>
-                <div className="bubble-flutter flutter-5">
-                  <div className="bubble bubble-5"></div>
-                </div>
-              </div>
+
+
 
               {/* Line 2: Developer */}
               <div className="text-line line-2">

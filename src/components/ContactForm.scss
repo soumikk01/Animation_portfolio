@@ -48,60 +48,7 @@
   animation-delay: 2s;
 }
 
-.bg-bubble {
-  position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(168, 85, 247, 0.1));
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 2;
-}
 
-.bubble-1 {
-  width: 15rem;
-  height: 15rem;
-  top: 10%;
-  left: -5%;
-  animation: floatBubble 15s ease-in-out infinite;
-}
-
-.bubble-2 {
-  width: 10rem;
-  height: 10rem;
-  bottom: 20%;
-  right: 5%;
-  animation: floatBubble 12s ease-in-out infinite reverse;
-}
-
-.bubble-3 {
-  width: 6rem;
-  height: 6rem;
-  top: 40%;
-  right: 30%;
-  animation: floatBubble 10s ease-in-out infinite;
-  animation-delay: -2s;
-}
-
-.bubble-4 {
-  width: 8rem;
-  height: 8rem;
-  bottom: -5%;
-  left: 20%;
-  animation: floatBubble 18s ease-in-out infinite;
-  animation-delay: -5s;
-}
-
-@keyframes contactBob {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.4;
-  }
-
-  100% {
-    transform: translate(-15px, -25px) scale(1.05);
-    opacity: 0.6;
-  }
-}
 
 .contact-grid {
   display: grid;
@@ -147,48 +94,7 @@
   margin-top: -0.2rem;
 }
 
-.contact-floats {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
 
-.contact-float-bubble {
-  position: absolute;
-  background: rgba(168, 85, 247, 0.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  border-radius: 50%;
-  animation: contactBob 4s ease-in-out infinite alternate;
-}
-
-.contact-float-bubble:nth-child(1) {
-  width: 70px;
-  height: 70px;
-  top: -25px;
-  right: -50px;
-  animation-delay: 0s;
-}
-
-.contact-float-bubble:nth-child(2) {
-  width: 50px;
-  height: 50px;
-  bottom: -10px;
-  left: -40px;
-  animation-delay: 0.5s;
-}
-
-.contact-float-bubble:nth-child(3) {
-  width: 35px;
-  height: 35px;
-  top: 20%;
-  right: -70px;
-  animation-delay: 1s;
-}
 
 .contact-description {
   font-size: 1.1rem;
