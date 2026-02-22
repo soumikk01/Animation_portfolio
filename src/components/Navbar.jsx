@@ -314,12 +314,7 @@ const Navbar = () => {
       <div className="nav-section nav-section-left">
         <div className="nav-logo">
           <span className="logo-text">
-            <div className="logo-bubbles">
-              <span className="logo-bubble"></span>
-              <span className="logo-bubble"></span>
-              <span className="logo-bubble"></span>
-              <span className="logo-bubble"></span>
-            </div>
+
             <span className="typing-part">{logoText}</span>
           </span>
         </div>
@@ -333,28 +328,19 @@ const Navbar = () => {
             <li>
               <a href="#home" className="nav-link" onClick={() => sounds.click()}>
                 <span className="link-text">Home</span>
-                <div className="link-bubbles">
-                  <span className="link-bubble"></span>
-                  <span className="link-bubble"></span>
-                </div>
+
               </a>
             </li>
             <li>
               <a href="#tech-stack" className="nav-link" onClick={() => sounds.click()}>
                 <span className="link-text">Tech Stack</span>
-                <div className="link-bubbles">
-                  <span className="link-bubble"></span>
-                  <span className="link-bubble"></span>
-                </div>
+
               </a>
             </li>
             <li>
               <a href="#projects" className="nav-link" onClick={() => sounds.click()}>
                 <span className="link-text">Projects</span>
-                <div className="link-bubbles">
-                  <span className="link-bubble"></span>
-                  <span className="link-bubble"></span>
-                </div>
+
               </a>
             </li>
           </ul>
@@ -362,11 +348,7 @@ const Navbar = () => {
           <div className="nav-action">
             <a href="#contact" className="contact-btn" onClick={() => sounds.click()}>
               <span className="btn-text">Let's Talk</span>
-              <div className="btn-bubbles">
-                <span className="btn-bubble"></span>
-                <span className="btn-bubble"></span>
-                <span className="btn-bubble"></span>
-              </div>
+
               <div className="btn-glow" />
             </a>
 
@@ -382,19 +364,11 @@ const Navbar = () => {
                 <span className="sound-wave"></span>
                 <span className="sound-wave"></span>
               </div>
-              <div className="btn-bubbles">
-                <span className="btn-bubble"></span>
-                <span className="btn-bubble"></span>
-              </div>
 
-              {/* Tooltip with bubble animation */}
+
+              {/* Sound tooltip */}
               {showSoundTooltip && (
                 <div className="sound-tooltip">
-                  <div className="tooltip-bubble tooltip-bubble-1"></div>
-                  <div className="tooltip-bubble tooltip-bubble-2"></div>
-                  <div className="tooltip-bubble tooltip-bubble-3"></div>
-                  <div className="tooltip-bubble tooltip-bubble-4"></div>
-                  <div className="tooltip-bubble tooltip-bubble-5"></div>
                   <div className="tooltip-content">
                     <span className="tooltip-text">
                       {tooltipText}
@@ -410,11 +384,7 @@ const Navbar = () => {
 
         {/* Menu Button - Shown when scrolled down */}
         <button ref={menuBtnRef} className="menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
-          <div className="menu-btn-bubbles">
-            <span className="menu-btn-bubble"></span>
-            <span className="menu-btn-bubble"></span>
-            <span className="menu-btn-bubble"></span>
-          </div>
+
           <div className="menu-lines">
             <span className={`menu-line ${isMenuOpen ? 'open' : ''}`}></span>
             <span className={`menu-line ${isMenuOpen ? 'open' : ''}`}></span>
