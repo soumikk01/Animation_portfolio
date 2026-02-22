@@ -52,10 +52,7 @@ function SocialButtons() {
   return (
     <div className="social-buttons-container">
       <div className="social-buttons">
-        {/* Animated background bubbles */}
-        <div className="bubble-bg bubble-1"></div>
-        <div className="bubble-bg bubble-2"></div>
-        <div className="bubble-bg bubble-3"></div>
+
 
         {/* Social media buttons */}
         <div className="social-links">
@@ -69,7 +66,7 @@ function SocialButtons() {
               style={{ animationDelay: `${index * 0.1}s` }}
               aria-label={social.name}
             >
-              <div className="button-bubble"></div>
+
               <span className="button-icon">{social.icon}</span>
               <span className="button-label">{social.name}</span>
             </a>

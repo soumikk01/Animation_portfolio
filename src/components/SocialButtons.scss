@@ -14,44 +14,7 @@
   align-items: center;
 }
 
-/* Background animated bubbles */
-.bubble-bg {
-  position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.1));
-  backdrop-filter: blur(20px);
-  animation: float 6s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-  /* Add subtle shadow to bubbles */
-  box-shadow:
-    0 8px 32px rgba(168, 85, 247, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
 
-.bubble-1 {
-  width: 300px;
-  height: 300px;
-  top: -50px;
-  left: -50px;
-  animation-delay: 0s;
-}
-
-.bubble-2 {
-  width: 200px;
-  height: 200px;
-  bottom: -30px;
-  right: -30px;
-  animation-delay: 2s;
-}
-
-.bubble-3 {
-  width: 150px;
-  height: 150px;
-  top: 50%;
-  right: -70px;
-  animation-delay: 4s;
-}
 
 /* Social links container */
 .social-links {
@@ -103,27 +66,7 @@
   }
 }
 
-/* Bubble effect inside button */
-.button-bubble {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.4), transparent);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.6s ease,
-    height 0.6s ease;
-  pointer-events: none;
-  z-index: 0;
-}
 
-.social-button:hover .button-bubble {
-  width: 300px;
-  height: 300px;
-}
 
 .social-button:hover {
   background: rgba(255, 255, 255, 0.08);
@@ -239,20 +182,7 @@
     font-size: 0.9rem;
   }
 
-  .bubble-1 {
-    width: 200px;
-    height: 200px;
-  }
 
-  .bubble-2 {
-    width: 150px;
-    height: 150px;
-  }
-
-  .bubble-3 {
-    width: 100px;
-    height: 100px;
-  }
 }
 
 @media (max-width: 480px) {
