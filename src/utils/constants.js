@@ -21,13 +21,13 @@ export const ANIMATION_TIMINGS = {
   // Other delays (in seconds)
   HERO_ENTRANCE_DELAY: 2.2,
   TYPING_ANIMATION_DELAY: 3.4,
-  TOOLTIP_DISPLAY_DURATION: 5, // 5 seconds
-  NAVBAR_SCROLL_THRESHOLD: 100, // pixels
+  TOOLTIP_DISPLAY_DURATION: 5,
+  NAVBAR_SCROLL_THRESHOLD: 100,
   
   // Loading (in milliseconds)
   INITIAL_LOAD_TIME: 1500,
   
-  // Easing functions (for reference)
+  // Easing functions
   POWER4_OUT: 'power4.out',
   EXPO_IN_OUT: 'expo.inOut',
   POWER3_OUT: 'power3.out',
@@ -35,34 +35,7 @@ export const ANIMATION_TIMINGS = {
   ELASTIC_OUT: 'elastic.out(1, 0.5)',
 };
 
-export const PERFORMANCE_SETTINGS = {
-  // Mobile detection breakpoint (in pixels)
-  MOBILE_BREAKPOINT: 768,
-  
-  // Bubble counts
-  DESKTOP_BUBBLES: 12,
-  MOBILE_BUBBLES: 6,
-  
-  DESKTOP_DECORATIVE_BUBBLES: 15,
-  MOBILE_DECORATIVE_BUBBLES: 8,
-  
-  DESKTOP_BLASTING_BUBBLES: 10,
-  MOBILE_BLASTING_BUBBLES: 6,
-  
-  // Quality settings
-  DESKTOP_SAMPLES: 4,
-  MOBILE_SAMPLES: 1,
-  
-  DESKTOP_RESOLUTION: 512,
-  MOBILE_RESOLUTION: 256,
-};
-
 export const VALIDATION_LIMITS = {
-  // Chat input validation
   MAX_MESSAGE_LENGTH: 500,
   SOUND_COOLDOWN_MS: 150,
 };
-
-// Comment: These timing values are carefully tuned for visual appeal
-// and user experience. Modifying them may affect animation quality.
-// Test thoroughly before changing production values.

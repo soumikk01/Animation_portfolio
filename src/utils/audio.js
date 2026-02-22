@@ -68,16 +68,7 @@ export const sounds = {
       setTimeout(() => playSound(freq, 0.2, 'triangle', 0.03 - i * 0.01), i * 60);
     });
   },
-  bubble: () => {
-    if (isMutedGlobal) return;
-    // Sweet, resonant bubble "drip"
-    const baseFreq = 220 + Math.random() * 110;
-    playSound(baseFreq, 0.4, 'triangle', 0.02);
-    setTimeout(() => {
-      if (isMutedGlobal) return;
-      playSound(baseFreq * 2, 0.2, 'sine', 0.01);
-    }, 30);
-  },
+
   pop: () => {
     if (isMutedGlobal) return;
     // Fun pop sound for tooltip
