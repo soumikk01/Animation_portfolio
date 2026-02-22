@@ -21,14 +21,7 @@ function LoadingScreen() {
           </h1>
           <div className="loading-subtitle">Experience Loading...</div>
           
-          {/* Integrated Bubble dots floating around the content */}
-          <div className="bubble-loader">
-            <div className="bubble-dot"></div>
-            <div className="bubble-dot"></div>
-            <div className="bubble-dot"></div>
-            <div className="bubble-dot"></div>
-            <div className="bubble-dot"></div>
-          </div>
+
         </div>
       </div>
     </div>
