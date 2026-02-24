@@ -37,5 +37,5 @@ export const ANIMATION_TIMINGS = {
 
 export const VALIDATION_LIMITS = {
   MAX_MESSAGE_LENGTH: 500,
-  SOUND_COOLDOWN_MS: 150,
+
 };
