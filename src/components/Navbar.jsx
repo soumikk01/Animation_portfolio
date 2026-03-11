@@ -12,6 +12,8 @@ const Navbar = () => {
   const navRef = useRef();
   const navSectionRightRef = useRef();
   const menuBtnRef = useRef();
+  const menuOverlayRef = useRef();
+  const menuLinksRef = useRef([]);
   const scrollTriggerRef = useRef(null);
   const menuOpenedAtRef = useRef(0);
   const [logoText, setLogoText] = useState('');
@@ -62,42 +64,40 @@ const Navbar = () => {
         // When scrolling down (past 100px), hide entire right section and show menu
         if (scrollY > 100) {
           gsap.to(navSectionRightRef.current, {
-            opacity: 0,
-            scale: 0.95,
-            duration: 0.4,
-            ease: 'power2.out',
-            pointerEvents: 'none',
-            display: 'none',
+            autoAlpha: 0,
+            scale: 0.8,
+            duration: 0.6,
+            ease: 'power3.inOut',
+            overwrite: true,
           });
           gsap.to(menuBtnRef.current, {
-            display: 'flex',
-            opacity: 1,
+            autoAlpha: 1,
             x: 0,
             rotation: 0,
             scale: 1,
-            duration: 0.6,
-            ease: 'elastic.out(1, 0.5)',
-            pointerEvents: 'auto',
+            duration: 0.8,
+            ease: 'expo.out',
+            overwrite: true,
+            display: 'flex', // ensure it becomes flex when visible
           });
         } else {
           // When scrolling back to home, show right section and hide menu
           gsap.to(navSectionRightRef.current, {
-            display: 'flex',
-            opacity: 1,
+            autoAlpha: 1,
             scale: 1,
-            duration: 0.4,
-            ease: 'power2.out',
-            pointerEvents: 'auto',
+            duration: 0.8,
+            ease: 'expo.out',
+            overwrite: true,
+            display: 'flex',
           });
           gsap.to(menuBtnRef.current, {
-            opacity: 0,
-            x: 100,
+            autoAlpha: 0,
+            x: 60,
             rotation: 180,
-            scale: 0.5,
-            duration: 0.5,
-            ease: 'back.in(1.7)',
-            pointerEvents: 'none',
-            display: 'none',
+            scale: 0.6,
+            duration: 0.6,
+            ease: 'power3.inOut',
+            overwrite: true,
           });
         }
       },
@@ -124,27 +124,64 @@ const Navbar = () => {
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.disable();
       }
-      // Show the navbar section when menu opens
+      // Hide the navbar section when menu opens (if it was visible)
       gsap.to(navSectionRightRef.current, {
-        display: 'flex',
-        opacity: 1,
-        scale: 1,
+        autoAlpha: 0,
+        scale: 0.8,
         duration: 0.5,
-        ease: 'elastic.out(1, 0.6)',
+        ease: 'expo.out',
+        overwrite: true,
+      });
+
+      // Animate overlay in
+      gsap.to(menuOverlayRef.current, {
+        autoAlpha: 1,
+        duration: 0.4,
+        ease: 'power2.out',
         pointerEvents: 'auto',
       });
+
+      // Stagger animate links in
+      gsap.fromTo(
+        menuLinksRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'back.out(1.5)',
+          delay: 0.2,
+        }
+      );
       // Hide the menu button when menu overlay is open
       gsap.to(menuBtnRef.current, {
-        opacity: 0,
-        x: 100,
+        autoAlpha: 0,
+        x: 60,
         rotation: 180,
-        scale: 0.5,
+        scale: 0.6,
         duration: 0.4,
-        ease: 'back.in(1.7)',
-        pointerEvents: 'none',
-        display: 'none',
+        ease: 'power3.inOut',
+        overwrite: true,
       });
     } else {
+
+      // Animate overlay out
+      gsap.to(menuOverlayRef.current, {
+        autoAlpha: 0,
+        duration: 0.4,
+        ease: 'power2.in',
+        pointerEvents: 'none',
+      });
+
+      // Animate links out
+      gsap.to(menuLinksRef.current, {
+        y: -50,
+        opacity: 0,
+        duration: 0.3,
+        stagger: -0.05,
+        ease: 'power2.in',
+      });
 
       // Re-enable ScrollTrigger
       if (scrollTriggerRef.current) {
@@ -156,35 +193,33 @@ const Navbar = () => {
       if (scrollY > 100) {
         // Hide navbar section if still scrolled down
         gsap.to(navSectionRightRef.current, {
-          opacity: 0,
-          scale: 0.95,
-          duration: 0.4,
-          ease: 'power2.out',
-          pointerEvents: 'none',
-          display: 'none',
+          autoAlpha: 0,
+          scale: 0.8,
+          duration: 0.6,
+          ease: 'power3.inOut',
+          overwrite: true,
         });
         // Show menu button again
         gsap.to(menuBtnRef.current, {
-          display: 'flex',
-          opacity: 1,
+          autoAlpha: 1,
           x: 0,
           rotation: 0,
           scale: 1,
-          duration: 0.6,
-          ease: 'elastic.out(1, 0.5)',
-          pointerEvents: 'auto',
+          duration: 0.8,
+          ease: 'expo.out',
+          overwrite: true,
+          display: 'flex',
         });
       } else {
         // At top of page - hide menu button
         gsap.to(menuBtnRef.current, {
-          opacity: 0,
-          x: 100,
+          autoAlpha: 0,
+          x: 60,
           rotation: 180,
-          scale: 0.5,
-          duration: 0.5,
-          ease: 'back.in(1.7)',
-          pointerEvents: 'none',
-          display: 'none',
+          scale: 0.6,
+          duration: 0.6,
+          ease: 'power3.inOut',
+          overwrite: true,
         });
       }
     }
@@ -211,28 +246,24 @@ const Navbar = () => {
           <ul className="nav-links">
             <li>
               <a href="#home" className="nav-link">
-                <span className="link-text">Home</span>
-
+                <span className="link-text" data-text="Home">Home</span>
               </a>
             </li>
             <li>
               <a href="#tech-stack" className="nav-link">
-                <span className="link-text">Tech Stack</span>
-
+                <span className="link-text" data-text="Tech Stack">Tech Stack</span>
               </a>
             </li>
             <li>
               <a href="#projects" className="nav-link">
-                <span className="link-text">Projects</span>
-
+                <span className="link-text" data-text="Projects">Projects</span>
               </a>
             </li>
           </ul>
 
           <div className="nav-action">
             <a href="#contact" className="contact-btn">
-              <span className="btn-text">Let's Talk</span>
-
+              <span className="btn-text" data-text="Let's Talk">Let's Talk</span>
               <div className="btn-glow" />
             </a>
 
@@ -252,24 +283,24 @@ const Navbar = () => {
       </div>
 
       {/* Mobile/Shrunk Menu Overlay */}
-      <div className={`menu-overlay ${isMenuOpen ? 'active' : ''}`}>
+      <div ref={menuOverlayRef} className={`menu-overlay`}>
         <ul className="menu-overlay-links">
-          <li>
+          <li ref={(el) => (menuLinksRef.current[0] = el)}>
             <a href="#home" onClick={toggleMenu}>
               Home
             </a>
           </li>
-          <li>
+          <li ref={(el) => (menuLinksRef.current[1] = el)}>
             <a href="#tech-stack" onClick={toggleMenu}>
               Tech Stack
             </a>
           </li>
-          <li>
+          <li ref={(el) => (menuLinksRef.current[2] = el)}>
             <a href="#projects" onClick={toggleMenu}>
               Projects
             </a>
           </li>
-          <li>
+          <li ref={(el) => (menuLinksRef.current[3] = el)}>
             <a href="#contact" onClick={toggleMenu}>
               Let's Talk
             </a>

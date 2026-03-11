@@ -108,6 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .nav-link:hover {
@@ -117,6 +118,20 @@
 .link-text {
   position: relative;
   z-index: 2;
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.link-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: -150%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--accent-color);
+}
+.nav-link:hover .link-text {
+  transform: translateY(150%);
 }
 
 
@@ -170,6 +185,20 @@
 .btn-text {
   position: relative;
   z-index: 2;
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.btn-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: -150%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--accent-color);
+}
+.contact-btn:hover .btn-text {
+  transform: translateY(150%);
 }
 
 
@@ -273,14 +302,9 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.4s ease;
   z-index: 999;
-}
-
-.menu-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .menu-overlay-links {
