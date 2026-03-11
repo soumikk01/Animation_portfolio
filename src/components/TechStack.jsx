@@ -85,18 +85,12 @@ const TechStack = () => {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const [paths, setPaths] = useState([]);
-  const [hubs, setHubs] = useState([]);
-  const [spinePaths, setSpinePaths] = useState([]);
 
   const calculatePaths = () => {
     if (!containerRef.current) return;
     const newPaths = [];
-    const newHubs = [];
-    const newSpinePaths = [];
     const containerRect = containerRef.current.getBoundingClientRect();
     const categories = containerRef.current.querySelectorAll('.tech-category');
-
-    const categoryPoints = [];
 
     categories.forEach((cat) => {
       const header = cat.querySelector('.category-header');
@@ -106,9 +100,6 @@ const TechStack = () => {
       const headerRect = header.getBoundingClientRect();
       const startX = headerRect.left + headerRect.width / 2 - containerRect.left;
       const startY = headerRect.bottom - containerRect.top + 5;
-
-      newHubs.push({ x: startX, y: startY });
-      categoryPoints.push({ x: startX, y: startY });
 
       items.forEach((item) => {
         const itemRect = item.getBoundingClientRect();
@@ -124,18 +115,7 @@ const TechStack = () => {
       });
     });
 
-    // Draw curvy spine connecting category hubs
-    for (let i = 0; i < categoryPoints.length - 1; i++) {
-        const p1 = categoryPoints[i];
-        const p2 = categoryPoints[i + 1];
-        const midY = (p1.y + p2.y) / 2;
-        const path = `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`;
-        newSpinePaths.push(path);
-    }
-
     setPaths(newPaths);
-    setHubs(newHubs);
-    setSpinePaths(newSpinePaths);
   };
 
   useLayoutEffect(() => {
@@ -191,18 +171,6 @@ const TechStack = () => {
             document.querySelectorAll('.tech-category').forEach(cat => {
               cat.classList.add('active');
             });
-            // Animate Master Spine
-            gsap.fromTo('.curvy-spine',
-              { strokeDashoffset: 1000, opacity: 0 },
-              {
-                strokeDashoffset: 0,
-                opacity: 0.5,
-                duration: 1.2,
-                stagger: 0.1,
-                ease: 'power2.inOut'
-              }
-            );
-
             // Animate SVG paths
             gsap.fromTo('.curvy-path', 
               { strokeDashoffset: 1000, opacity: 0 },
@@ -214,12 +182,7 @@ const TechStack = () => {
                 ease: 'power2.inOut' 
               }
             );
-            // Animate Hubs
-            gsap.to('.curvy-hub', {
-              opacity: 1,
-              duration: 1,
-              ease: 'power2.out'
-            });
+
           }
         },
       }
@@ -249,21 +212,6 @@ const TechStack = () => {
           pointerEvents: 'none',
           zIndex: 0
         }}>
-          {/* Master Spine */}
-          {spinePaths.map((p, i) => (
-            <path 
-              key={`spine-${i}`} 
-              d={p} 
-              className="curvy-spine"
-              fill="none" 
-              stroke="var(--accent-color)" 
-              strokeWidth="2"
-              strokeDasharray="1000"
-              strokeDashoffset="1000"
-              style={{ opacity: 0 }}
-            />
-          ))}
-
           {/* Individual Curves */}
           {paths.map((p, i) => (
             <path 
@@ -278,17 +226,7 @@ const TechStack = () => {
               style={{ opacity: 0 }}
             />
           ))}
-          {hubs.map((hub, i) => (
-            <circle 
-              key={i}
-              cx={hub.x}
-              cy={hub.y}
-              r="4"
-              className="curvy-hub"
-              fill="var(--accent-color)"
-              style={{ opacity: 0 }}
-            />
-          ))}
+
         </svg>
 
         <div className="tech-stack-content">
