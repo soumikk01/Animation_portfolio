@@ -95,7 +95,6 @@ const TechStack = () => {
     const newSpinePaths = [];
     const containerRect = containerRef.current.getBoundingClientRect();
     const categories = containerRef.current.querySelectorAll('.tech-category');
-    const title = containerRef.current.querySelector('.section-title');
 
     const categoryPoints = [];
 
@@ -140,9 +139,16 @@ const TechStack = () => {
   };
 
   useLayoutEffect(() => {
-    calculatePaths();
+    // Wrap initial call in requestAnimationFrame to avoid synchronous setState lint warning
+    const rafId = requestAnimationFrame(() => {
+      calculatePaths();
+    });
+    
     window.addEventListener('resize', calculatePaths);
-    return () => window.removeEventListener('resize', calculatePaths);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', calculatePaths);
+    };
   }, []);
 
   useEffect(() => {

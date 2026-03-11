@@ -77,7 +77,7 @@ function AIAssistantChat() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKeyMissing, setApiKeyMissing] = useState(false);
+  const [apiKeyMissing] = useState(!import.meta.env.VITE_GEMINI_API_KEY);
   const messagesEndRef = useRef(null);
   const lastMessageTime = useRef(0);
   const MAX_MESSAGE_LENGTH = 500;
@@ -86,11 +86,7 @@ function AIAssistantChat() {
 
   const [messageCount, setMessageCount] = useState(0);
 
-  // Check if API key is configured
-  useEffect(() => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    setApiKeyMissing(!apiKey);
-  }, []);
+  // Check if API key is configured is now handled during initial state assignment.
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -10,7 +10,7 @@
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
         "react-icons": "^5.5.0",
-        "split-type": "^0.3.4",
+        "split-type": "^0.3.4"
       },
       "devDependencies": {
         "@eslint/js": "^9.39.1",
@@ -23,12 +23,12 @@
         "globals": "^16.5.0",
         "prettier": "^3.8.1",
         "sass": "^1.97.3",
-        "vite": "^7.2.4",
-      },
-    },
+        "vite": "^7.2.4"
+      }
+    }
   },
   "trustedDependencies": [
-    "@parcel/watcher",
+    "@parcel/watcher"
   ],
   "packages": {
     "@babel/code-frame": ["@babel/code-frame@7.29.0", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.28.5", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw=="],
@@ -491,6 +491,6 @@
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
 
-    "@eslint/eslintrc/globals": ["globals@14.0.0", "", {}, "sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ=="],
+    "@eslint/eslintrc/globals": ["globals@14.0.0", "", {}, "sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ=="]
   }
 }
