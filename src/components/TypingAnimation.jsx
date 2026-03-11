@@ -28,11 +28,13 @@ function TypingAnimation({
       setDisplayedText('');
       setIsComplete(false);
       indexRef.current = 0;
+      
+      const charArray = Array.from(text);
 
       typingInterval = setInterval(() => {
         if (isCancelled) return;
-        if (indexRef.current < text.length) {
-          setDisplayedText(text.substring(0, indexRef.current + 1));
+        if (indexRef.current < charArray.length) {
+          setDisplayedText(charArray.slice(0, indexRef.current + 1).join(''));
           indexRef.current++;
         } else {
           setIsComplete(true);
