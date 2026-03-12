@@ -64,7 +64,7 @@ const About = () => {
     gsap.fromTo(
       imageRef.current,
       {
-        x: 100,
+        x: -100,
         opacity: 0,
         scale: 0.9,
       },
@@ -122,6 +122,16 @@ const About = () => {
             }}
           />
 
+          <div ref={imageRef} className="about-image-wrapper">
+            <div className="image-frame">
+              <div className="animated-border"></div>
+              <div className="placeholder-image">
+                <div className="scan-line"></div>
+                <div className="grid-overlay"></div>
+              </div>
+            </div>
+          </div>
+
           <div ref={textRef} className="about-text-wrapper">
             <h2 className="section-title">
               <span className="title-glow">00</span> / About
@@ -144,20 +154,6 @@ const About = () => {
               <span className="tech-badge">AI/ML</span>
               <span className="tech-badge">Full-Stack</span>
               <span className="tech-badge">Three.js</span>
-            </div>
-          </div>
-
-          <div ref={imageRef} className="about-image-wrapper">
-            <div className="image-frame">
-              <div className="animated-border"></div>
-              <div className="placeholder-image">
-                <div className="scan-line"></div>
-                <div className="grid-overlay"></div>
-              </div>
-              <div className="frame-corner top-left"></div>
-              <div className="frame-corner top-right"></div>
-              <div className="frame-corner bottom-left"></div>
-              <div className="frame-corner bottom-right"></div>
             </div>
           </div>
         </div>
@@ -375,22 +371,22 @@ const About = () => {
                 .image-frame {
                     position: relative;
                     width: 100%;
-                    max-width: 450px;
-                    aspect-ratio: 4/5;
-                    padding: 1.5rem;
+                    max-width: 280px;
+                    aspect-ratio: 1/1;
+                    padding: 1rem;
                     transition: transform 0.6s ease;
                     transform-style: preserve-3d;
                 }
 
                 .image-frame:hover {
-                    transform: scale(1.03) rotateY(5deg);
+                    transform: scale(1.05) rotateY(5deg);
                 }
 
                 .animated-border {
                     position: absolute;
                     inset: 0;
-                    border-radius: 8px;
-                    padding: 2px;
+                    border-radius: 50%;
+                    padding: 4px;
                     background: linear-gradient(45deg, #9333ea, #3b82f6, #9333ea, #3b82f6);
                     background-size: 300% 300%;
                     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -412,7 +408,7 @@ const About = () => {
                     backdrop-filter: blur(20px);
                     position: relative;
                     overflow: hidden;
-                    border-radius: 8px;
+                    border-radius: 50%;
                     box-shadow: 
                         inset 0 0 60px rgba(147, 51, 234, 0.1),
                         0 0 40px rgba(147, 51, 234, 0.2);
@@ -444,50 +440,7 @@ const About = () => {
                         linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px);
                     background-size: 20px 20px;
                     opacity: 0.3;
-                }
-
-                .frame-corner {
-                    position: absolute;
-                    width: 30px;
-                    height: 30px;
-                    border: 3px solid;
-                    border-image: linear-gradient(135deg, #9333ea, #3b82f6) 1;
-                    transition: all 0.4s ease;
-                    z-index: 2;
-                }
-
-                .image-frame:hover .frame-corner {
-                    width: 40px;
-                    height: 40px;
-                    filter: drop-shadow(0 0 15px rgba(147, 51, 234, 0.8));
-                }
-
-                .top-left {
-                    top: -3px;
-                    left: -3px;
-                    border-right: none;
-                    border-bottom: none;
-                }
-
-                .top-right {
-                    top: -3px;
-                    right: -3px;
-                    border-left: none;
-                    border-bottom: none;
-                }
-
-                .bottom-left {
-                    bottom: -3px;
-                    left: -3px;
-                    border-right: none;
-                    border-top: none;
-                }
-
-                .bottom-right {
-                    bottom: -3px;
-                    right: -3px;
-                    border-left: none;
-                    border-top: none;
+                    border-radius: 50%;
                 }
 
                 @media (max-width: 768px) {
