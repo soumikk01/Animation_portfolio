@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
  * FadeIn component - Simple fade and slide up animation on scroll
  * Use this for any text element (headings, paragraphs, etc.)
  */
-function FadeIn({ children, className = '', delay = 0, direction = 'up', duration = 0.8 }) {
+function FadeIn({ children, className = '', delay = 0, direction = 'up', duration = 0.8, repeatOnScroll = false }) {
   const elementRef = useRef(null);
 
   useEffect(() => {
@@ -58,7 +58,8 @@ function FadeIn({ children, className = '', delay = 0, direction = 'up', duratio
       scrollTrigger: {
         trigger: element,
         start: 'top 90%',
-        once: true,
+        once: !repeatOnScroll,
+        toggleActions: repeatOnScroll ? 'play none none reverse' : 'play none none none',
       },
     });
 

@@ -22,11 +22,11 @@ function ContactForm() {
 
       <div className="container">
         <div className="contact-grid">
-          <FadeIn delay={0.2} className="contact-info">
+          <div className="contact-info">
             <div className="contact-heading-wrapper">
               <div className="contact-heading-reveal">
-                <TextReveal className="heading-lets">Let's</TextReveal>
-                <TextReveal className="heading-talk">Talk</TextReveal>
+                <TextReveal className="heading-lets" direction="down" delay={0.1} repeatOnScroll={true}>Let's</TextReveal>
+                <TextReveal className="heading-talk" direction="down" delay={0.4} repeatOnScroll={true}>Talk</TextReveal>
               </div>
               <div className="contact-floats">
                 <div className="contact-float-bubble"></div>
@@ -35,29 +35,31 @@ function ContactForm() {
               </div>
             </div>
 
-            {/* Social Media Buttons */}
-            <div className="contact-social-wrapper">
-              <SocialButtons />
-            </div>
-
-            <p className="contact-description">
-              Have a project in mind? Want to collaborate? Drop me a message and let's make it
-              happen.
-            </p>
-
-            <div className="contact-details">
-              <div className="contact-detail-item">
-                <span className="detail-label">Location</span>
-                <span className="detail-value">West Bengal, India</span>
+            <FadeIn delay={0.6} className="contact-content" repeatOnScroll={true}>
+              {/* Social Media Buttons */}
+              <div className="contact-social-wrapper">
+                <SocialButtons />
               </div>
-              <div className="contact-detail-item">
-                <span className="detail-label">Availability</span>
-                <span className="detail-value">Open for opportunities</span>
-              </div>
-            </div>
-          </FadeIn>
 
-          <FadeIn delay={0.4} className="contact-form-wrapper">
+              <p className="contact-description">
+                Have a project in mind? Want to collaborate? Drop me a message and let's make it
+                happen.
+              </p>
+
+              <div className="contact-details">
+                <div className="contact-detail-item">
+                  <span className="detail-label">Location</span>
+                  <span className="detail-value">West Bengal, India</span>
+                </div>
+                <div className="contact-detail-item">
+                  <span className="detail-label">Availability</span>
+                  <span className="detail-value">Open for opportunities</span>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+
+          <FadeIn delay={0.8} className="contact-form-wrapper" repeatOnScroll={true}>
             <AIAssistantChat />
           </FadeIn>
         </div>

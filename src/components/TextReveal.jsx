@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 
-const TextReveal = ({ children, className }) => {
+const TextReveal = ({ children, className, direction = 'up', delay = 0, repeatOnScroll = false }) => {
   const textRef = useRef(null);
 
   useEffect(() => {
@@ -13,9 +13,9 @@ const TextReveal = ({ children, className }) => {
     gsap.fromTo(
       split.chars,
       {
-        y: 80,
+        y: direction === 'down' ? -150 : 80,
         opacity: 0,
-        rotateX: -45,
+        rotateX: direction === 'down' ? 45 : -45,
         scale: 0.8,
       },
       {
@@ -23,13 +23,15 @@ const TextReveal = ({ children, className }) => {
         opacity: 1,
         rotateX: 0,
         scale: 1,
-        stagger: 0.02,
+        stagger: 0.05,
         duration: 1,
+        delay: delay,
         ease: 'back.out(1.5)',
         scrollTrigger: {
           trigger: textRef.current,
           start: 'top 85%',
-          once: true,
+          once: !repeatOnScroll,
+          toggleActions: repeatOnScroll ? 'play none none reverse' : 'play none none none',
         },
       }
     );
