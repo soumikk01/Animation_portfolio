@@ -13,6 +13,7 @@ import StaggerFadeIn from './components/StaggerFadeIn';
 import ContactForm from './components/ContactForm';
 import LoadingScreen from './components/LoadingScreen';
 import ScrollIndicator from './components/ScrollIndicator';
+import FloatingAIButton from './components/FloatingAIButton';
 import './components/GlobalAnimations.scss';
 import './App.scss';
 
@@ -210,6 +211,7 @@ function App() {
 
           <ContactForm />
         </main>
+        <FloatingAIButton />
       </SmoothScroll>
     </SoundProvider>
   );

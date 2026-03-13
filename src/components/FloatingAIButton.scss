@@ -1,0 +1,180 @@
+.floating-ai-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: none;
+
+  &.at-top {
+    bottom: auto;
+    top: 2rem;
+    right: 5%;
+    transform: translateY(10px);
+    
+    .floating-ai-button {
+      width: 140px;
+      height: 44px; /* Matches navbar height more closely */
+      border-radius: 100px;
+      padding: 0 1.2rem;
+      background: rgba(255, 255, 255, 0.03); /* Identical to navbar */
+      backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08); /* Identical to navbar */
+      gap: 0.8rem;
+      justify-content: center;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+      .button-label {
+        opacity: 1;
+        width: auto;
+        transform: translateX(0);
+        font-size: 0.75rem; /* Matches navbar link size */
+        letter-spacing: 0.15rem;
+      }
+      
+      .logo-wrapper {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+  }
+
+  &.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+
+  &.merged {
+    opacity: 0;
+    transform: translate(-100px, -200px) scale(0.5); /* Animate towards contact chat position approx */
+  }
+}
+
+.floating-ai-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(168, 85, 247, 0.2);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  gap: 0;
+
+  .button-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform: translateX(10px);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(168, 85, 247, 0.2);
+    box-shadow: 0 12px 40px rgba(168, 85, 247, 0.4);
+    
+    .button-glow {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    
+    .ai-svg-icon {
+      transform: rotate(90deg) scale(1.1);
+    }
+  }
+
+  .logo-wrapper {
+    width: 38px;
+    height: 38px;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ai-svg-icon {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 8px rgba(155, 114, 203, 0.6));
+    }
+  }
+
+  .button-glow {
+    position: absolute;
+    inset: -5px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: all 0.4s ease;
+    z-index: 0;
+  }
+
+  .button-pulse {
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    border-radius: 50%;
+    animation: aiPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    z-index: 1;
+  }
+}
+
+@keyframes aiPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Gemini-like styling (Gradient border) */
+.floating-ai-button::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #4285f4, #9b72cb, #d96570, #f4afc4);
+  background-size: 300% 300%;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: geminiGradient 4s linear infinite;
+}
+
+.floating-ai-button:hover::after {
+  opacity: 1;
+}
+
+@keyframes geminiGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
