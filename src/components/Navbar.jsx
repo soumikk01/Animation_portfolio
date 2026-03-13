@@ -23,6 +23,13 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fullText = 'PORTFOLIO';
 
+  const isMenuOpenRef = useRef(isMenuOpen);
+  
+  // Sync ref with state
+  useEffect(() => {
+    isMenuOpenRef.current = isMenuOpen;
+  }, [isMenuOpen]);
+
   useEffect(() => {
     // Initial entrance animation
     gsap.fromTo(
@@ -45,187 +52,197 @@ const Navbar = () => {
       });
     });
 
-    // Scroll-based shrink/expand animation
-    scrollTriggerRef.current = ScrollTrigger.create({
-      start: 'top top',
-      end: 'max',
-      onUpdate: (self) => {
-        const scrollY = self.scroll();
+    // Responsive Scroll Logic
+    let mm = gsap.matchMedia();
 
-        // If menu is open, handle "convert back on scroll" logic
-        if (isMenuOpen) {
-          // Only convert back if user has scrolled a bit away (e.g. 100px) from where they opened it
-          if (Math.abs(scrollY - menuOpenedAtRef.current) > 100) {
-            setIsMenuOpen(false);
-            // The next update or current check below will handle the visual shrink
-          } else {
-            // While in the "buffer" zone, don't let scroll trigger override the manual open state
+    mm.add("(min-width: 769px)", () => {
+      // Desktop Scroll-based shrink/expand animation
+      scrollTriggerRef.current = ScrollTrigger.create({
+        start: 'top top',
+        end: 'max',
+        onUpdate: (self) => {
+          const scrollY = self.scroll();
+
+          if (isMenuOpenRef.current) {
+            if (Math.abs(scrollY - menuOpenedAtRef.current) > 100) {
+              // Close menu if user scrolls away
+              toggleMenu();
+            }
             return;
           }
-        }
 
-        // When scrolling down (past 100px), hide entire right section and show menu
-        if (scrollY > 100) {
-          gsap.to(navSectionRightRef.current, {
-            autoAlpha: 0,
-            scale: 0.8,
-            duration: 0.6,
-            ease: 'power3.inOut',
-            overwrite: true,
-          });
-          gsap.to(menuBtnRef.current, {
-            autoAlpha: 1,
-            x: 0,
-            rotation: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: 'expo.out',
-            overwrite: true,
-            display: 'flex', // ensure it becomes flex when visible
-          });
-        } else {
-          // When scrolling back to home, show right section and hide menu
-          gsap.to(navSectionRightRef.current, {
-            autoAlpha: 1,
-            scale: 1,
-            duration: 0.8,
-            ease: 'expo.out',
-            overwrite: true,
-            display: 'flex',
-          });
-          gsap.to(menuBtnRef.current, {
-            autoAlpha: 0,
-            x: 60,
-            rotation: 180,
-            scale: 0.6,
-            duration: 0.6,
-            ease: 'power3.inOut',
-            overwrite: true,
-          });
-        }
-      },
+          if (scrollY > 100) {
+            gsap.to(navSectionRightRef.current, {
+              autoAlpha: 0,
+              scale: 0.8,
+              duration: 0.6,
+              ease: 'power3.inOut',
+              overwrite: true,
+            });
+            gsap.to(menuBtnRef.current, {
+              autoAlpha: 1,
+              x: 0,
+              rotation: 0,
+              scale: 1,
+              duration: 0.8,
+              ease: 'expo.out',
+              overwrite: true,
+              display: 'flex',
+            });
+          } else {
+            gsap.to(navSectionRightRef.current, {
+              autoAlpha: 1,
+              scale: 1,
+              duration: 0.8,
+              ease: 'expo.out',
+              overwrite: true,
+              display: 'flex',
+            });
+            gsap.to(menuBtnRef.current, {
+              autoAlpha: 0,
+              x: 60,
+              rotation: 180,
+              scale: 0.6,
+              duration: 0.6,
+              ease: 'power3.inOut',
+              overwrite: true,
+            });
+          }
+        },
+      });
+    });
+
+    mm.add("(max-width: 768px)", () => {
+      // On mobile, ensure menu button is visible and nav section right is hidden
+      gsap.set(navSectionRightRef.current, { autoAlpha: 0, display: 'none' });
+      gsap.set(menuBtnRef.current, { 
+        autoAlpha: 1, 
+        x: 0, 
+        rotation: 0, 
+        scale: 1, 
+        display: 'flex',
+        pointerEvents: 'auto'
+      });
     });
 
     return () => {
       ctx.revert();
+      mm.revert();
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
       }
     };
-  }, [isMenuOpen]);
+  }, []); // Only run on mount
 
 
 
   const toggleMenu = () => {
-    const newState = !isMenuOpen;
-    setIsMenuOpen(newState);
+    // We need to use the functional update or ref logic since this function 
+    // might be called from within the ScrollTrigger onUpdate which 
+    // closure-traps the initial state if not careful.
+    // However, it's called from React event handlers too.
+    
+    setIsMenuOpen(prev => {
+      const newState = !prev;
+      
+      if (newState) {
+        menuOpenedAtRef.current = window.scrollY || window.pageYOffset;
 
-    if (newState) {
-      menuOpenedAtRef.current = window.scrollY || window.pageYOffset;
-
-      // Disable ScrollTrigger animations while menu is open
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.disable();
-      }
-      // Hide the navbar section when menu opens (if it was visible)
-      gsap.to(navSectionRightRef.current, {
-        autoAlpha: 0,
-        scale: 0.8,
-        duration: 0.5,
-        ease: 'expo.out',
-        overwrite: true,
-      });
-
-      // Animate overlay in
-      gsap.to(menuOverlayRef.current, {
-        autoAlpha: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-        pointerEvents: 'auto',
-      });
-
-      // Stagger animate links in
-      gsap.fromTo(
-        menuLinksRef.current,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'back.out(1.5)',
-          delay: 0.2,
+        if (scrollTriggerRef.current) {
+          scrollTriggerRef.current.disable();
         }
-      );
-      // Hide the menu button when menu overlay is open
-      gsap.to(menuBtnRef.current, {
-        autoAlpha: 0,
-        x: 60,
-        rotation: 180,
-        scale: 0.6,
-        duration: 0.4,
-        ease: 'power3.inOut',
-        overwrite: true,
-      });
-    } else {
 
-      // Animate overlay out
-      gsap.to(menuOverlayRef.current, {
-        autoAlpha: 0,
-        duration: 0.4,
-        ease: 'power2.in',
-        pointerEvents: 'none',
-      });
+        // Animate overlay in
+        gsap.fromTo(menuOverlayRef.current, 
+          { autoAlpha: 0, scale: 0.8, x: 20, y: -20 },
+          { 
+            autoAlpha: 1, 
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 0.6, 
+            ease: 'expo.out',
+            pointerEvents: 'auto' 
+          }
+        );
 
-      // Animate links out
-      gsap.to(menuLinksRef.current, {
-        y: -50,
-        opacity: 0,
-        duration: 0.3,
-        stagger: -0.05,
-        ease: 'power2.in',
-      });
-
-      // Re-enable ScrollTrigger
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.enable();
-      }
-
-      // When menu closes, check scroll position to determine if navbar should stay visible
-      const scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY > 100) {
-        // Hide navbar section if still scrolled down
-        gsap.to(navSectionRightRef.current, {
-          autoAlpha: 0,
-          scale: 0.8,
-          duration: 0.6,
-          ease: 'power3.inOut',
-          overwrite: true,
-        });
-        // Show menu button again
+        // Stagger animate links in
+        gsap.fromTo(
+          menuLinksRef.current,
+          { y: 40, opacity: 0, scale: 0.9 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power4.out',
+            delay: 0.2,
+          }
+        );
+        
         gsap.to(menuBtnRef.current, {
-          autoAlpha: 1,
-          x: 0,
-          rotation: 0,
-          scale: 1,
-          duration: 0.8,
-          ease: 'expo.out',
-          overwrite: true,
-          display: 'flex',
+          scale: 1.1,
+          duration: 0.4,
+          ease: 'back.out(2)',
         });
       } else {
-        // At top of page - hide menu button
-        gsap.to(menuBtnRef.current, {
+        // Close menu
+        gsap.to(menuOverlayRef.current, {
           autoAlpha: 0,
-          x: 60,
-          rotation: 180,
-          scale: 0.6,
-          duration: 0.6,
-          ease: 'power3.inOut',
-          overwrite: true,
+          duration: 0.4,
+          ease: 'power3.in',
+          pointerEvents: 'none',
         });
+
+        gsap.to(menuLinksRef.current, {
+          y: -40,
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.3,
+          stagger: -0.05,
+          ease: 'power3.in',
+        });
+
+        if (scrollTriggerRef.current) {
+          scrollTriggerRef.current.enable();
+        }
+
+        const scrollY = window.scrollY || window.pageYOffset;
+        const isMobile = window.innerWidth <= 768;
+
+        if (!isMobile) {
+          if (scrollY > 100) {
+            gsap.to(menuBtnRef.current, {
+              autoAlpha: 1,
+              x: 0,
+              rotation: 0,
+              scale: 1,
+              duration: 0.6,
+              ease: 'expo.out',
+            });
+          } else {
+            gsap.to(menuBtnRef.current, {
+              autoAlpha: 0,
+              x: 60,
+              rotation: 180,
+              scale: 0.6,
+              duration: 0.5,
+              ease: 'power3.inOut',
+            });
+          }
+        } else {
+          gsap.to(menuBtnRef.current, {
+            autoAlpha: 1,
+            scale: 1,
+            x: 0,
+            duration: 0.5,
+            ease: 'expo.out',
+          });
+        }
       }
-    }
+      return newState;
+    });
   };
 
 
