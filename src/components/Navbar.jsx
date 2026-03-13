@@ -8,7 +8,10 @@ gsap.registerPlugin(ScrollTrigger);
 import './GlobalAnimations.scss';
 import './Navbar.scss';
 
+import { useSound } from '../hooks/useSound';
+
 const Navbar = () => {
+  const { playHover, playClick } = useSound();
   const navRef = useRef();
   const navSectionRightRef = useRef();
   const menuBtnRef = useRef();
@@ -245,24 +248,24 @@ const Navbar = () => {
         <div ref={navSectionRightRef} className="nav-section nav-section-right">
           <ul className="nav-links">
             <li>
-              <a href="#home" className="nav-link">
+              <a href="#home" className="nav-link" onMouseEnter={playHover} onClick={playClick}>
                 <span className="link-text" data-text="Home">Home</span>
               </a>
             </li>
             <li>
-              <a href="#tech-stack" className="nav-link">
+              <a href="#tech-stack" className="nav-link" onMouseEnter={playHover} onClick={playClick}>
                 <span className="link-text" data-text="Tech Stack">Tech Stack</span>
               </a>
             </li>
             <li>
-              <a href="#projects" className="nav-link">
+              <a href="#projects" className="nav-link" onMouseEnter={playHover} onClick={playClick}>
                 <span className="link-text" data-text="Projects">Projects</span>
               </a>
             </li>
           </ul>
 
           <div className="nav-action">
-            <a href="#contact" className="contact-btn">
+            <a href="#contact" className="contact-btn" onMouseEnter={playHover} onClick={playClick}>
               <span className="btn-text" data-text="Let's Talk">Let's Talk</span>
               <div className="btn-glow" />
             </a>
@@ -272,7 +275,13 @@ const Navbar = () => {
         </div>
 
         {/* Menu Button - Shown when scrolled down */}
-        <button ref={menuBtnRef} className="menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
+        <button 
+          ref={menuBtnRef} 
+          className="menu-btn" 
+          onClick={() => { playClick(); toggleMenu(); }} 
+          onMouseEnter={playHover}
+          aria-label="Toggle menu"
+        >
 
           <div className="menu-lines">
             <span className={`menu-line ${isMenuOpen ? 'open' : ''}`}></span>
@@ -286,22 +295,22 @@ const Navbar = () => {
       <div ref={menuOverlayRef} className={`menu-overlay`}>
         <ul className="menu-overlay-links">
           <li ref={(el) => (menuLinksRef.current[0] = el)}>
-            <a href="#home" onClick={toggleMenu}>
+            <a href="#home" onMouseEnter={playHover} onClick={() => { playClick(); toggleMenu(); }}>
               Home
             </a>
           </li>
           <li ref={(el) => (menuLinksRef.current[1] = el)}>
-            <a href="#tech-stack" onClick={toggleMenu}>
+            <a href="#tech-stack" onMouseEnter={playHover} onClick={() => { playClick(); toggleMenu(); }}>
               Tech Stack
             </a>
           </li>
           <li ref={(el) => (menuLinksRef.current[2] = el)}>
-            <a href="#projects" onClick={toggleMenu}>
+            <a href="#projects" onMouseEnter={playHover} onClick={() => { playClick(); toggleMenu(); }}>
               Projects
             </a>
           </li>
           <li ref={(el) => (menuLinksRef.current[3] = el)}>
-            <a href="#contact" onClick={toggleMenu}>
+            <a href="#contact" onMouseEnter={playHover} onClick={() => { playClick(); toggleMenu(); }}>
               Let's Talk
             </a>
           </li>

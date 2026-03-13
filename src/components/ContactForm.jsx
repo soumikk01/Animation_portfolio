@@ -5,6 +5,7 @@ import TypingAnimation from './TypingAnimation';
 import SocialButtons from './SocialButtons';
 import { getGeminiEndpoint, API_CONFIG } from '../utils/apiConfig';
 import airiLogo from '../assets/airi-logo.png';
+import { useSound } from '../hooks/useSound';
 import './ContactForm.scss';
 
 function ContactForm() {
@@ -70,6 +71,7 @@ function ContactForm() {
 
 // AI Assistant Chat Component
 function AIAssistantChat() {
+  const { playHover, playClick } = useSound();
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -159,6 +161,8 @@ Keep responses very concise and helpful (maximum 80 words).`;
     // Validation: trim spaces, check loading state, validate length
     const trimmedInput = input.trim();
     if (!trimmedInput || isLoading) return;
+
+    playClick();
 
     // Rate Limiting
     const now = Date.now();
@@ -279,12 +283,14 @@ Keep responses very concise and helpful (maximum 80 words).`;
             className="chat-input"
             maxLength={MAX_MESSAGE_LENGTH}
             aria-label="Chat message input"
+            onMouseEnter={playHover}
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim() || apiKeyMissing}
             className="send-button"
             aria-label="Send message"
+            onMouseEnter={playHover}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path

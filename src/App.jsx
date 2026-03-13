@@ -19,6 +19,9 @@ import './App.scss';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+import { SoundProvider } from './hooks/useSound';
+import AudioControls from './components/AudioControls';
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const heroSectionRef = useRef(null);
@@ -97,141 +100,118 @@ function App() {
   }, []);
 
   return (
-    <>
+    <SoundProvider>
       {isLoading && <LoadingScreen />}
       <SmoothScroll>
-      <Navbar />
+        <Navbar />
+        <AudioControls />
 
+        {/* Background is now outside main-content to show behind modal */}
+        <ShaderHero />
 
-      {/* Background is now outside main-content to show behind modal */}
-      <ShaderHero />
-
-      <main className="main-content started">
-        {/* HERO SECTION - REPLICATING "LOCKED AWAY" DESIGN */}
-        <section id="home" className="hero hero-vibe">
-          <div className="container hero-container" ref={heroSectionRef}>
-            <div className="typography-design">
-              {/* Line 1: Full-Stack */}
-              <div className="text-line line-1">
-                {/* Top-center annotation */}
-                <div className="annotation top-center-ann">
-                  <span className="annotation-text">"logic"</span>
-                  <div className="annotation-line"></div>
+        <main className="main-content started">
+          {/* HERO SECTION */}
+          <section id="home" className="hero hero-vibe">
+            <div className="container hero-container" ref={heroSectionRef}>
+              <div className="typography-design">
+                <div className="text-line line-1">
+                  <div className="annotation top-center-ann">
+                    <span className="annotation-text">"logic"</span>
+                    <div className="annotation-line"></div>
+                  </div>
+                  <h1 className="main-word">Full-Stack</h1>
+                  <div className="annotation top-left-ann">
+                    <span className="annotation-text">"Java backend"</span>
+                    <div className="annotation-line diag-line"></div>
+                  </div>
+                  <div className="annotation ligature">
+                    <div className="annotation-line"></div>
+                    <span className="annotation-text">"RESTful APIs"</span>
+                  </div>
                 </div>
 
-                <h1 className="main-word">Full-Stack</h1>
-
-                {/* Top-left annotation */}
-                <div className="annotation top-left-ann">
-                  <span className="annotation-text">"Java backend"</span>
-                  <div className="annotation-line diag-line"></div>
+                <div className="text-line line-2">
+                  <div className="annotation alternate-left">
+                    <div className="annotation-line"></div>
+                    <span className="annotation-text">"JavaScript frontends"</span>
+                  </div>
+                  <h1 className="main-word">Developer</h1>
+                  <div className="annotation bottom-center-ann">
+                    <div className="annotation-line"></div>
+                    <span className="annotation-text">"CI/CD"</span>
+                  </div>
+                  <div className="annotation alternate-right">
+                    <div className="annotation-line"></div>
+                    <span className="annotation-text">"databases"</span>
+                  </div>
                 </div>
 
-                {/* Top-right annotation */}
-                <div className="annotation ligature">
-                  <div className="annotation-line"></div>
-                  <span className="annotation-text">"RESTful APIs"</span>
-                </div>
+                <FadeIn delay={0.8} className="hero-description">
+                  <p>Building modern web experiences</p>
+                  <p>with cutting-edge technologies</p>
+                </FadeIn>
               </div>
-
-
-
-
-              {/* Line 2: Developer */}
-              <div className="text-line line-2">
-                {/* Left annotation */}
-                <div className="annotation alternate-left">
-                  <div className="annotation-line"></div>
-                  <span className="annotation-text">"JavaScript frontends"</span>
-                </div>
-
-                <h1 className="main-word">Developer</h1>
-
-                {/* Bottom-center annotation */}
-                <div className="annotation bottom-center-ann">
-                  <div className="annotation-line"></div>
-                  <span className="annotation-text">"CI/CD"</span>
-                </div>
-
-                {/* Right annotation */}
-                <div className="annotation alternate-right">
-                  <div className="annotation-line"></div>
-                  <span className="annotation-text">"databases"</span>
-                </div>
-              </div>
-
-              {/* Subtext */}
-              <FadeIn delay={0.8} className="hero-description">
-                <p>Building modern web experiences</p>
-                <p>with cutting-edge technologies</p>
-              </FadeIn>
             </div>
-          </div>
-          
-          <ScrollIndicator />
-        </section>
+            <ScrollIndicator />
+          </section>
 
-        {/* ABOUT SECTION */}
-        <About />
+          <About />
+          <TechStack />
 
-        {/* TECH STACK SECTION */}
-        <TechStack />
-
-        {/* PROJECTS SECTION */}
-        <section id="projects" className="projects">
-          <div className="container">
-            <FadeIn>
-              <h2 className="section-title" data-text="02 / Projects">02 / Projects</h2>
-            </FadeIn>
-            <StaggerFadeIn className="project-grid" staggerDelay={0.2}>
-              {[
-                { 
-                  name: 'Motion Identity', 
-                  cat: 'Interaction Design', 
-                  url: 'https://example.com/project-1',
-                  image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                  name: 'Vortex System', 
-                  cat: 'WebGL / Shader', 
-                  url: 'https://example.com/project-2',
-                  image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
-                },
-                { 
-                  name: 'Orias Portal', 
-                  cat: 'Creative Dev', 
-                  url: 'https://example.com/project-3',
-                  image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
-                },
-              ].map((proj, i) => (
-                <a 
-                  key={i} 
-                  href={proj.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="project-card"
-                >
-                  <div className="project-card-image" style={{ backgroundImage: `url(${proj.image})` }}>
-                    <div className="project-card-overlay">
-                      <span className="view-link">View Project</span>
+          {/* PROJECTS SECTION */}
+          <section id="projects" className="projects">
+            <div className="container">
+              <FadeIn>
+                <h2 className="section-title" data-text="02 / Projects">02 / Projects</h2>
+              </FadeIn>
+              <StaggerFadeIn className="project-grid" staggerDelay={0.2}>
+                {[
+                  { 
+                    name: 'Motion Identity', 
+                    cat: 'Interaction Design', 
+                    url: 'https://example.com/project-1',
+                    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
+                  },
+                  { 
+                    name: 'Vortex System', 
+                    cat: 'WebGL / Shader', 
+                    url: 'https://example.com/project-2',
+                    image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
+                  },
+                  { 
+                    name: 'Orias Portal', 
+                    cat: 'Creative Dev', 
+                    url: 'https://example.com/project-3',
+                    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
+                  },
+                ].map((proj, i) => (
+                  <a 
+                    key={i} 
+                    href={proj.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="project-card"
+                  >
+                    <div className="project-card-image" style={{ backgroundImage: `url(${proj.image})` }}>
+                      <div className="project-card-overlay">
+                        <span className="view-link">View Project</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="project-card-info">
-                    <span className="project-num">0{i + 1}</span>
-                    <TextReveal className="project-name">{proj.name}</TextReveal>
-                    <span className="project-category">{proj.cat}</span>
-                  </div>
-                </a>
-              ))}
-            </StaggerFadeIn>
-          </div>
-        </section>
+                    <div className="project-card-info">
+                      <span className="project-num">0{i + 1}</span>
+                      <TextReveal className="project-name">{proj.name}</TextReveal>
+                      <span className="project-category">{proj.cat}</span>
+                    </div>
+                  </a>
+                ))}
+              </StaggerFadeIn>
+            </div>
+          </section>
 
-        {/* CONTACT / MESSAGE SECTION */}
-        <ContactForm />
-      </main>
-    </SmoothScroll>
-    </>
+          <ContactForm />
+        </main>
+      </SmoothScroll>
+    </SoundProvider>
   );
 }
 
